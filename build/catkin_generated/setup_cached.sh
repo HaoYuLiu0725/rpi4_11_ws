@@ -8,6 +8,7 @@
 
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/haoyu/rpi4_11_ws/devel:$CMAKE_PREFIX_PATH"
+export LD_LIBRARY_PATH="/home/haoyu/rpi4_11_ws/devel/lib:$LD_LIBRARY_PATH"
 export PWD='/home/haoyu/rpi4_11_ws/build'
 export ROSLISP_PACKAGE_DIRECTORIES="/home/haoyu/rpi4_11_ws/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
 export ROS_PACKAGE_PATH="/home/haoyu/rpi4_11_ws/src:$ROS_PACKAGE_PATH"
