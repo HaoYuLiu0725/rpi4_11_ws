@@ -1,11 +1,15 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
-#include <turtlesim/Pose.h>
+#include <geometry_msgs/Pose.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <tf2/utils.h>
 #include <std_msgs/Bool.h>
 #include <cmath>
 
-turtlesim::Pose now_pose;
-turtlesim::Pose goal_pose;
+double now_x, now_y, now_theta;
+double goal_x, goal_y, goal_theta;
+double linear_velocity, angular_velocity;
+
 double MAX_linear_speed  = 1.6; // m/s
 double MAX_angular_speed = 1.2; // rad/s
 double linear_acceleration  = 0.4; // m/s^2
@@ -13,8 +17,8 @@ double linear_deceleration  = 0.4; // m/s^2
 double angular_acceleration = 0.3; // rad/s^2
 double angular_deceleration = 0.3; // rad/s^2
 
-double linear_speed = 0; // m/s
-double angular_speed = 0; // rad/s
+double t_linear_speed = 0; // m/s, target linear speed
+double t_angular_speed = 0; // rad/s, target angular speed
 bool have_new_goal = false;
 std_msgs::Bool reached_status;
 
@@ -36,22 +40,35 @@ enum Speed_State
 };
 Speed_State speed_state = ACCELERATE;
 
-void pose_CallBack(const turtlesim::PoseConstPtr& pose)
+void pose_CallBack(const geometry_msgs::PoseWithCovarianceStampedConstPtr& pose)
 {
-    now_pose.x = pose->x;
-    now_pose.y = pose->y;
-    now_pose.theta = pose->theta;
-    now_pose.angular_velocity = pose->angular_velocity;
-    now_pose.linear_velocity = pose->linear_velocity;
-    // ROS_INFO("\nnow pose: %f, %f, %f", now_pose.x, now_pose.y, now_pose.theta);
+    now_x = pose->pose.pose.position.x;
+    now_y = pose->pose.pose.position.y;
+    now_theta = tf2::getYaw(pose->pose.pose.orientation);
+    // ROS_INFO("\nnow pose: %f, %f, %f", now_x, now_y, now_theta);
 }
 
-void goal_CallBack(const turtlesim::PoseConstPtr& pose)
+// void pose_CallBack(const geometry_msgs::PoseConstPtr& pose)
+// {
+//     now_x = pose->position.x;
+//     now_y = pose->position.y;
+//     now_theta = tf2::getYaw(pose->orientation);
+//     // ROS_INFO("\nnow pose: %f, %f, %f", now_x, now_y, now_theta);
+// }
+
+void speed_CallBack(const geometry_msgs::TwistConstPtr& speed)
 {
-    ROS_INFO("\nNew goal : [%f, %f, %f]", pose->x, pose->y, pose->theta);
-    goal_pose.x = pose->x;
-    goal_pose.y = pose->y;
-    goal_pose.theta = pose->theta;
+    linear_velocity = sqrt(pow(speed->linear.x, 2) + pow(speed->linear.y, 2));
+    angular_velocity = speed->angular.z;
+    // ROS_INFO("\nnow speed: %f, %f", linear_velocity, angular_velocity);
+}
+
+void goal_CallBack(const geometry_msgs::PoseConstPtr& pose)
+{
+    goal_x = pose->position.x;
+    goal_y = pose->position.x;
+    goal_theta = tf2::getYaw(pose->orientation);
+    ROS_INFO("\nNew goal : [%f, %f, %f]", goal_x, goal_y, goal_theta);
     have_new_goal = true;
     move_state = LINEAR;
     speed_state = ACCELERATE;
@@ -68,17 +85,17 @@ void twist_publish(ros::Publisher vel_pub, double Vx, double Vy, double W)
 
 bool hasReachedGoal_XY()
 {
-  return fabsf(now_pose.x - goal_pose.x) < 0.1 && fabsf(now_pose.y - goal_pose.y) < 0.1;
+  return fabsf(now_x - goal_x) < 0.1 && fabsf(now_y - goal_y) < 0.1;
 }
 
 bool hasReachedGoal_Theta()
 {
-  return fabsf(now_pose.theta - goal_pose.theta) < 0.01;
+  return fabsf(now_theta - goal_theta) < 0.01;
 }
 
 bool hasStopped()
 {
-  return fabsf(now_pose.angular_velocity) < 0.0001 && fabsf(now_pose.linear_velocity) < 0.0001;
+  return fabsf(angular_velocity) < 0.0001 && fabsf(linear_velocity) < 0.0001;
 }
 
 /*-------speed_timer_Callback------------------------------------------------------------*/
@@ -88,10 +105,10 @@ bool time_to_decelerate(double &speed, double deceleration)
     ROS_INFO("decelerate_distance: %f", decelerate_distance);
     double remain_distance;
     if (move_state == LINEAR){
-        remain_distance = sqrt(pow(goal_pose.x - now_pose.x, 2) + pow(goal_pose.y - now_pose.y, 2));
+        remain_distance = sqrt(pow(goal_x - now_x, 2) + pow(goal_y - now_y, 2));
     }
     else if (move_state == TURN){
-        remain_distance = fabsf(goal_pose.theta - now_pose.theta);
+        remain_distance = fabsf(goal_theta - now_theta);
     }
     ROS_INFO("remain_distance: %f", remain_distance);
     return (remain_distance <= decelerate_distance);
@@ -151,40 +168,40 @@ void speed_timer_Callback(const ros::TimerEvent& event, ros::Publisher reached_p
             reached_pub.publish(reached_status);
             have_new_goal = false;
             ROS_INFO("\nspeed reached_status : %s", reached_status.data ? "true" : "false");
-            linear_speed = 0.0;
-            angular_speed = 0.0;
+            t_linear_speed = 0.0;
+            t_angular_speed = 0.0;
             speed_state = ACCELERATE;
         }
 
         if (move_state == LINEAR){
             if (speed_state == ACCELERATE){
-                accelerate(linear_speed, MAX_linear_speed, linear_acceleration, linear_deceleration);
+                accelerate(t_linear_speed, MAX_linear_speed, linear_acceleration, linear_deceleration);
             }
             else if (speed_state == MAX_SPEED){
-                max_speed(linear_speed, MAX_linear_speed, linear_acceleration, linear_deceleration);
+                max_speed(t_linear_speed, MAX_linear_speed, linear_acceleration, linear_deceleration);
             }
             else if (speed_state == DECELERATE){
-                decelerate(linear_speed, MAX_linear_speed, linear_acceleration, linear_deceleration);
+                decelerate(t_linear_speed, MAX_linear_speed, linear_acceleration, linear_deceleration);
             }
             else if (speed_state == STOP){
-                stop(linear_speed);
+                stop(t_linear_speed);
             }
-            ROS_INFO("linear_speed: %f", linear_speed);
+            ROS_INFO("t_linear_speed: %f", t_linear_speed);
         }
         else if (move_state == TURN){
             if (speed_state == ACCELERATE){
-                accelerate(angular_speed, MAX_angular_speed, angular_acceleration, angular_deceleration);
+                accelerate(t_angular_speed, MAX_angular_speed, angular_acceleration, angular_deceleration);
             }
             else if (speed_state == MAX_SPEED){
-                max_speed(angular_speed, MAX_angular_speed, angular_acceleration, angular_deceleration);
+                max_speed(t_angular_speed, MAX_angular_speed, angular_acceleration, angular_deceleration);
             }
             else if (speed_state == DECELERATE){
-                decelerate(angular_speed, MAX_angular_speed, angular_acceleration, angular_deceleration);
+                decelerate(t_angular_speed, MAX_angular_speed, angular_acceleration, angular_deceleration);
             }
             else if (speed_state == STOP){
-                stop(angular_speed);
+                stop(t_angular_speed);
             }
-            ROS_INFO("angular_speed: %f", angular_speed);
+            ROS_INFO("t_angular_speed: %f", t_angular_speed);
         }
     }
 }
@@ -197,9 +214,9 @@ void linear(ros::Publisher vel_pub)
         twist_publish(vel_pub, 0, 0, 0);
     }
     else{
-        double angle = atan2( goal_pose.y - now_pose.y , goal_pose.x - now_pose.x ) - now_pose.theta;
-        double Vx = linear_speed * cos(angle);
-        double Vy = linear_speed * sin(angle);
+        double angle = atan2( goal_y - now_y , goal_x - now_x ) - now_theta;
+        double Vx = t_linear_speed * cos(angle);
+        double Vy = t_linear_speed * sin(angle);
         twist_publish(vel_pub, Vx, Vy, 0);
     }
 }
@@ -222,9 +239,9 @@ void turn(ros::Publisher vel_pub)
         twist_publish(vel_pub, 0, 0, 0);
     }
     else{
-        double W = angular_speed;
-        double error = goal_pose.theta - now_pose.theta;
-        if (error < 0) W = -angular_speed;
+        double W = t_angular_speed;
+        double error = goal_theta - now_theta;
+        if (error < 0) W = -t_angular_speed;
         if (abs(error) > M_PI) W = -W;
         twist_publish(vel_pub, 0, 0, W);
     }
@@ -275,9 +292,10 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "turtle_move");
     ros::NodeHandle nh;
     ros::Publisher vel_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
-    ros::Subscriber pose_sub = nh.subscribe("/odom_pose", 1, pose_CallBack);
+    ros::Subscriber pose_sub = nh.subscribe("/odom_pose", 1, &pose_CallBack);
+    ros::Subscriber speed_sub = nh.subscribe("/base_speed", 1, &speed_CallBack);
     ros::Publisher reached_pub = nh.advertise<std_msgs::Bool>("/reached_status", 1);
-    ros::Subscriber goal_sub = nh.subscribe("/base_goal", 1, goal_CallBack);
+    ros::Subscriber goal_sub = nh.subscribe("/base_goal", 1, &goal_CallBack);
 
     // Timer
     ros::Timer move_timer = nh.createTimer(ros::Duration(0.016), boost::bind(move_timer_Callback, _1, vel_pub, reached_pub));
