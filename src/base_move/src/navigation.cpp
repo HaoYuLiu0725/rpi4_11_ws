@@ -40,7 +40,7 @@ enum Speed_State
 };
 Speed_State speed_state = ACCELERATE;
 
-void pose_CallBack(const geometry_msgs::PoseWithCovarianceStampedConstPtr& pose)
+void pose_CallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& pose)
 {
     now_x = pose->pose.pose.position.x;
     now_y = pose->pose.pose.position.y;
@@ -48,7 +48,7 @@ void pose_CallBack(const geometry_msgs::PoseWithCovarianceStampedConstPtr& pose)
     // ROS_INFO("\nnow pose: %f, %f, %f", now_x, now_y, now_theta);
 }
 
-// void pose_CallBack(const geometry_msgs::PoseConstPtr& pose)
+// void pose_CallBack(const geometry_msgs::Pose::ConstPtr& pose)
 // {
 //     now_x = pose->position.x;
 //     now_y = pose->position.y;
@@ -56,7 +56,7 @@ void pose_CallBack(const geometry_msgs::PoseWithCovarianceStampedConstPtr& pose)
 //     // ROS_INFO("\nnow pose: %f, %f, %f", now_x, now_y, now_theta);
 // }
 
-void speed_CallBack(const geometry_msgs::TwistConstPtr& speed)
+void speed_CallBack(const geometry_msgs::Twist::ConstPtr& speed)
 {
     linear_velocity = sqrt(pow(speed->linear.x, 2) + pow(speed->linear.y, 2));
     angular_velocity = speed->angular.z;

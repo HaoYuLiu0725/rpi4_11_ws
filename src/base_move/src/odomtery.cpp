@@ -91,24 +91,24 @@ void timerCallback(const ros::TimerEvent& e)
 
 int main(int argc, char **argv)
 {
-    //node initialization
-    ros::init(argc, argv, "turtle_odom");
-    ros::NodeHandle nh;
-    ros::Subscriber twist_sub = nh.subscribe("/cmd_vel", 10, &twistCallback);
-    pose_pub = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("/odom_pose", 10);
-    odom_pub = nh.advertise<nav_msgs::Odometry>("/odom", 10);
-    ros::Timer timer = nh.createTimer(ros::Duration(0.01), &timerCallback);
+  //node initialization
+  ros::init(argc, argv, "turtle_odom");
+  ros::NodeHandle nh;
+  ros::Subscriber twist_sub = nh.subscribe("/cmd_vel", 10, &twistCallback);
+  pose_pub = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("/odom_pose", 10);
+  odom_pub = nh.advertise<nav_msgs::Odometry>("/odom", 10);
+  ros::Timer timer = nh.createTimer(ros::Duration(0.01), &timerCallback);
 
-    /* init state param */
-    double p_init_pose_x = 0;
-    double p_init_pose_y = 0;
-    double p_init_pose_yaw = M_PI / 2;
-    output_odom.pose.pose.position.x = p_init_pose_x;
-    output_odom.pose.pose.position.y = p_init_pose_y;
+  /* init state param */
+  double p_init_pose_x = 0;
+  double p_init_pose_y = 0;
+  double p_init_pose_yaw = M_PI / 2;
+  output_odom.pose.pose.position.x = p_init_pose_x;
+  output_odom.pose.pose.position.y = p_init_pose_y;
 
-    tf2::Quaternion q;
-    q.setRPY(0.0, 0.0, p_init_pose_yaw);
-    output_odom.pose.pose.orientation = tf2::toMsg(q);
+  tf2::Quaternion q;
+  q.setRPY(0.0, 0.0, p_init_pose_yaw);
+  output_odom.pose.pose.orientation = tf2::toMsg(q);
 
-    ros::spin();
+  ros::spin();
 }

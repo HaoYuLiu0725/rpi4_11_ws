@@ -79,6 +79,9 @@ navigation_EXTERNAL_OBJECTS =
 
 /home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: base_move/CMakeFiles/navigation.dir/src/navigation.cpp.o
 /home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: base_move/CMakeFiles/navigation.dir/build.make
+/home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /opt/ros/noetic/lib/libtf2_ros.so
+/home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /opt/ros/noetic/lib/libactionlib.so
+/home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /opt/ros/noetic/lib/libmessage_filters.so
 /home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /opt/ros/noetic/lib/libroscpp.so
 /home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /usr/lib/x86_64-linux-gnu/libpthread.so
 /home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.71.0
@@ -89,6 +92,7 @@ navigation_EXTERNAL_OBJECTS =
 /home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
 /home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /usr/lib/x86_64-linux-gnu/libboost_regex.so.1.71.0
 /home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /opt/ros/noetic/lib/libxmlrpcpp.so
+/home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /opt/ros/noetic/lib/libtf2.so
 /home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /opt/ros/noetic/lib/libroscpp_serialization.so
 /home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /opt/ros/noetic/lib/librostime.so
 /home/haoyu/rpi4_11_ws/devel/lib/base_move/navigation: /usr/lib/x86_64-linux-gnu/libboost_date_time.so.1.71.0
