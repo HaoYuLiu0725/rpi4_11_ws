@@ -3,7 +3,7 @@
         <param name="port" value="/dev/ttyUSB0"/>
         <param name="baud" value="115200"/>
     </node>
-    <node pkg = "base_move" type = "ododmetry" name = "ododmetry"/>
+    <node pkg = "base_move" type = "odometry" name = "odometry"/>
     <node pkg = "base_move" type = "navigation" name = "navigation"/>
     <node pkg = "base_move" type = "call_goal" name = "call_goal"/>
 </launch>
