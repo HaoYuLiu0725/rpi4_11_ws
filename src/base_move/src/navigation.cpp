@@ -10,10 +10,10 @@ double now_x, now_y, now_theta;
 double goal_x, goal_y, goal_theta;
 double linear_velocity, angular_velocity;
 
-double MAX_linear_speed  = 0.5; // m/s
+double MAX_linear_speed  = 0.2; // m/s
 double MAX_angular_speed = 0.8; // rad/s
-double linear_acceleration  = 0.2; // m/s^2
-double linear_deceleration  = 0.2; // m/s^2
+double linear_acceleration  = 0.05; // m/s^2
+double linear_deceleration  = 0.05; // m/s^2
 double angular_acceleration = 0.4; // rad/s^2
 double angular_deceleration = 0.4; // rad/s^2
 
