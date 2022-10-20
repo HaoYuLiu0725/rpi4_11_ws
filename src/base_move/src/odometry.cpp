@@ -100,8 +100,8 @@ int main(int argc, char **argv)
   ros::Timer timer = nh.createTimer(ros::Duration(0.01), &timerCallback);
 
   /* init state param */
-  double p_init_pose_x = 0;
-  double p_init_pose_y = 0;
+  double p_init_pose_x = 0.5;
+  double p_init_pose_y = -0.15;
   double p_init_pose_yaw = M_PI / 2;
   output_odom.pose.pose.position.x = p_init_pose_x;
   output_odom.pose.pose.position.y = p_init_pose_y;

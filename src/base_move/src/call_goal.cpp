@@ -4,19 +4,16 @@
 #include <std_msgs/Bool.h>
 #include <cmath>
 
-#define goal_num 4
+#define goal_num 7
 double goal_arr[goal_num][3] = {
-                        /* square */
-                        {0, 2, 90},
-                        {2, 2, 90},
-                        {2, 0, 90},
-                        {0, 0, 90}
-                        /* star */
-                        // {5.544, 10.802, 0},
-                        // {2.454, 1.291, 0},
-                        // {10.544, 7.169, 0},
-                        // {0.544, 7.169, 0},
-                        // {8.635, 1.291, 0},
+                        /* LEVEL 2*/
+                        {0.5, -0.15, 90},
+                        {0.7, -0.15, 90},
+                        {0.7, 1.25, 90},
+                        {0.325, 1.25, 90},
+                        {0.325, 2.35, 90},
+                        {0.65, 2.35, 90},
+                        {0.65, 3.725, 90},
                         };
 bool reached_status = true;
 int num = 0;
@@ -43,7 +40,7 @@ void call_goal_timer_Callback(const ros::TimerEvent& event, ros::Publisher goal_
         ROS_INFO("\nNew goal : [%f, %f, %f]", goal_pose.position.x, goal_pose.position.y, tf2::getYaw(goal_pose.orientation));
         reached_status = false;
         num++;
-        if (num >= goal_num) num = 0;
+        if (num >= goal_num) num = goal_num;
     }
     else{
         ROS_INFO("MOVING !");
