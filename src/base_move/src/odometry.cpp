@@ -92,7 +92,7 @@ void timerCallback(const ros::TimerEvent& e)
 int main(int argc, char **argv)
 {
   //node initialization
-  ros::init(argc, argv, "turtle_odom");
+  ros::init(argc, argv, "odomtery");
   ros::NodeHandle nh;
   ros::Subscriber twist_sub = nh.subscribe("/base_speed", 10, &twistCallback);
   pose_pub = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("/odom_pose", 10);

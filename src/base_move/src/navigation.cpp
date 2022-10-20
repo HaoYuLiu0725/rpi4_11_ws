@@ -289,7 +289,7 @@ void move_timer_Callback(const ros::TimerEvent& event, ros::Publisher vel_pub, r
 int main(int argc, char **argv)
 {
     //node initialization
-    ros::init(argc, argv, "turtle_move");
+    ros::init(argc, argv, "navigation");
     ros::NodeHandle nh;
     ros::Publisher vel_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
     ros::Subscriber pose_sub = nh.subscribe("/odom_pose", 1, &pose_CallBack);
