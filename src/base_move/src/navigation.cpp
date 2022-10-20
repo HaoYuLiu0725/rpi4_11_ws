@@ -45,7 +45,7 @@ void pose_CallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& pos
     now_x = pose->pose.pose.position.x;
     now_y = pose->pose.pose.position.y;
     now_theta = tf2::getYaw(pose->pose.pose.orientation);
-    // ROS_INFO("\nnow pose: %f, %f, %f", now_x, now_y, now_theta);
+    ROS_INFO("\nnow pose: %f, %f, %f", now_x, now_y, now_theta);
 }
 
 // void pose_CallBack(const geometry_msgs::Pose::ConstPtr& pose)
@@ -66,7 +66,7 @@ void speed_CallBack(const geometry_msgs::Twist::ConstPtr& speed)
 void goal_CallBack(const geometry_msgs::PoseConstPtr& pose)
 {
     goal_x = pose->position.x;
-    goal_y = pose->position.x;
+    goal_y = pose->position.y;
     goal_theta = tf2::getYaw(pose->orientation);
     ROS_INFO("\nNew goal : [%f, %f, %f]", goal_x, goal_y, goal_theta);
     have_new_goal = true;

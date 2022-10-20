@@ -4,12 +4,12 @@
 #include <std_msgs/Bool.h>
 #include <cmath>
 
-#define goal_num 5
+#define goal_num 4
 double goal_arr[goal_num][3] = {
                         /* square */
-                        {2, 0, 90},
-                        {2, 2, 90},
                         {0, 2, 90},
+                        {2, 2, 90},
+                        {2, 0, 90},
                         {0, 0, 90}
                         /* star */
                         // {5.544, 10.802, 0},

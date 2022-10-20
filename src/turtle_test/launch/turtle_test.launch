@@ -1,0 +1,7 @@
+<launch>
+    <node pkg = "turtlesim" name = "turtlesim_node" type = "turtlesim_node"/>
+    <node pkg = "turtle_test" name = "turtle_move" type = "turtle_move"/>
+    <node pkg = "base_move" type = "odometry" name = "odometry"/>
+    <node pkg = "base_move" type = "navigation" name = "navigation"/>
+    <node pkg = "base_move" type = "call_goal" name = "call_goal"/>
+</launch>

@@ -80,6 +80,16 @@ install/fast: preinstall/fast
 	/usr/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -90,16 +100,6 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
 
 # Special rule for the target test
 test:
@@ -183,19 +183,19 @@ call_goal/fast:
 .PHONY : call_goal/fast
 
 # Convenience name for target.
-base_move/CMakeFiles/odomtery.dir/rule:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/odomtery.dir/rule
-.PHONY : base_move/CMakeFiles/odomtery.dir/rule
+base_move/CMakeFiles/odometry.dir/rule:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/odometry.dir/rule
+.PHONY : base_move/CMakeFiles/odometry.dir/rule
 
 # Convenience name for target.
-odomtery: base_move/CMakeFiles/odomtery.dir/rule
+odometry: base_move/CMakeFiles/odometry.dir/rule
 
-.PHONY : odomtery
+.PHONY : odometry
 
 # fast build rule for target.
-odomtery/fast:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odomtery.dir/build.make base_move/CMakeFiles/odomtery.dir/build
-.PHONY : odomtery/fast
+odometry/fast:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odometry.dir/build.make base_move/CMakeFiles/odometry.dir/build
+.PHONY : odometry/fast
 
 # Convenience name for target.
 base_move/CMakeFiles/navigation.dir/rule:
@@ -791,32 +791,32 @@ src/navigation.cpp.s:
 	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/navigation.dir/build.make base_move/CMakeFiles/navigation.dir/src/navigation.cpp.s
 .PHONY : src/navigation.cpp.s
 
-src/odomtery.o: src/odomtery.cpp.o
+src/odometry.o: src/odometry.cpp.o
 
-.PHONY : src/odomtery.o
+.PHONY : src/odometry.o
 
 # target to build an object file
-src/odomtery.cpp.o:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odomtery.dir/build.make base_move/CMakeFiles/odomtery.dir/src/odomtery.cpp.o
-.PHONY : src/odomtery.cpp.o
+src/odometry.cpp.o:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odometry.dir/build.make base_move/CMakeFiles/odometry.dir/src/odometry.cpp.o
+.PHONY : src/odometry.cpp.o
 
-src/odomtery.i: src/odomtery.cpp.i
+src/odometry.i: src/odometry.cpp.i
 
-.PHONY : src/odomtery.i
+.PHONY : src/odometry.i
 
 # target to preprocess a source file
-src/odomtery.cpp.i:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odomtery.dir/build.make base_move/CMakeFiles/odomtery.dir/src/odomtery.cpp.i
-.PHONY : src/odomtery.cpp.i
+src/odometry.cpp.i:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odometry.dir/build.make base_move/CMakeFiles/odometry.dir/src/odometry.cpp.i
+.PHONY : src/odometry.cpp.i
 
-src/odomtery.s: src/odomtery.cpp.s
+src/odometry.s: src/odometry.cpp.s
 
-.PHONY : src/odomtery.s
+.PHONY : src/odometry.s
 
 # target to generate assembly for a file
-src/odomtery.cpp.s:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odomtery.dir/build.make base_move/CMakeFiles/odomtery.dir/src/odomtery.cpp.s
-.PHONY : src/odomtery.cpp.s
+src/odometry.cpp.s:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odometry.dir/build.make base_move/CMakeFiles/odometry.dir/src/odometry.cpp.s
+.PHONY : src/odometry.cpp.s
 
 # Help Target
 help:
@@ -826,10 +826,10 @@ help:
 	@echo "... depend"
 	@echo "... install/strip"
 	@echo "... install"
+	@echo "... list_install_components"
 	@echo "... edit_cache"
 	@echo "... call_goal"
-	@echo "... list_install_components"
-	@echo "... odomtery"
+	@echo "... odometry"
 	@echo "... navigation"
 	@echo "... actionlib_generate_messages_nodejs"
 	@echo "... std_msgs_generate_messages_py"
@@ -875,9 +875,9 @@ help:
 	@echo "... src/navigation.o"
 	@echo "... src/navigation.i"
 	@echo "... src/navigation.s"
-	@echo "... src/odomtery.o"
-	@echo "... src/odomtery.i"
-	@echo "... src/odomtery.s"
+	@echo "... src/odometry.o"
+	@echo "... src/odometry.i"
+	@echo "... src/odometry.s"
 .PHONY : help
 
 

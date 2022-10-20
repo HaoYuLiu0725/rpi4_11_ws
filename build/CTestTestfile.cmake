@@ -7,3 +7,4 @@
 subdirs("gtest")
 subdirs("rosserial_python")
 subdirs("base_move")
+subdirs("turtle_test")
