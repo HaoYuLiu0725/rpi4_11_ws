@@ -40,7 +40,7 @@ void call_goal_timer_Callback(const ros::TimerEvent& event, ros::Publisher goal_
         ROS_INFO("\nNew goal : [%f, %f, %f]", goal_pose.position.x, goal_pose.position.y, tf2::getYaw(goal_pose.orientation));
         reached_status = false;
         num++;
-        if (num >= goal_num) num = goal_num;
+        if (num >= goal_num) num = goal_num-1;
     }
     else{
         ROS_INFO("MOVING !");
