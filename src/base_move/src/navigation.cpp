@@ -85,7 +85,7 @@ void twist_publish(ros::Publisher vel_pub, double Vx, double Vy, double W)
 
 bool hasReachedGoal_XY()
 {
-  return fabsf(now_x - goal_x) < 0.1 && fabsf(now_y - goal_y) < 0.1;
+  return fabsf(now_x - goal_x) < 0.001 && fabsf(now_y - goal_y) < 0.001;
 }
 
 bool hasReachedGoal_Theta()
