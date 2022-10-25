@@ -56,18 +56,6 @@ CMAKE_BINARY_DIR = /home/haoyu/rpi4_11_ws/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
-
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -100,6 +88,18 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
 
 # Special rule for the target test
 test:
@@ -168,6 +168,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+base_move/CMakeFiles/odometry_node.dir/rule:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/odometry_node.dir/rule
+.PHONY : base_move/CMakeFiles/odometry_node.dir/rule
+
+# Convenience name for target.
+odometry_node: base_move/CMakeFiles/odometry_node.dir/rule
+
+.PHONY : odometry_node
+
+# fast build rule for target.
+odometry_node/fast:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odometry_node.dir/build.make base_move/CMakeFiles/odometry_node.dir/build
+.PHONY : odometry_node/fast
+
+# Convenience name for target.
 base_move/CMakeFiles/call_goal.dir/rule:
 	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/call_goal.dir/rule
 .PHONY : base_move/CMakeFiles/call_goal.dir/rule
@@ -183,19 +198,19 @@ call_goal/fast:
 .PHONY : call_goal/fast
 
 # Convenience name for target.
-base_move/CMakeFiles/odometry.dir/rule:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/odometry.dir/rule
-.PHONY : base_move/CMakeFiles/odometry.dir/rule
+base_move/CMakeFiles/my_odometry.dir/rule:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/my_odometry.dir/rule
+.PHONY : base_move/CMakeFiles/my_odometry.dir/rule
 
 # Convenience name for target.
-odometry: base_move/CMakeFiles/odometry.dir/rule
+my_odometry: base_move/CMakeFiles/my_odometry.dir/rule
 
-.PHONY : odometry
+.PHONY : my_odometry
 
 # fast build rule for target.
-odometry/fast:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odometry.dir/build.make base_move/CMakeFiles/odometry.dir/build
-.PHONY : odometry/fast
+my_odometry/fast:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_odometry.dir/build.make base_move/CMakeFiles/my_odometry.dir/build
+.PHONY : my_odometry/fast
 
 # Convenience name for target.
 base_move/CMakeFiles/navigation.dir/rule:
@@ -211,6 +226,21 @@ navigation: base_move/CMakeFiles/navigation.dir/rule
 navigation/fast:
 	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/navigation.dir/build.make base_move/CMakeFiles/navigation.dir/build
 .PHONY : navigation/fast
+
+# Convenience name for target.
+base_move/CMakeFiles/odometry.dir/rule:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/odometry.dir/rule
+.PHONY : base_move/CMakeFiles/odometry.dir/rule
+
+# Convenience name for target.
+odometry: base_move/CMakeFiles/odometry.dir/rule
+
+.PHONY : odometry
+
+# fast build rule for target.
+odometry/fast:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odometry.dir/build.make base_move/CMakeFiles/odometry.dir/build
+.PHONY : odometry/fast
 
 # Convenience name for target.
 base_move/CMakeFiles/actionlib_generate_messages_nodejs.dir/rule:
@@ -764,6 +794,33 @@ src/call_goal.cpp.s:
 	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/call_goal.dir/build.make base_move/CMakeFiles/call_goal.dir/src/call_goal.cpp.s
 .PHONY : src/call_goal.cpp.s
 
+src/my_odometry.o: src/my_odometry.cpp.o
+
+.PHONY : src/my_odometry.o
+
+# target to build an object file
+src/my_odometry.cpp.o:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_odometry.dir/build.make base_move/CMakeFiles/my_odometry.dir/src/my_odometry.cpp.o
+.PHONY : src/my_odometry.cpp.o
+
+src/my_odometry.i: src/my_odometry.cpp.i
+
+.PHONY : src/my_odometry.i
+
+# target to preprocess a source file
+src/my_odometry.cpp.i:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_odometry.dir/build.make base_move/CMakeFiles/my_odometry.dir/src/my_odometry.cpp.i
+.PHONY : src/my_odometry.cpp.i
+
+src/my_odometry.s: src/my_odometry.cpp.s
+
+.PHONY : src/my_odometry.s
+
+# target to generate assembly for a file
+src/my_odometry.cpp.s:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_odometry.dir/build.make base_move/CMakeFiles/my_odometry.dir/src/my_odometry.cpp.s
+.PHONY : src/my_odometry.cpp.s
+
 src/navigation.o: src/navigation.cpp.o
 
 .PHONY : src/navigation.o
@@ -790,6 +847,33 @@ src/navigation.s: src/navigation.cpp.s
 src/navigation.cpp.s:
 	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/navigation.dir/build.make base_move/CMakeFiles/navigation.dir/src/navigation.cpp.s
 .PHONY : src/navigation.cpp.s
+
+src/nodes/odometry_node.o: src/nodes/odometry_node.cpp.o
+
+.PHONY : src/nodes/odometry_node.o
+
+# target to build an object file
+src/nodes/odometry_node.cpp.o:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odometry_node.dir/build.make base_move/CMakeFiles/odometry_node.dir/src/nodes/odometry_node.cpp.o
+.PHONY : src/nodes/odometry_node.cpp.o
+
+src/nodes/odometry_node.i: src/nodes/odometry_node.cpp.i
+
+.PHONY : src/nodes/odometry_node.i
+
+# target to preprocess a source file
+src/nodes/odometry_node.cpp.i:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odometry_node.dir/build.make base_move/CMakeFiles/odometry_node.dir/src/nodes/odometry_node.cpp.i
+.PHONY : src/nodes/odometry_node.cpp.i
+
+src/nodes/odometry_node.s: src/nodes/odometry_node.cpp.s
+
+.PHONY : src/nodes/odometry_node.s
+
+# target to generate assembly for a file
+src/nodes/odometry_node.cpp.s:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/odometry_node.dir/build.make base_move/CMakeFiles/odometry_node.dir/src/nodes/odometry_node.cpp.s
+.PHONY : src/nodes/odometry_node.cpp.s
 
 src/odometry.o: src/odometry.cpp.o
 
@@ -824,13 +908,15 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/strip"
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... edit_cache"
+	@echo "... odometry_node"
 	@echo "... call_goal"
-	@echo "... odometry"
+	@echo "... install/strip"
+	@echo "... my_odometry"
 	@echo "... navigation"
+	@echo "... odometry"
 	@echo "... actionlib_generate_messages_nodejs"
 	@echo "... std_msgs_generate_messages_py"
 	@echo "... std_msgs_generate_messages_lisp"
@@ -872,9 +958,15 @@ help:
 	@echo "... src/call_goal.o"
 	@echo "... src/call_goal.i"
 	@echo "... src/call_goal.s"
+	@echo "... src/my_odometry.o"
+	@echo "... src/my_odometry.i"
+	@echo "... src/my_odometry.s"
 	@echo "... src/navigation.o"
 	@echo "... src/navigation.i"
 	@echo "... src/navigation.s"
+	@echo "... src/nodes/odometry_node.o"
+	@echo "... src/nodes/odometry_node.i"
+	@echo "... src/nodes/odometry_node.s"
 	@echo "... src/odometry.o"
 	@echo "... src/odometry.i"
 	@echo "... src/odometry.s"

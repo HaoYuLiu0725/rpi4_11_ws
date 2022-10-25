@@ -177,7 +177,7 @@ foreach(library ${libraries})
   endif()
 endforeach()
 
-set(turtle_test_EXPORTED_TARGETS "turtle_test_generate_messages_cpp;turtle_test_generate_messages_eus;turtle_test_generate_messages_lisp;turtle_test_generate_messages_nodejs;turtle_test_generate_messages_py")
+set(turtle_test_EXPORTED_TARGETS "")
 # create dummy targets for exported code generation targets to make life of users easier
 foreach(t ${turtle_test_EXPORTED_TARGETS})
   if(NOT TARGET ${t})
@@ -214,7 +214,7 @@ foreach(depend ${depends})
   _list_append_deduplicate(turtle_test_EXPORTED_TARGETS ${${turtle_test_dep}_EXPORTED_TARGETS})
 endforeach()
 
-set(pkg_cfg_extras "turtle_test-msg-extras.cmake")
+set(pkg_cfg_extras "")
 foreach(extra ${pkg_cfg_extras})
   if(NOT IS_ABSOLUTE ${extra})
     set(extra ${turtle_test_DIR}/${extra})

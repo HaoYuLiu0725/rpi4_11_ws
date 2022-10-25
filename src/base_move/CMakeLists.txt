@@ -106,10 +106,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES base_move
-#  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs
-#  DEPENDS system_lib
+ INCLUDE_DIRS include
+ LIBRARIES base_move
+ CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs tf2 tf2_ros
+ DEPENDS system_lib
 )
 
 ###########
@@ -119,14 +119,12 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/base_move.cpp
-# )
+add_library(odometry src/odometry.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -137,10 +135,10 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/base_move_node.cpp)
-add_executable(navigation src/navigation.cpp)
-add_executable(odometry   src/odometry.cpp)
-add_executable(call_goal  src/call_goal.cpp)
-
+add_executable(navigation     src/navigation.cpp)
+add_executable(my_odometry    src/my_odometry.cpp)
+add_executable(call_goal      src/call_goal.cpp)
+add_executable(odometry_node  src/nodes/odometry_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -157,8 +155,10 @@ add_executable(call_goal  src/call_goal.cpp)
 #   ${catkin_LIBRARIES}
 # )
 target_link_libraries(navigation  ${catkin_LIBRARIES})
-target_link_libraries(odometry    ${catkin_LIBRARIES})
+target_link_libraries(my_odometry ${catkin_LIBRARIES})
 target_link_libraries(call_goal   ${catkin_LIBRARIES})
+target_link_libraries(odometry    ${catkin_LIBRARIES})
+target_link_libraries(odometry_node odometry)
 
 #############
 ## Install ##

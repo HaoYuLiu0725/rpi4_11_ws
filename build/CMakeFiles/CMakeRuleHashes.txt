@@ -2,4 +2,3 @@
 957786a1208ff5cc121053f349e8e380 /home/haoyu/rpi4_11_ws/devel/share/roseus/ros/turtle_practice/manifest.l
 64e79edb3f051169ec0d2989b094c4b1 /home/haoyu/rpi4_11_ws/devel/share/roseus/ros/turtle_test/manifest.l
 f636c17e3c2faaab6656736ec71e2286 CMakeFiles/clean_test_results
-d8262febef9a1cc45e651d72eac86d14 turtle_test/CMakeFiles/turtle_test_generate_messages_eus
