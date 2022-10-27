@@ -1,4 +1,9 @@
 <launch>
+  <node name = "serial_node" pkg = "rosserial_python" type = "serial_node.py">
+        <param name="port" value="/dev/ttyUSB0"/>
+        <param name="baud" value="115200"/>
+  </node>
+
   <node name="odometry" pkg="base_move" type="odometry_node" output="screen">
     <param name="active" value="true"/>
     <param name="publish_pose" value="false"/>
