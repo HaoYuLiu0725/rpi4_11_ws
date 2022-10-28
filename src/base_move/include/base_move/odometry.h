@@ -71,7 +71,7 @@ private:
   double p_cov_vy_;
   double p_cov_vyaw_;
 
-  std::string p_twist_topic;
+  std::string p_twist_topic_;
   std::string p_odom_topic_;
   std::string p_pose_topic_;
   std::string p_fixed_frame_id_;

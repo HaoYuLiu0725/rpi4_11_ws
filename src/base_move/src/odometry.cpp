@@ -33,7 +33,7 @@ bool Odometry::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Resp
   get_param_ok = nh_local_.param<double>("timeout", timeout, 0.2);
   timeout_.fromSec(timeout);
 
-  get_param_ok = nh_local_.param<string>("twist_topic", p_twist_topic, "base_speed");
+  get_param_ok = nh_local_.param<string>("twist_topic", p_twist_topic_, "base_speed");
   get_param_ok = nh_local_.param<string>("odom_topic", p_odom_topic_, "odom");
   get_param_ok = nh_local_.param<string>("pose_topic", p_pose_topic_, "odom_pose");
   get_param_ok = nh_local_.param<string>("fixed_frame_id", p_fixed_frame_id_, "odom");
@@ -58,7 +58,7 @@ bool Odometry::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Resp
   {
     if (p_active_)
     {
-      twist_sub_ = nh_.subscribe(p_twist_topic, 10, &Odometry::twistCallback, this);
+      twist_sub_ = nh_.subscribe(p_twist_topic_, 10, &Odometry::twistCallback, this);
       pose_pub_ = nh_.advertise<geometry_msgs::PoseWithCovarianceStamped>(p_pose_topic_, 10);
       odom_pub_ = nh_.advertise<nav_msgs::Odometry>(p_odom_topic_, 10);
       timer_.start();
