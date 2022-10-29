@@ -6,5 +6,5 @@
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
 subdirs("rosserial_python")
+subdirs("odometry")
 subdirs("base_move")
-subdirs("turtle_test")

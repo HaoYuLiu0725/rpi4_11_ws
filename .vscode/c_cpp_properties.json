@@ -13,7 +13,8 @@
                 "/home/haoyu/ros_test/src/test/include/**",
                 "/home/haoyu/ros_test/src/turtle_practice/include/**",
                 "/usr/include/**",
-                "/home/haoyu/rpi4_11_ws/src/base_move/include/**"
+                "/home/haoyu/rpi4_11_ws/src/base_move/include/**",
+                "${workspaceFolder}/src/odometry/include"
             ],
             "name": "ROS",
             "intelliSenseMode": "gcc-x64",

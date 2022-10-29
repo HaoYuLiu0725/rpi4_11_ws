@@ -124,7 +124,9 @@ include_directories(
 )
 
 ## Declare a C++ library
-add_library(odometry src/odometry.cpp)
+# add_library(${PROJECT_NAME}
+#   src/${PROJECT_NAME}/odometry.cpp
+# )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -138,7 +140,6 @@ add_library(odometry src/odometry.cpp)
 add_executable(navigation     src/navigation.cpp)
 add_executable(my_odometry    src/my_odometry.cpp)
 add_executable(call_goal      src/call_goal.cpp)
-add_executable(odometry_node  src/nodes/odometry_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -157,8 +158,6 @@ add_executable(odometry_node  src/nodes/odometry_node.cpp)
 target_link_libraries(navigation  ${catkin_LIBRARIES})
 target_link_libraries(my_odometry ${catkin_LIBRARIES})
 target_link_libraries(call_goal   ${catkin_LIBRARIES})
-target_link_libraries(odometry    ${catkin_LIBRARIES})
-target_link_libraries(odometry_node odometry)
 
 #############
 ## Install ##
