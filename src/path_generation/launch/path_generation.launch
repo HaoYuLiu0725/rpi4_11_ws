@@ -11,5 +11,6 @@
     <param name="path_topic" value="nav_path"/>
     <param name="goal_topic" value="nav_goal"/>
     <param name="pose_topic" value="ekf_pose"/>
+    <param name="frame_id" value="map"/>
   </node>
 </launch>

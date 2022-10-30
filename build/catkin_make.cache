@@ -1,2 +1,2 @@
-base_move:odometry:path_generation:rosserial_python
+base_move:fake_odom:odometry:path_generation:rosserial_python
 -DCATKIN_DEVEL_PREFIX=/home/haoyu/rpi4_11_ws/devel -DCMAKE_INSTALL_PREFIX=/home/haoyu/rpi4_11_ws/install -G Unix Makefiles
