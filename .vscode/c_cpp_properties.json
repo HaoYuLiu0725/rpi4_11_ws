@@ -14,7 +14,8 @@
                 "${workspaceFolder}/src/turtle_practice/include/**",
                 "${workspaceFolder}/src/base_move/include/**",
                 "${workspaceFolder}/src/odometry/include/**",
-                "${workspaceFolder}/src/path_generation/include"
+                "${workspaceFolder}/src/path_generation/include/**",
+                "${workspaceFolder}/src/fake_odom/include/**"
             ],
             "name": "ROS",
             "intelliSenseMode": "gcc-x64",

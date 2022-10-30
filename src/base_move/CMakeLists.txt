@@ -109,7 +109,7 @@ catkin_package(
  INCLUDE_DIRS include
  LIBRARIES base_move
  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs tf2 tf2_ros
- DEPENDS system_lib
+#  DEPENDS system_lib
 )
 
 ###########

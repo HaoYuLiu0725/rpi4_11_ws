@@ -109,7 +109,7 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES odometry
   CATKIN_DEPENDS geometry_msgs nav_msgs roscpp std_msgs tf2 tf2_ros
-  DEPENDS system_lib
+  # DEPENDS system_lib
 )
 
 ###########
