@@ -6,15 +6,15 @@
                 "limitSymbolsToIncludedHeaders": false
             },
             "includePath": [
-                "/home/haoyu/ros_test/devel/include/**",
-                "/opt/ros/noetic/include/**",
-                "/home/haoyu/ros_test/src/base_move/include/**",
-                "/home/haoyu/ros_test/src/practice/include/**",
-                "/home/haoyu/ros_test/src/test/include/**",
-                "/home/haoyu/ros_test/src/turtle_practice/include/**",
                 "/usr/include/**",
-                "/home/haoyu/rpi4_11_ws/src/base_move/include/**",
-                "${workspaceFolder}/src/odometry/include"
+                "/opt/ros/noetic/include/**",
+                "/home/haoyu/ros_test/devel/include/**",
+                "${workspaceFolder}/src/practice/include/**",
+                "${workspaceFolder}/src/test/include/**",
+                "${workspaceFolder}/src/turtle_practice/include/**",
+                "${workspaceFolder}/src/base_move/include/**",
+                "${workspaceFolder}/src/odometry/include/**",
+                "${workspaceFolder}/src/path_generation/include"
             ],
             "name": "ROS",
             "intelliSenseMode": "gcc-x64",

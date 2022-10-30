@@ -1,0 +1,8 @@
+prefix=/home/haoyu/rpi4_11_ws/devel
+
+Name: path_generation
+Description: Description of path_generation
+Version: 0.0.0
+Cflags: -I/home/haoyu/rpi4_11_ws/src/path_generation/include
+Libs: -L${prefix}/lib -lodometry
+Requires: geometry_msgs nav_msgs roscpp std_msgs tf2 tf2_ros

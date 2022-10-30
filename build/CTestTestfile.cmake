@@ -7,4 +7,5 @@
 subdirs("gtest")
 subdirs("rosserial_python")
 subdirs("odometry")
+subdirs("path_generation")
 subdirs("base_move")

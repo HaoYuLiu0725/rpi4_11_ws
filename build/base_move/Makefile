@@ -68,6 +68,40 @@ install/strip/fast: preinstall/fast
 	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -100,40 +134,6 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
-
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-
-.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -198,19 +198,19 @@ my_odometry/fast:
 .PHONY : my_odometry/fast
 
 # Convenience name for target.
-base_move/CMakeFiles/navigation.dir/rule:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/navigation.dir/rule
-.PHONY : base_move/CMakeFiles/navigation.dir/rule
+base_move/CMakeFiles/my_navigation.dir/rule:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/my_navigation.dir/rule
+.PHONY : base_move/CMakeFiles/my_navigation.dir/rule
 
 # Convenience name for target.
-navigation: base_move/CMakeFiles/navigation.dir/rule
+my_navigation: base_move/CMakeFiles/my_navigation.dir/rule
 
-.PHONY : navigation
+.PHONY : my_navigation
 
 # fast build rule for target.
-navigation/fast:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/navigation.dir/build.make base_move/CMakeFiles/navigation.dir/build
-.PHONY : navigation/fast
+my_navigation/fast:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_navigation.dir/build.make base_move/CMakeFiles/my_navigation.dir/build
+.PHONY : my_navigation/fast
 
 src/call_goal.o: src/call_goal.cpp.o
 
@@ -239,6 +239,33 @@ src/call_goal.cpp.s:
 	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/call_goal.dir/build.make base_move/CMakeFiles/call_goal.dir/src/call_goal.cpp.s
 .PHONY : src/call_goal.cpp.s
 
+src/my_navigation.o: src/my_navigation.cpp.o
+
+.PHONY : src/my_navigation.o
+
+# target to build an object file
+src/my_navigation.cpp.o:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_navigation.dir/build.make base_move/CMakeFiles/my_navigation.dir/src/my_navigation.cpp.o
+.PHONY : src/my_navigation.cpp.o
+
+src/my_navigation.i: src/my_navigation.cpp.i
+
+.PHONY : src/my_navigation.i
+
+# target to preprocess a source file
+src/my_navigation.cpp.i:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_navigation.dir/build.make base_move/CMakeFiles/my_navigation.dir/src/my_navigation.cpp.i
+.PHONY : src/my_navigation.cpp.i
+
+src/my_navigation.s: src/my_navigation.cpp.s
+
+.PHONY : src/my_navigation.s
+
+# target to generate assembly for a file
+src/my_navigation.cpp.s:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_navigation.dir/build.make base_move/CMakeFiles/my_navigation.dir/src/my_navigation.cpp.s
+.PHONY : src/my_navigation.cpp.s
+
 src/my_odometry.o: src/my_odometry.cpp.o
 
 .PHONY : src/my_odometry.o
@@ -266,33 +293,6 @@ src/my_odometry.cpp.s:
 	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_odometry.dir/build.make base_move/CMakeFiles/my_odometry.dir/src/my_odometry.cpp.s
 .PHONY : src/my_odometry.cpp.s
 
-src/navigation.o: src/navigation.cpp.o
-
-.PHONY : src/navigation.o
-
-# target to build an object file
-src/navigation.cpp.o:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/navigation.dir/build.make base_move/CMakeFiles/navigation.dir/src/navigation.cpp.o
-.PHONY : src/navigation.cpp.o
-
-src/navigation.i: src/navigation.cpp.i
-
-.PHONY : src/navigation.i
-
-# target to preprocess a source file
-src/navigation.cpp.i:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/navigation.dir/build.make base_move/CMakeFiles/navigation.dir/src/navigation.cpp.i
-.PHONY : src/navigation.cpp.i
-
-src/navigation.s: src/navigation.cpp.s
-
-.PHONY : src/navigation.s
-
-# target to generate assembly for a file
-src/navigation.cpp.s:
-	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/navigation.dir/build.make base_move/CMakeFiles/navigation.dir/src/navigation.cpp.s
-.PHONY : src/navigation.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -300,24 +300,24 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... install/strip"
-	@echo "... install"
-	@echo "... list_install_components"
-	@echo "... rebuild_cache"
+	@echo "... edit_cache"
+	@echo "... test"
 	@echo "... install/local"
 	@echo "... call_goal"
 	@echo "... my_odometry"
-	@echo "... edit_cache"
-	@echo "... test"
-	@echo "... navigation"
+	@echo "... install"
+	@echo "... list_install_components"
+	@echo "... rebuild_cache"
+	@echo "... my_navigation"
 	@echo "... src/call_goal.o"
 	@echo "... src/call_goal.i"
 	@echo "... src/call_goal.s"
+	@echo "... src/my_navigation.o"
+	@echo "... src/my_navigation.i"
+	@echo "... src/my_navigation.s"
 	@echo "... src/my_odometry.o"
 	@echo "... src/my_odometry.i"
 	@echo "... src/my_odometry.s"
-	@echo "... src/navigation.o"
-	@echo "... src/navigation.i"
-	@echo "... src/navigation.s"
 .PHONY : help
 
 

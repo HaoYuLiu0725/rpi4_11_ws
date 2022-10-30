@@ -17,6 +17,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "catkin_generated/order_packages.cmake"
   "odometry/catkin_generated/ordered_paths.cmake"
   "odometry/catkin_generated/package.cmake"
+  "path_generation/catkin_generated/ordered_paths.cmake"
+  "path_generation/catkin_generated/package.cmake"
   "rosserial_python/catkin_generated/package.cmake"
   "rosserial_python/catkin_generated/setup_py_interrogation.cmake"
   "/home/haoyu/rpi4_11_ws/src/CMakeLists.txt"
@@ -24,6 +26,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/haoyu/rpi4_11_ws/src/base_move/package.xml"
   "/home/haoyu/rpi4_11_ws/src/odometry/CMakeLists.txt"
   "/home/haoyu/rpi4_11_ws/src/odometry/package.xml"
+  "/home/haoyu/rpi4_11_ws/src/path_generation/CMakeLists.txt"
+  "/home/haoyu/rpi4_11_ws/src/path_generation/package.xml"
   "/home/haoyu/rpi4_11_ws/src/rosserial_python/CMakeLists.txt"
   "/home/haoyu/rpi4_11_ws/src/rosserial_python/nodes/message_info_service.py"
   "/home/haoyu/rpi4_11_ws/src/rosserial_python/nodes/serial_node.py"
@@ -242,6 +246,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "gtest/googletest/CMakeFiles/CMakeDirectoryInformation.cmake"
   "rosserial_python/CMakeFiles/CMakeDirectoryInformation.cmake"
   "odometry/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "path_generation/CMakeFiles/CMakeDirectoryInformation.cmake"
   "base_move/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
@@ -299,7 +304,9 @@ set(CMAKE_DEPEND_INFO_FILES
   "odometry/CMakeFiles/actionlib_generate_messages_cpp.dir/DependInfo.cmake"
   "odometry/CMakeFiles/actionlib_msgs_generate_messages_py.dir/DependInfo.cmake"
   "odometry/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/DependInfo.cmake"
+  "path_generation/CMakeFiles/path_generation_node.dir/DependInfo.cmake"
+  "path_generation/CMakeFiles/path_generation.dir/DependInfo.cmake"
   "base_move/CMakeFiles/call_goal.dir/DependInfo.cmake"
   "base_move/CMakeFiles/my_odometry.dir/DependInfo.cmake"
-  "base_move/CMakeFiles/navigation.dir/DependInfo.cmake"
+  "base_move/CMakeFiles/my_navigation.dir/DependInfo.cmake"
   )

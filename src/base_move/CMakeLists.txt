@@ -137,7 +137,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/base_move_node.cpp)
-add_executable(navigation     src/navigation.cpp)
+add_executable(my_navigation  src/my_navigation.cpp)
 add_executable(my_odometry    src/my_odometry.cpp)
 add_executable(call_goal      src/call_goal.cpp)
 
@@ -155,7 +155,7 @@ add_executable(call_goal      src/call_goal.cpp)
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(navigation  ${catkin_LIBRARIES})
+target_link_libraries(my_navigation  ${catkin_LIBRARIES})
 target_link_libraries(my_odometry ${catkin_LIBRARIES})
 target_link_libraries(call_goal   ${catkin_LIBRARIES})
 

@@ -844,6 +844,32 @@ rosgraph_msgs_generate_messages_nodejs/fast:
 .PHONY : rosgraph_msgs_generate_messages_nodejs/fast
 
 #=============================================================================
+# Target rules for targets named path_generation_node
+
+# Build rule for target.
+path_generation_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 path_generation_node
+.PHONY : path_generation_node
+
+# fast build rule for target.
+path_generation_node/fast:
+	$(MAKE) -f path_generation/CMakeFiles/path_generation_node.dir/build.make path_generation/CMakeFiles/path_generation_node.dir/build
+.PHONY : path_generation_node/fast
+
+#=============================================================================
+# Target rules for targets named path_generation
+
+# Build rule for target.
+path_generation: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 path_generation
+.PHONY : path_generation
+
+# fast build rule for target.
+path_generation/fast:
+	$(MAKE) -f path_generation/CMakeFiles/path_generation.dir/build.make path_generation/CMakeFiles/path_generation.dir/build
+.PHONY : path_generation/fast
+
+#=============================================================================
 # Target rules for targets named call_goal
 
 # Build rule for target.
@@ -870,17 +896,17 @@ my_odometry/fast:
 .PHONY : my_odometry/fast
 
 #=============================================================================
-# Target rules for targets named navigation
+# Target rules for targets named my_navigation
 
 # Build rule for target.
-navigation: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 navigation
-.PHONY : navigation
+my_navigation: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 my_navigation
+.PHONY : my_navigation
 
 # fast build rule for target.
-navigation/fast:
-	$(MAKE) -f base_move/CMakeFiles/navigation.dir/build.make base_move/CMakeFiles/navigation.dir/build
-.PHONY : navigation/fast
+my_navigation/fast:
+	$(MAKE) -f base_move/CMakeFiles/my_navigation.dir/build.make base_move/CMakeFiles/my_navigation.dir/build
+.PHONY : my_navigation/fast
 
 # Help Target
 help:
@@ -947,9 +973,11 @@ help:
 	@echo "... actionlib_generate_messages_cpp"
 	@echo "... actionlib_msgs_generate_messages_py"
 	@echo "... rosgraph_msgs_generate_messages_nodejs"
+	@echo "... path_generation_node"
+	@echo "... path_generation"
 	@echo "... call_goal"
 	@echo "... my_odometry"
-	@echo "... navigation"
+	@echo "... my_navigation"
 .PHONY : help
 
 
