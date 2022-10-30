@@ -30,6 +30,7 @@ bool Path_generation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empt
   get_param_ok = nh_local_.param<string>("path_topic", p_path_topic_, "nav_path");
   get_param_ok = nh_local_.param<string>("goal_topic", p_goal_topic_, "nav_goal");
   get_param_ok = nh_local_.param<string>("pose_topic", p_pose_topic_, "ekf_pose");
+  get_param_ok = nh_local_.param<string>("frame_id", p_frame_id_, "map");
 
   /* check param */
   if (get_param_ok)
@@ -123,6 +124,10 @@ void Path_generation::generatePath()
 
 void Path_generation::publish()
 {
+  ros::Time now = ros::Time::now();
+  output_path_.header.stamp = now;
+  output_path_.header.frame_id = p_frame_id_;
+  
   path_pub_.publish(output_path_);
   have_new_goal = false;
 }

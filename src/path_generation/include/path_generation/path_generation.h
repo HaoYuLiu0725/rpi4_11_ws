@@ -63,5 +63,6 @@ private:
   std::string p_path_topic_;
   std::string p_goal_topic_;
   std::string p_pose_topic_;
+  std::string p_frame_id_;
 };
 }  // namespace path_generation

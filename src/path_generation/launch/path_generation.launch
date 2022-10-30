@@ -1,22 +1,15 @@
 <launch>
   <node name="path_generation" pkg="path_generation" type="path_generation_node" output="screen">
     <param name="active" value="true"/>
-    <param name="publish_pose" value="false"/>
-    <param name="publish_odom" value="true"/>
-    <param name="publish_tf" value="true"/>
 
-    <param name="frequency" value="100"/>
-    <param name="init_pose_x" value="0"/>
-    <param name="init_pose_y" value="0"/>
-    <param name="init_pose_yaw" value="$(eval 0 * 3.1415 / 180.0)"/>
-    <param name="cov_vx" value="0.00005"/>
-    <param name="cov_vy" value="0.00005"/>
-    <param name="cov_vyaw" value="0.00005"/>
+    <param name="frequency" value="30"/>
+    <param name="init_pose_x" value="0.0"/>
+    <param name="init_pose_y" value="0.0"/>
+    <param name="init_pose_yaw" value="$(eval 0.0 * 3.1415 / 180.0)"/>
+    <param name="resolution" value="100"/>
   
-    <param name="twist_topic" value="base_speed"/>
-    <param name="odom_topic" value="odom"/>
-    <param name="pose_topic" value="odom_pose"/>
-    <param name="fixed_frame_id" value="odom"/>
-    <param name="target_frame_id" value="base_footprint"/>
+    <param name="path_topic" value="nav_path"/>
+    <param name="goal_topic" value="nav_goal"/>
+    <param name="pose_topic" value="ekf_pose"/>
   </node>
 </launch>
