@@ -116,6 +116,7 @@
 /home/haoyu/rpi4_11_ws/build/base_move/CMakeFiles/install/local.dir
 /home/haoyu/rpi4_11_ws/build/base_move/CMakeFiles/call_goal.dir
 /home/haoyu/rpi4_11_ws/build/base_move/CMakeFiles/my_odometry.dir
+/home/haoyu/rpi4_11_ws/build/base_move/CMakeFiles/my_navigation_node.dir
 /home/haoyu/rpi4_11_ws/build/base_move/CMakeFiles/install.dir
 /home/haoyu/rpi4_11_ws/build/base_move/CMakeFiles/list_install_components.dir
 /home/haoyu/rpi4_11_ws/build/base_move/CMakeFiles/rebuild_cache.dir

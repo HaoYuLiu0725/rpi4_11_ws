@@ -26,7 +26,7 @@ std_msgs/Bool.h
 tf2_ros/transform_listener.h
 -
 
-/home/haoyu/rpi4_11_ws/src/base_move/src/my_navigation.cpp
+/home/haoyu/rpi4_11_ws/src/base_move/src/nodes/my_navigation_node.cpp
 base_move/my_navigation.h
 -
 

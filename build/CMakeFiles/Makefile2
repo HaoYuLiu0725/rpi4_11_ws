@@ -93,6 +93,7 @@ clean: base_move/clean
 # Recursive "all" directory target.
 base_move/all: base_move/CMakeFiles/call_goal.dir/all
 base_move/all: base_move/CMakeFiles/my_odometry.dir/all
+base_move/all: base_move/CMakeFiles/my_navigation_node.dir/all
 base_move/all: base_move/CMakeFiles/my_navigation.dir/all
 
 .PHONY : base_move/all
@@ -105,6 +106,7 @@ base_move/preinstall:
 # Recursive "clean" directory target.
 base_move/clean: base_move/CMakeFiles/call_goal.dir/clean
 base_move/clean: base_move/CMakeFiles/my_odometry.dir/clean
+base_move/clean: base_move/CMakeFiles/my_navigation_node.dir/clean
 base_move/clean: base_move/CMakeFiles/my_navigation.dir/clean
 
 .PHONY : base_move/clean
@@ -1704,7 +1706,7 @@ odometry/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/clean:
 odometry/CMakeFiles/odometry.dir/all:
 	$(MAKE) -f odometry/CMakeFiles/odometry.dir/build.make odometry/CMakeFiles/odometry.dir/depend
 	$(MAKE) -f odometry/CMakeFiles/odometry.dir/build.make odometry/CMakeFiles/odometry.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haoyu/rpi4_11_ws/build/CMakeFiles --progress-num=19,20 "Built target odometry"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haoyu/rpi4_11_ws/build/CMakeFiles --progress-num=21,22 "Built target odometry"
 .PHONY : odometry/CMakeFiles/odometry.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1731,7 +1733,7 @@ odometry/CMakeFiles/odometry.dir/clean:
 odometry/CMakeFiles/odometry_node.dir/all: odometry/CMakeFiles/odometry.dir/all
 	$(MAKE) -f odometry/CMakeFiles/odometry_node.dir/build.make odometry/CMakeFiles/odometry_node.dir/depend
 	$(MAKE) -f odometry/CMakeFiles/odometry_node.dir/build.make odometry/CMakeFiles/odometry_node.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haoyu/rpi4_11_ws/build/CMakeFiles --progress-num=21,22 "Built target odometry_node"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haoyu/rpi4_11_ws/build/CMakeFiles --progress-num=23,24 "Built target odometry_node"
 .PHONY : odometry/CMakeFiles/odometry_node.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1785,7 +1787,7 @@ odometry/CMakeFiles/nav_msgs_generate_messages_py.dir/clean:
 path_generation/CMakeFiles/path_generation_node.dir/all: path_generation/CMakeFiles/path_generation.dir/all
 	$(MAKE) -f path_generation/CMakeFiles/path_generation_node.dir/build.make path_generation/CMakeFiles/path_generation_node.dir/depend
 	$(MAKE) -f path_generation/CMakeFiles/path_generation_node.dir/build.make path_generation/CMakeFiles/path_generation_node.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haoyu/rpi4_11_ws/build/CMakeFiles --progress-num=25,26 "Built target path_generation_node"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haoyu/rpi4_11_ws/build/CMakeFiles --progress-num=27,28 "Built target path_generation_node"
 .PHONY : path_generation/CMakeFiles/path_generation_node.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1812,7 +1814,7 @@ path_generation/CMakeFiles/path_generation_node.dir/clean:
 path_generation/CMakeFiles/path_generation.dir/all:
 	$(MAKE) -f path_generation/CMakeFiles/path_generation.dir/build.make path_generation/CMakeFiles/path_generation.dir/depend
 	$(MAKE) -f path_generation/CMakeFiles/path_generation.dir/build.make path_generation/CMakeFiles/path_generation.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haoyu/rpi4_11_ws/build/CMakeFiles --progress-num=23,24 "Built target path_generation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haoyu/rpi4_11_ws/build/CMakeFiles --progress-num=25,26 "Built target path_generation"
 .PHONY : path_generation/CMakeFiles/path_generation.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1866,7 +1868,7 @@ base_move/CMakeFiles/call_goal.dir/clean:
 base_move/CMakeFiles/my_odometry.dir/all:
 	$(MAKE) -f base_move/CMakeFiles/my_odometry.dir/build.make base_move/CMakeFiles/my_odometry.dir/depend
 	$(MAKE) -f base_move/CMakeFiles/my_odometry.dir/build.make base_move/CMakeFiles/my_odometry.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haoyu/rpi4_11_ws/build/CMakeFiles --progress-num=17,18 "Built target my_odometry"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haoyu/rpi4_11_ws/build/CMakeFiles --progress-num=19,20 "Built target my_odometry"
 .PHONY : base_move/CMakeFiles/my_odometry.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1885,6 +1887,33 @@ my_odometry: base_move/CMakeFiles/my_odometry.dir/rule
 base_move/CMakeFiles/my_odometry.dir/clean:
 	$(MAKE) -f base_move/CMakeFiles/my_odometry.dir/build.make base_move/CMakeFiles/my_odometry.dir/clean
 .PHONY : base_move/CMakeFiles/my_odometry.dir/clean
+
+#=============================================================================
+# Target rules for target base_move/CMakeFiles/my_navigation_node.dir
+
+# All Build rule for target.
+base_move/CMakeFiles/my_navigation_node.dir/all: base_move/CMakeFiles/my_navigation.dir/all
+	$(MAKE) -f base_move/CMakeFiles/my_navigation_node.dir/build.make base_move/CMakeFiles/my_navigation_node.dir/depend
+	$(MAKE) -f base_move/CMakeFiles/my_navigation_node.dir/build.make base_move/CMakeFiles/my_navigation_node.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haoyu/rpi4_11_ws/build/CMakeFiles --progress-num=17,18 "Built target my_navigation_node"
+.PHONY : base_move/CMakeFiles/my_navigation_node.dir/all
+
+# Build rule for subdir invocation for target.
+base_move/CMakeFiles/my_navigation_node.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/haoyu/rpi4_11_ws/build/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/my_navigation_node.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/haoyu/rpi4_11_ws/build/CMakeFiles 0
+.PHONY : base_move/CMakeFiles/my_navigation_node.dir/rule
+
+# Convenience name for target.
+my_navigation_node: base_move/CMakeFiles/my_navigation_node.dir/rule
+
+.PHONY : my_navigation_node
+
+# clean rule for target.
+base_move/CMakeFiles/my_navigation_node.dir/clean:
+	$(MAKE) -f base_move/CMakeFiles/my_navigation_node.dir/build.make base_move/CMakeFiles/my_navigation_node.dir/clean
+.PHONY : base_move/CMakeFiles/my_navigation_node.dir/clean
 
 #=============================================================================
 # Target rules for target base_move/CMakeFiles/my_navigation.dir

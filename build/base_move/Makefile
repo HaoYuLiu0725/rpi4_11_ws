@@ -198,6 +198,21 @@ my_odometry/fast:
 .PHONY : my_odometry/fast
 
 # Convenience name for target.
+base_move/CMakeFiles/my_navigation_node.dir/rule:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/my_navigation_node.dir/rule
+.PHONY : base_move/CMakeFiles/my_navigation_node.dir/rule
+
+# Convenience name for target.
+my_navigation_node: base_move/CMakeFiles/my_navigation_node.dir/rule
+
+.PHONY : my_navigation_node
+
+# fast build rule for target.
+my_navigation_node/fast:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_navigation_node.dir/build.make base_move/CMakeFiles/my_navigation_node.dir/build
+.PHONY : my_navigation_node/fast
+
+# Convenience name for target.
 base_move/CMakeFiles/my_navigation.dir/rule:
 	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f CMakeFiles/Makefile2 base_move/CMakeFiles/my_navigation.dir/rule
 .PHONY : base_move/CMakeFiles/my_navigation.dir/rule
@@ -293,6 +308,33 @@ src/my_odometry.cpp.s:
 	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_odometry.dir/build.make base_move/CMakeFiles/my_odometry.dir/src/my_odometry.cpp.s
 .PHONY : src/my_odometry.cpp.s
 
+src/nodes/my_navigation_node.o: src/nodes/my_navigation_node.cpp.o
+
+.PHONY : src/nodes/my_navigation_node.o
+
+# target to build an object file
+src/nodes/my_navigation_node.cpp.o:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_navigation_node.dir/build.make base_move/CMakeFiles/my_navigation_node.dir/src/nodes/my_navigation_node.cpp.o
+.PHONY : src/nodes/my_navigation_node.cpp.o
+
+src/nodes/my_navigation_node.i: src/nodes/my_navigation_node.cpp.i
+
+.PHONY : src/nodes/my_navigation_node.i
+
+# target to preprocess a source file
+src/nodes/my_navigation_node.cpp.i:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_navigation_node.dir/build.make base_move/CMakeFiles/my_navigation_node.dir/src/nodes/my_navigation_node.cpp.i
+.PHONY : src/nodes/my_navigation_node.cpp.i
+
+src/nodes/my_navigation_node.s: src/nodes/my_navigation_node.cpp.s
+
+.PHONY : src/nodes/my_navigation_node.s
+
+# target to generate assembly for a file
+src/nodes/my_navigation_node.cpp.s:
+	cd /home/haoyu/rpi4_11_ws/build && $(MAKE) -f base_move/CMakeFiles/my_navigation_node.dir/build.make base_move/CMakeFiles/my_navigation_node.dir/src/nodes/my_navigation_node.cpp.s
+.PHONY : src/nodes/my_navigation_node.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -305,6 +347,7 @@ help:
 	@echo "... install/local"
 	@echo "... call_goal"
 	@echo "... my_odometry"
+	@echo "... my_navigation_node"
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
@@ -318,6 +361,9 @@ help:
 	@echo "... src/my_odometry.o"
 	@echo "... src/my_odometry.i"
 	@echo "... src/my_odometry.s"
+	@echo "... src/nodes/my_navigation_node.o"
+	@echo "... src/nodes/my_navigation_node.i"
+	@echo "... src/nodes/my_navigation_node.s"
 .PHONY : help
 
 

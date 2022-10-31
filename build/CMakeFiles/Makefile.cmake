@@ -315,5 +315,6 @@ set(CMAKE_DEPEND_INFO_FILES
   "path_generation/CMakeFiles/path_generation.dir/DependInfo.cmake"
   "base_move/CMakeFiles/call_goal.dir/DependInfo.cmake"
   "base_move/CMakeFiles/my_odometry.dir/DependInfo.cmake"
+  "base_move/CMakeFiles/my_navigation_node.dir/DependInfo.cmake"
   "base_move/CMakeFiles/my_navigation.dir/DependInfo.cmake"
   )

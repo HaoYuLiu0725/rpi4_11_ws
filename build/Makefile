@@ -922,6 +922,19 @@ my_odometry/fast:
 .PHONY : my_odometry/fast
 
 #=============================================================================
+# Target rules for targets named my_navigation_node
+
+# Build rule for target.
+my_navigation_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 my_navigation_node
+.PHONY : my_navigation_node
+
+# fast build rule for target.
+my_navigation_node/fast:
+	$(MAKE) -f base_move/CMakeFiles/my_navigation_node.dir/build.make base_move/CMakeFiles/my_navigation_node.dir/build
+.PHONY : my_navigation_node/fast
+
+#=============================================================================
 # Target rules for targets named my_navigation
 
 # Build rule for target.
@@ -1005,6 +1018,7 @@ help:
 	@echo "... path_generation"
 	@echo "... call_goal"
 	@echo "... my_odometry"
+	@echo "... my_navigation_node"
 	@echo "... my_navigation"
 .PHONY : help
 

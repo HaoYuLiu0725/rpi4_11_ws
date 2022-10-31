@@ -8,7 +8,7 @@
     <param name="active" value="true"/>
     <param name="publish_pose" value="false"/>
     <param name="publish_odom" value="true"/>
-    <param name="publish_tf" value="true"/>
+    <param name="publish_tf" value="false"/>
 
     <param name="frequency" value="100"/>
     <param name="init_pose_x" value="0"/>
@@ -22,7 +22,7 @@
     <param name="odom_topic" value="odom"/>
     <param name="pose_topic" value="odom_pose"/>
     <param name="fixed_frame_id" value="odom"/>
-    <param name="target_frame_id" value="base_footprint"/>
+    <param name="target_frame_id" value="base_link"/>
   </node>
 
   <node name="map_to_odom" pkg="tf2_ros" type="static_transform_publisher" args="1 0.4 0 1.5708 0 0 map odom"/>

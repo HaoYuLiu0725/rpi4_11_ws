@@ -9,6 +9,7 @@ project(base_move)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
+  nav_msgs
   roscpp
   rospy
   std_msgs
@@ -106,9 +107,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES base_move
-#  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs tf2 tf2_ros
+ INCLUDE_DIRS include
+ LIBRARIES base_move
+ CATKIN_DEPENDS geometry_msgs nav_msgs roscpp rospy std_msgs tf2 tf2_ros
 #  DEPENDS system_lib
 )
 
@@ -119,7 +120,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-#   include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -127,6 +128,7 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/odometry.cpp
 # )
+add_library(my_navigation src/my_navigation.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -137,7 +139,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/base_move_node.cpp)
-add_executable(my_navigation  src/my_navigation.cpp)
+add_executable(my_navigation_node  src/nodes/my_navigation_node.cpp)
 add_executable(my_odometry    src/my_odometry.cpp)
 add_executable(call_goal      src/call_goal.cpp)
 
@@ -156,6 +158,7 @@ add_executable(call_goal      src/call_goal.cpp)
 #   ${catkin_LIBRARIES}
 # )
 target_link_libraries(my_navigation  ${catkin_LIBRARIES})
+target_link_libraries(my_navigation_node  my_navigation)
 target_link_libraries(my_odometry ${catkin_LIBRARIES})
 target_link_libraries(call_goal   ${catkin_LIBRARIES})
 

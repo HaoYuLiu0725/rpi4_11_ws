@@ -1,108 +1,157 @@
-#include <ros/ros.h>
-#include <geometry_msgs/Twist.h>
-#include <geometry_msgs/Pose.h>
-#include <geometry_msgs/PoseWithCovarianceStamped.h>
-#include <tf2/utils.h>
-#include <std_msgs/Bool.h>
-#include <cmath>
+#include <base_move/my_navigation.h>
 
-double now_x, now_y, now_theta;
-double goal_x, goal_y, goal_theta;
-double linear_velocity, angular_velocity;
+using namespace std;
+using namespace my_navigation;
 
-double MAX_linear_speed  = 0.2; // m/s
-double MAX_angular_speed = 0.8; // rad/s
-double linear_acceleration  = 0.05; // m/s^2
-double linear_deceleration  = 0.05; // m/s^2
-double angular_acceleration = 0.4; // rad/s^2
-double angular_deceleration = 0.4; // rad/s^2
-
-double t_linear_speed = 0; // m/s, target linear speed
-double t_angular_speed = 0; // rad/s, target angular speed
-bool have_new_goal = false;
-std_msgs::Bool reached_status;
-
-enum Move_State
+My_navigation::My_navigation(ros::NodeHandle& nh, ros::NodeHandle& nh_local) : nh_(nh), nh_local_(nh_local)
 {
-  LINEAR,
-  STOP_LINEAR,
-  TURN,
-  STOP_TURN,
-};
-Move_State move_state = LINEAR;
-
-enum Speed_State
-{
-  ACCELERATE,
-  MAX_SPEED,
-  DECELERATE,
-  STOP,
-};
-Speed_State speed_state = ACCELERATE;
-
-void pose_CallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& pose)
-{
-    now_x = pose->pose.pose.position.x;
-    now_y = pose->pose.pose.position.y;
-    now_theta = tf2::getYaw(pose->pose.pose.orientation);
-    ROS_INFO("\nnow pose: %f, %f, %f", now_x, now_y, now_theta);
+    move_timer_ = nh_.createTimer(ros::Duration(1.0), &My_navigation::moveTimerCallback, this, false, false);
+    speed_timer_ = nh_.createTimer(ros::Duration(1.0), &My_navigation::speedTimerCallback, this, false, false);
+    initialize();
 }
 
-// void pose_CallBack(const geometry_msgs::Pose::ConstPtr& pose)
-// {
-//     now_x = pose->position.x;
-//     now_y = pose->position.y;
-//     now_theta = tf2::getYaw(pose->orientation);
-//     // ROS_INFO("\nnow pose: %f, %f, %f", now_x, now_y, now_theta);
-// }
-
-void speed_CallBack(const geometry_msgs::Twist::ConstPtr& speed)
+bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
-    linear_velocity = sqrt(pow(speed->linear.x, 2) + pow(speed->linear.y, 2));
-    angular_velocity = speed->angular.z;
-    // ROS_INFO("\nnow speed: %f, %f", linear_velocity, angular_velocity);
+    bool get_param_ok = true;
+    bool prev_active = p_active_;
+
+    /* get param */
+    get_param_ok = nh_local_.param<bool>("active", p_active_, true);
+
+    get_param_ok = nh_local_.param<double>("move_frequency", p_move_frequency_, 60);
+    get_param_ok = nh_local_.param<double>("speed_frequency", p_speed_frequency_, 100);
+    get_param_ok = nh_local_.param<double>("init_pose_x", p_init_pose_x, 0.0);
+    get_param_ok = nh_local_.param<double>("init_pose_y", p_init_pose_y, 0.0);
+    get_param_ok = nh_local_.param<double>("init_pose_yaw", p_init_pose_yaw, 0.0);
+    get_param_ok = nh_local_.param<double>("MAX_linear_speed", p_MAX_linear_speed_, 0.5);           // m/s
+    get_param_ok = nh_local_.param<double>("MAX_angular_speed", p_MAX_angular_speed_, 0.8);         // rad/s
+    get_param_ok = nh_local_.param<double>("linear_acceleration", p_linear_acceleration_, 0.05);    // m/s^2
+    get_param_ok = nh_local_.param<double>("linear_deceleration", p_linear_deceleration_, 0.05);    // m/s^2
+    get_param_ok = nh_local_.param<double>("angular_acceleration", p_angular_acceleration_, 0.4);   // m/s^2
+    get_param_ok = nh_local_.param<double>("angular_deceleration", p_angular_deceleration_, 0.4);   // rad/s^2
+    get_param_ok = nh_local_.param<double>("linear_margin", p_linear_margin_, 0.001);   // m
+    get_param_ok = nh_local_.param<double>("angular_margin", p_angular_margin_, 0.001); // rad
+    get_param_ok = nh_local_.param<double>("stop_margin", p_stop_margin_, 0.0001);      // m/s & rad/s
+
+    double timeout;
+    get_param_ok = nh_local_.param<double>("timeout", timeout, 0.2);
+    timeout_.fromSec(timeout);
+
+    get_param_ok = nh_local_.param<string>("twist_topic", p_twist_topic_, "/cmd_vel");
+    get_param_ok = nh_local_.param<string>("reached_topic", p_reached_topic_, "/reached_status");
+    get_param_ok = nh_local_.param<string>("odom_topic", p_odom_topic_, "/odom");
+    get_param_ok = nh_local_.param<string>("goal_topic", p_goal_topic_, "/base_goal");
+
+//   get_param_ok = nh_local_.param<string>("fixed_frame_id", p_fixed_frame_id_, "odom");
+//   get_param_ok = nh_local_.param<string>("target_frame_id", p_target_frame_id_, "base_footprint");
+
+    /* check param */
+    if (get_param_ok)
+    {
+        ROS_INFO_STREAM("[My_navigation]: "
+                        << "param set ok");
+    }
+    else
+    {
+        ROS_WARN_STREAM("[My_navigation]: "
+                        << "param set fail");
+    }
+
+    /* ros node param */
+    move_timer_.setPeriod(ros::Duration(1 / p_move_frequency_), false);
+    speed_timer_.setPeriod(ros::Duration(1 / p_speed_frequency_), false);
+
+    if (p_active_ != prev_active)
+    {
+        if (p_active_)
+        {
+            twist_pub_ = nh_.advertise<geometry_msgs::Twist>(p_twist_topic_, 10);
+            reached_pub_ = nh_.advertise<std_msgs::Bool>(p_reached_topic_, 10);
+            odom_sub_ = nh_.subscribe(p_odom_topic_, 10, &My_navigation::odomCallBack, this);
+            goal_sub_ = nh_.subscribe(p_goal_topic_, 10, &My_navigation::goalCallBack, this);
+            move_timer_.start();
+            speed_timer_.start();
+        }
+        else
+        {
+            twist_pub_.shutdown();
+            reached_pub_.shutdown();
+            odom_sub_.shutdown();
+            goal_sub_.shutdown();
+            move_timer_.stop();
+            speed_timer_.stop();
+        }
+    }
+
+    /* init state param */
+    now_x = p_init_pose_x;
+    now_y = p_init_pose_y;
+    now_theta = p_init_pose_yaw;
+    bool have_new_goal = false;
+    t_linear_speed = 0;
+    t_angular_speed = 0;
+    move_state = LINEAR;
+    speed_state = ACCELERATE;
+
+    output_twist_.linear.x = 0;
+    output_twist_.linear.y = 0;
+    output_twist_.angular.z = 0;
+    reached_status_.data = true;
+
+    twistPublish(0, 0, 0);
+
+    return true;
 }
 
-void goal_CallBack(const geometry_msgs::PoseConstPtr& pose)
+void My_navigation::odomCallBack(const nav_msgs::Odometry::ConstPtr& odom)
+{
+    now_x = odom->pose.pose.position.x;
+    now_y = odom->pose.pose.position.y;
+    now_theta = tf2::getYaw(odom->pose.pose.orientation);
+    linear_velocity = sqrt(pow(odom->twist.twist.linear.x, 2) + pow(odom->twist.twist.linear.y, 2));
+    angular_velocity = odom->twist.twist.angular.z;
+    // ROS_INFO_STREAM("[Now pose]:" << now_x << "," << now_y << "," << now_theta);
+    // ROS_INFO_STREAM("[Now speed]:" << linear_velocity << "," << angular_velocity);
+}
+
+void My_navigation::goalCallBack(const geometry_msgs::PoseConstPtr& pose)
 {
     goal_x = pose->position.x;
     goal_y = pose->position.y;
     goal_theta = tf2::getYaw(pose->orientation);
-    ROS_INFO("\nNew goal : [%f, %f, %f]", goal_x, goal_y, goal_theta);
+    ROS_INFO_STREAM("[New goal!]:" << goal_x << "," << goal_y << "," << goal_theta);
     have_new_goal = true;
     move_state = LINEAR;
     speed_state = ACCELERATE;
 }
 
-void twist_publish(ros::Publisher vel_pub, double Vx, double Vy, double W)
+void My_navigation::twistPublish(double Vx, double Vy, double W)
 {
-    geometry_msgs::Twist twist;
-    twist.linear.x = Vx;
-    twist.linear.y = Vy;
-    twist.angular.z = W;
-    vel_pub.publish(twist);
+    output_twist_.linear.x = Vx;
+    output_twist_.linear.y = Vy;
+    output_twist_.angular.z = W;
+    twist_pub_.publish(output_twist_);
+}
+/*--------------------check status--------------------*/
+bool My_navigation::hasReachedGoal_XY()
+{
+  return fabsf(now_x - goal_x) < p_linear_margin_ && fabsf(now_y - goal_y) < p_linear_margin_;
 }
 
-bool hasReachedGoal_XY()
+bool My_navigation::hasReachedGoal_Theta()
 {
-  return fabsf(now_x - goal_x) < 0.001 && fabsf(now_y - goal_y) < 0.001;
+  return fabsf(now_theta - goal_theta) < p_angular_margin_;
 }
 
-bool hasReachedGoal_Theta()
+bool My_navigation::hasStopped()
 {
-  return fabsf(now_theta - goal_theta) < 0.01;
+  return fabsf(angular_velocity) < p_stop_margin_ && fabsf(linear_velocity) < p_stop_margin_;
 }
 
-bool hasStopped()
-{
-  return fabsf(angular_velocity) < 0.0001 && fabsf(linear_velocity) < 0.0001;
-}
-
-/*-------speed_timer_Callback------------------------------------------------------------*/
-bool time_to_decelerate(double &speed, double deceleration)
+bool My_navigation::timeToDecelerate(double &speed, double deceleration)
 {
     double decelerate_distance = pow(speed, 2) / (2 * deceleration);
-    ROS_INFO("decelerate_distance: %f", decelerate_distance);
+    // ROS_INFO("decelerate_distance: %f", decelerate_distance);
     double remain_distance;
     if (move_state == LINEAR){
         remain_distance = sqrt(pow(goal_x - now_x, 2) + pow(goal_y - now_y, 2));
@@ -110,49 +159,130 @@ bool time_to_decelerate(double &speed, double deceleration)
     else if (move_state == TURN){
         remain_distance = fabsf(goal_theta - now_theta);
     }
-    ROS_INFO("remain_distance: %f", remain_distance);
+    // ROS_INFO("remain_distance: %f", remain_distance);
     return (remain_distance <= decelerate_distance);
 }
 
-void accelerate(double &speed, double MAX_speed, double acceleration, double deceleration)
+/*--------------------move_timer--------------------*/
+void My_navigation::linear()
 {
-    if (time_to_decelerate(speed, deceleration)){
+    if (hasReachedGoal_XY()){
+        move_state = STOP_LINEAR;
+        twistPublish(0, 0, 0);
+    }
+    else{
+        double angle = atan2( goal_y - now_y , goal_x - now_x ) - now_theta;
+        double Vx = t_linear_speed * cos(angle);
+        double Vy = t_linear_speed * sin(angle);
+        twistPublish(Vx, Vy, 0);
+    }
+}
+
+void My_navigation::stopLinear()
+{
+    if (hasStopped()){
+        ROS_INFO_STREAM("[Reached goal_XY !]");
+        move_state = TURN;
+    }
+    else{
+        twistPublish(0, 0, 0);
+    }
+}
+
+void My_navigation::turn()
+{
+    if (hasReachedGoal_Theta()){
+        move_state = STOP_TURN;
+        twistPublish(0, 0, 0);
+    }
+    else{
+        double W = t_angular_speed;
+        double error = goal_theta - now_theta;
+        if (error < 0) W = -t_angular_speed;
+        if (abs(error) > M_PI) W = -W;
+        twistPublish(0, 0, W);
+    }
+}
+
+void My_navigation::stopTurn()
+{
+    if (hasStopped()){
+        ROS_INFO_STREAM("[Reached goal_Theta !]");
+        move_state = LINEAR;
+    }
+    else{
+        twistPublish(0, 0, 0);
+    }
+}
+
+void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
+{
+    if(have_new_goal){
+        if (hasReachedGoal_XY() && hasReachedGoal_Theta()){
+            reached_status_.data = true;
+            reached_pub_.publish(reached_status_);
+            have_new_goal = false;
+            ROS_INFO_STREAM("[move reached_status:]" << (reached_status_.data ? "true" : "false"));
+        }
+
+        if (move_state == LINEAR){
+            linear();
+        }
+        else if (move_state == STOP_LINEAR){
+            stopLinear();
+        }
+        else if (move_state == TURN){
+            turn();
+        }
+        else if (move_state == STOP_TURN){
+            stopTurn();
+        }
+    }
+    else{
+        twistPublish(0, 0, 0);
+    }
+}
+
+/*--------------------speed_timer---------------------------*/
+void My_navigation::accelerate(double &speed, double deceleration, double MAX_speed, double acceleration)
+{
+    if (timeToDecelerate(speed, deceleration)){
         speed_state = DECELERATE;
     }
     else if (fabsf(speed - MAX_speed) < 0.01){
         speed_state = MAX_SPEED;
     }
     else{
-        ROS_INFO("accelerate");
-        speed += acceleration * 0.05; //speed_timer period = 0.05 seconds
+        // ROS_INFO("accelerate");
+        speed += acceleration / p_speed_frequency_;
     }
 }
 
-void max_speed(double &speed, double MAX_speed, double acceleration, double deceleration)
+void My_navigation::max_speed(double &speed, double deceleration, double MAX_speed)
 {
-    if (time_to_decelerate(speed, deceleration)){
+    if (timeToDecelerate(speed, deceleration)){
         speed_state = DECELERATE;
     }
     else{
-        ROS_INFO("max_speed");
+        // ROS_INFO("max_speed");
         speed = MAX_speed;
     }
 }
 
-void decelerate(double &speed, double MAX_speed, double acceleration, double deceleration)
+void My_navigation::decelerate(double &speed, double deceleration)
 {
     if (hasStopped()){
         speed_state = STOP;
     }
     else{
-        ROS_INFO("decelerate");
-        speed -= deceleration * 0.05; //speed_timer period = 0.05 seconds
+        // ROS_INFO("decelerate");
+        speed -= deceleration / p_speed_frequency_;
     }
 }
-void stop(double &speed)
+void My_navigation::stop(double &speed)
 {
     if (hasStopped()){
-        ROS_INFO("stop !");
+        // ROS_INFO("stop !");
         speed_state = ACCELERATE;
     }
     else{
@@ -160,14 +290,14 @@ void stop(double &speed)
     }
 }
 
-void speed_timer_Callback(const ros::TimerEvent& event, ros::Publisher reached_pub)
+void My_navigation::speedTimerCallback(const ros::TimerEvent& e)
 {
     if(have_new_goal){
         if (hasReachedGoal_XY() && hasReachedGoal_Theta()){
-            reached_status.data = true;
-            reached_pub.publish(reached_status);
+            reached_status_.data = true;
+            reached_pub_.publish(reached_status_);
             have_new_goal = false;
-            ROS_INFO("\nspeed reached_status : %s", reached_status.data ? "true" : "false");
+            ROS_INFO_STREAM("[move reached_status:]" << (reached_status_.data ? "true" : "false"));
             t_linear_speed = 0.0;
             t_angular_speed = 0.0;
             speed_state = ACCELERATE;
@@ -175,131 +305,33 @@ void speed_timer_Callback(const ros::TimerEvent& event, ros::Publisher reached_p
 
         if (move_state == LINEAR){
             if (speed_state == ACCELERATE){
-                accelerate(t_linear_speed, MAX_linear_speed, linear_acceleration, linear_deceleration);
+                accelerate(t_linear_speed, p_linear_deceleration_, p_MAX_linear_speed_, p_linear_acceleration_);
             }
             else if (speed_state == MAX_SPEED){
-                max_speed(t_linear_speed, MAX_linear_speed, linear_acceleration, linear_deceleration);
+                max_speed(t_linear_speed, p_linear_deceleration_, p_MAX_linear_speed_);
             }
             else if (speed_state == DECELERATE){
-                decelerate(t_linear_speed, MAX_linear_speed, linear_acceleration, linear_deceleration);
+                decelerate(t_linear_speed, p_linear_deceleration_);
             }
             else if (speed_state == STOP){
                 stop(t_linear_speed);
             }
-            ROS_INFO("t_linear_speed: %f", t_linear_speed);
+            // ROS_INFO("t_linear_speed: %f", t_linear_speed);
         }
         else if (move_state == TURN){
             if (speed_state == ACCELERATE){
-                accelerate(t_angular_speed, MAX_angular_speed, angular_acceleration, angular_deceleration);
+                accelerate(t_angular_speed, p_angular_deceleration_, p_MAX_angular_speed_, p_angular_acceleration_);
             }
             else if (speed_state == MAX_SPEED){
-                max_speed(t_angular_speed, MAX_angular_speed, angular_acceleration, angular_deceleration);
+                max_speed(t_angular_speed, p_angular_deceleration_, p_MAX_angular_speed_);
             }
             else if (speed_state == DECELERATE){
-                decelerate(t_angular_speed, MAX_angular_speed, angular_acceleration, angular_deceleration);
+                decelerate(t_angular_speed, p_angular_deceleration_);
             }
             else if (speed_state == STOP){
                 stop(t_angular_speed);
             }
-            ROS_INFO("t_angular_speed: %f", t_angular_speed);
+            // ROS_INFO("t_angular_speed: %f", t_angular_speed);
         }
     }
-}
-
-/*-------move_timer_Callback------------------------------------------------------------*/
-void linear(ros::Publisher vel_pub)
-{
-    if (hasReachedGoal_XY()){
-        move_state = STOP_LINEAR;
-        twist_publish(vel_pub, 0, 0, 0);
-    }
-    else{
-        double angle = atan2( goal_y - now_y , goal_x - now_x ) - now_theta;
-        double Vx = t_linear_speed * cos(angle);
-        double Vy = t_linear_speed * sin(angle);
-        twist_publish(vel_pub, Vx, Vy, 0);
-    }
-}
-
-void stopLinear(ros::Publisher vel_pub)
-{
-    if (hasStopped()){
-        ROS_INFO("Reached goal_XY !");
-        move_state = TURN;
-    }
-    else{
-        twist_publish(vel_pub, 0, 0, 0);
-    }
-}
-
-void turn(ros::Publisher vel_pub)
-{
-    if (hasReachedGoal_Theta()){
-        move_state = STOP_TURN;
-        twist_publish(vel_pub, 0, 0, 0);
-    }
-    else{
-        double W = t_angular_speed;
-        double error = goal_theta - now_theta;
-        if (error < 0) W = -t_angular_speed;
-        if (abs(error) > M_PI) W = -W;
-        twist_publish(vel_pub, 0, 0, W);
-    }
-}
-
-void stopTurn(ros::Publisher vel_pub)
-{
-    if (hasStopped()){
-        ROS_INFO("Reached goal_Theta !");
-        move_state = LINEAR;
-    }
-    else{
-        twist_publish(vel_pub, 0, 0, 0);
-    }
-}
-
-void move_timer_Callback(const ros::TimerEvent& event, ros::Publisher vel_pub, ros::Publisher reached_pub)
-{
-    if(have_new_goal){
-        if (hasReachedGoal_XY() && hasReachedGoal_Theta()){
-            reached_status.data = true;
-            reached_pub.publish(reached_status);
-            have_new_goal = false;
-            ROS_INFO("\nmove reached_status : %s", reached_status.data ? "true" : "false");
-        }
-
-        if (move_state == LINEAR){
-            linear(vel_pub);
-        }
-        else if (move_state == STOP_LINEAR){
-            stopLinear(vel_pub);
-        }
-        else if (move_state == TURN){
-            turn(vel_pub);
-        }
-        else if (move_state == STOP_TURN){
-            stopTurn(vel_pub);
-        }
-    }
-    else{
-        twist_publish(vel_pub, 0, 0, 0);
-    }
-}
-
-int main(int argc, char **argv)
-{
-    //node initialization
-    ros::init(argc, argv, "navigation");
-    ros::NodeHandle nh;
-    ros::Publisher vel_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
-    ros::Subscriber pose_sub = nh.subscribe("/odom_pose", 1, &pose_CallBack);
-    ros::Subscriber speed_sub = nh.subscribe("/base_speed", 1, &speed_CallBack);
-    ros::Publisher reached_pub = nh.advertise<std_msgs::Bool>("/reached_status", 1);
-    ros::Subscriber goal_sub = nh.subscribe("/base_goal", 1, &goal_CallBack);
-
-    // Timer
-    ros::Timer move_timer = nh.createTimer(ros::Duration(0.016), boost::bind(move_timer_Callback, _1, vel_pub, reached_pub));
-    ros::Timer speed_timer = nh.createTimer(ros::Duration(0.05), boost::bind(speed_timer_Callback, _1, reached_pub));
-
-    ros::spin();
 }

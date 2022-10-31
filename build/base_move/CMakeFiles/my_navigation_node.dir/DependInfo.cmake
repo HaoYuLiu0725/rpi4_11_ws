@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/haoyu/rpi4_11_ws/src/base_move/src/call_goal.cpp" "/home/haoyu/rpi4_11_ws/build/base_move/CMakeFiles/call_goal.dir/src/call_goal.cpp.o"
+  "/home/haoyu/rpi4_11_ws/src/base_move/src/nodes/my_navigation_node.cpp" "/home/haoyu/rpi4_11_ws/build/base_move/CMakeFiles/my_navigation_node.dir/src/nodes/my_navigation_node.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -24,6 +24,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/home/haoyu/rpi4_11_ws/build/base_move/CMakeFiles/my_navigation.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.
