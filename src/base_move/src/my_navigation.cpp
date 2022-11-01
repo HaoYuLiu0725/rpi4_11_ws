@@ -41,9 +41,8 @@ bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty:
     get_param_ok = nh_local_.param<string>("reached_topic", p_reached_topic_, "/reached_status");
     get_param_ok = nh_local_.param<string>("odom_topic", p_odom_topic_, "/odom");
     get_param_ok = nh_local_.param<string>("goal_topic", p_goal_topic_, "/base_goal");
-
-//   get_param_ok = nh_local_.param<string>("fixed_frame_id", p_fixed_frame_id_, "odom");
-//   get_param_ok = nh_local_.param<string>("target_frame_id", p_target_frame_id_, "base_footprint");
+    get_param_ok = nh_local_.param<string>("target_frame_id", p_target_frame_id_, "base_link");
+    get_param_ok = nh_local_.param<string>("source_frame_id", p_source_frame_id_, "odom");
 
     /* check param */
     if (get_param_ok)
@@ -105,11 +104,25 @@ bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty:
 
 void My_navigation::odomCallBack(const nav_msgs::Odometry::ConstPtr& odom)
 {
-    now_x = odom->pose.pose.position.x;
-    now_y = odom->pose.pose.position.y;
-    now_theta = tf2::getYaw(odom->pose.pose.orientation);
+    ros::Time now = ros::Time::now();
+    try{
+        transformStamped = tf2Buffer_.lookupTransform(p_target_frame_id_, p_source_frame_id_, now);                         
+    }
+    catch(tf2::TransformException &ex){
+        ROS_WARN("%s",ex.what());
+        ros::Duration(1.0).sleep();
+    }
+    /* get pose from transform*/
+    now_x = transformStamped.transform.translation.x;
+    now_y = transformStamped.transform.translation.y;
+    now_theta = tf2::getYaw(transformStamped.transform.rotation);
+    /* get pose from odom*/
+    // now_x = odom->pose.pose.position.x;
+    // now_y = odom->pose.pose.position.y;
+    // now_theta = tf2::getYaw(odom->pose.pose.orientation);
     linear_velocity = sqrt(pow(odom->twist.twist.linear.x, 2) + pow(odom->twist.twist.linear.y, 2));
     angular_velocity = odom->twist.twist.angular.z;
+
     // ROS_INFO_STREAM("[Now pose]:" << now_x << "," << now_y << "," << now_theta);
     // ROS_INFO_STREAM("[Now speed]:" << linear_velocity << "," << angular_velocity);
 }

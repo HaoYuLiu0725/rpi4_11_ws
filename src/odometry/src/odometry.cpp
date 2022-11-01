@@ -37,7 +37,7 @@ bool Odometry::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Resp
   get_param_ok = nh_local_.param<string>("odom_topic", p_odom_topic_, "odom");
   get_param_ok = nh_local_.param<string>("pose_topic", p_pose_topic_, "odom_pose");
   get_param_ok = nh_local_.param<string>("fixed_frame_id", p_fixed_frame_id_, "odom");
-  get_param_ok = nh_local_.param<string>("target_frame_id", p_target_frame_id_, "base_footprint");
+  get_param_ok = nh_local_.param<string>("target_frame_id", p_target_frame_id_, "base_link");
 
   /* check param */
   if (get_param_ok)

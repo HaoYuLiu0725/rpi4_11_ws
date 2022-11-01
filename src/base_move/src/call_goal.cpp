@@ -51,8 +51,8 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "call_goal");
     ros::NodeHandle nh;
-    ros::Publisher goal_pub = nh.advertise<geometry_msgs::Pose>("/base_goal", 1);
-    ros::Subscriber reached_sub = nh.subscribe("/reached_status", 1, reached_CallBack);
+    ros::Publisher goal_pub = nh.advertise<geometry_msgs::Pose>("/base_goal", 10);
+    ros::Subscriber reached_sub = nh.subscribe("/reached_status", 10, reached_CallBack);
     ros::Timer call_goal_timer = nh.createTimer(ros::Duration(0.5), boost::bind(call_goal_timer_Callback, _1, goal_pub));
 
     ros::spin();

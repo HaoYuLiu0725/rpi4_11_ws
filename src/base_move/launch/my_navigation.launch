@@ -1,6 +1,6 @@
 <launch>
     <!-- my_navigation -->
-    <node name="my_navigation" pkg="my_navigation" type="my_navigation_node" output="screen">
+    <node name="my_navigation" pkg="base_move" type="my_navigation_node" output="screen">
         <param name="active" value="true"/>
 
         <param name="move_frequency" value="60"/>
@@ -22,8 +22,10 @@
         <param name="reached_topic" value="/reached_status"/>   <!-- Pub [std_msgs::Bool] -->
         <param name="odom_topic" value="/odom"/>                <!-- Sub [nav_msgs::Odometry] -->
         <param name="goal_topic" value="/base_goal"/>           <!-- Sub [geometry_msgs::Pose] -->
-
-        <!-- <param name="fixed_frame_id" value="odom"/> -->
-        <!-- <param name="target_frame_id" value="base_link"/> -->
+        <param name="target_frame_id" value="base_link"/>
+        <param name="source_frame_id" value="map"/>
     </node>
+
+    <!-- odometry -->
+    <include file="$(find odometry)/launch/odometry.launch" />
 </launch>
