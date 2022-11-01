@@ -27,7 +27,7 @@ bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty:
     get_param_ok = nh_local_.param<double>("MAX_angular_speed", p_MAX_angular_speed_, 0.8);         // rad/s
     get_param_ok = nh_local_.param<double>("linear_acceleration", p_linear_acceleration_, 0.05);    // m/s^2
     get_param_ok = nh_local_.param<double>("linear_deceleration", p_linear_deceleration_, 0.05);    // m/s^2
-    get_param_ok = nh_local_.param<double>("angular_acceleration", p_angular_acceleration_, 0.4);   // m/s^2
+    get_param_ok = nh_local_.param<double>("angular_acceleration", p_angular_acceleration_, 0.4);   // rad/s^2
     get_param_ok = nh_local_.param<double>("angular_deceleration", p_angular_deceleration_, 0.4);   // rad/s^2
     get_param_ok = nh_local_.param<double>("linear_margin", p_linear_margin_, 0.001);   // m
     get_param_ok = nh_local_.param<double>("angular_margin", p_angular_margin_, 0.001); // rad
@@ -114,7 +114,7 @@ void My_navigation::odomCallBack(const nav_msgs::Odometry::ConstPtr& odom)
     // ROS_INFO_STREAM("[Now speed]:" << linear_velocity << "," << angular_velocity);
 }
 
-void My_navigation::goalCallBack(const geometry_msgs::PoseConstPtr& pose)
+void My_navigation::goalCallBack(const geometry_msgs::Pose::ConstPtr& pose)
 {
     goal_x = pose->position.x;
     goal_y = pose->position.y;
