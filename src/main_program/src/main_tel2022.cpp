@@ -150,7 +150,7 @@ void checkStateMachine(ros::Publisher pub1, ros::Publisher pub2)
     {
         if (checkPosition(state_list[i].getPosition('x'), state_list[i].getPosition('y')))
         {
-            cout << "Index : " << i << endl;
+            cout << position_x << " , " << position_y << " - Index : " << i << endl;
             if (state_list[i].getCondition() == 11)
             {
                 if (moving && doing)
