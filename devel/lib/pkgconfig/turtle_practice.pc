@@ -1,8 +1,0 @@
-prefix=/home/haoyu/rpi4_11_ws/devel
-
-Name: turtle_practice
-Description: Description of turtle_practice
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

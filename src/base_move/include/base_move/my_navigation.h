@@ -11,8 +11,6 @@
 #include <nav_msgs/Odometry.h>
 #include <tf2/utils.h>
 #include <std_msgs/Bool.h>
-#include <tf2_ros/transform_listener.h>
-
 namespace my_navigation
 {
 class My_navigation
@@ -24,14 +22,15 @@ private:
     void initialize()
     {
         std_srvs::Empty empt;
-        tf2_ros::TransformListener tf2_listener_(tf2Buffer_);
         updateParams(empt.request, empt.response);
     }
 
     bool updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
-    void odomCallBack(const nav_msgs::Odometry::ConstPtr& odom);
-    void goalCallBack(const geometry_msgs::PoseConstPtr& pose);
+    void mapPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& pose_ptr);
+    void odomCallback(const nav_msgs::Odometry::ConstPtr& odom_ptr);
+    void goalCallback(const geometry_msgs::PoseConstPtr& pose_ptr);
     void twistPublish(double Vx, double Vy, double W);
+    void transformCallback(const ros::TimerEvent& e);
     void moveTimerCallback(const ros::TimerEvent& e);
     void speedTimerCallback(const ros::TimerEvent& e);
     /* check status*/
@@ -60,13 +59,12 @@ private:
     /* ros inter-node */
     ros::Publisher twist_pub_;
     ros::Publisher reached_pub_;
+    ros::Subscriber mapPose_sub_;
     ros::Subscriber odom_sub_;
     ros::Subscriber goal_sub_;
-    tf2_ros::Buffer tf2Buffer_;
-    
+
     std_msgs::Bool reached_status_;
     geometry_msgs::Twist output_twist_;
-    geometry_msgs::TransformStamped transformStamped;
 
     ros::Time last_time_;
     ros::Duration timeout_;
@@ -76,6 +74,7 @@ private:
 
     double p_move_frequency_;
     double p_speed_frequency_;
+    double p_transform_frequency_;
     double p_init_pose_x;
     double p_init_pose_y;
     double p_init_pose_yaw;
@@ -91,6 +90,7 @@ private:
 
     std::string p_twist_topic_;
     std::string p_reached_topic_;
+    std::string p_mapPose_topic_;
     std::string p_odom_topic_;
     std::string p_goal_topic_;
     std::string p_target_frame_id_;

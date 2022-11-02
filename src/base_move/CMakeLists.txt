@@ -139,9 +139,10 @@ add_library(my_navigation src/my_navigation.cpp)
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/base_move_node.cpp)
-add_executable(my_navigation_node  src/nodes/my_navigation_node.cpp)
-add_executable(my_odometry    src/my_odometry.cpp)
-add_executable(call_goal      src/call_goal.cpp)
+add_executable(my_navigation_node     src/nodes/my_navigation_node.cpp)
+add_executable(my_odometry            src/my_odometry.cpp)
+add_executable(call_goal              src/call_goal.cpp)
+add_executable(tf2_transformListener  src/tf2_transformListener.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -157,10 +158,11 @@ add_executable(call_goal      src/call_goal.cpp)
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(my_navigation  ${catkin_LIBRARIES})
-target_link_libraries(my_navigation_node  my_navigation)
-target_link_libraries(my_odometry ${catkin_LIBRARIES})
-target_link_libraries(call_goal   ${catkin_LIBRARIES})
+target_link_libraries(my_navigation         ${catkin_LIBRARIES})
+target_link_libraries(my_navigation_node    my_navigation)
+target_link_libraries(my_odometry           ${catkin_LIBRARIES})
+target_link_libraries(call_goal             ${catkin_LIBRARIES})
+target_link_libraries(tf2_transformListener ${catkin_LIBRARIES})
 
 #############
 ## Install ##

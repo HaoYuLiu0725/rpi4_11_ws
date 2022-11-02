@@ -39,6 +39,7 @@ bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty:
 
     get_param_ok = nh_local_.param<string>("twist_topic", p_twist_topic_, "/cmd_vel");
     get_param_ok = nh_local_.param<string>("reached_topic", p_reached_topic_, "/reached_status");
+    get_param_ok = nh_local_.param<string>("mapPose_topic", p_mapPose_topic_, "/map_pose");
     get_param_ok = nh_local_.param<string>("odom_topic", p_odom_topic_, "/odom");
     get_param_ok = nh_local_.param<string>("goal_topic", p_goal_topic_, "/base_goal");
     get_param_ok = nh_local_.param<string>("target_frame_id", p_target_frame_id_, "base_link");
@@ -66,8 +67,9 @@ bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty:
         {
             twist_pub_ = nh_.advertise<geometry_msgs::Twist>(p_twist_topic_, 10);
             reached_pub_ = nh_.advertise<std_msgs::Bool>(p_reached_topic_, 10);
-            odom_sub_ = nh_.subscribe(p_odom_topic_, 10, &My_navigation::odomCallBack, this);
-            goal_sub_ = nh_.subscribe(p_goal_topic_, 10, &My_navigation::goalCallBack, this);
+            mapPose_sub_ = nh_.subscribe(p_mapPose_topic_, 10, &My_navigation::mapPoseCallback, this);
+            odom_sub_ = nh_.subscribe(p_odom_topic_, 10, &My_navigation::odomCallback, this);
+            goal_sub_ = nh_.subscribe(p_goal_topic_, 10, &My_navigation::goalCallback, this);
             move_timer_.start();
             speed_timer_.start();
         }
@@ -101,37 +103,34 @@ bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty:
 
     return true;
 }
-
-void My_navigation::odomCallBack(const nav_msgs::Odometry::ConstPtr& odom)
+void My_navigation::mapPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& pose_ptr)
 {
-    ros::Time now = ros::Time::now();
-    try{
-        transformStamped = tf2Buffer_.lookupTransform(p_target_frame_id_, p_source_frame_id_, now);                         
-    }
-    catch(tf2::TransformException &ex){
-        ROS_WARN("%s",ex.what());
-        ros::Duration(1.0).sleep();
-    }
-    /* get pose from transform*/
-    now_x = transformStamped.transform.translation.x;
-    now_y = transformStamped.transform.translation.y;
-    now_theta = tf2::getYaw(transformStamped.transform.rotation);
-    /* get pose from odom*/
-    // now_x = odom->pose.pose.position.x;
-    // now_y = odom->pose.pose.position.y;
-    // now_theta = tf2::getYaw(odom->pose.pose.orientation);
-    linear_velocity = sqrt(pow(odom->twist.twist.linear.x, 2) + pow(odom->twist.twist.linear.y, 2));
-    angular_velocity = odom->twist.twist.angular.z;
-
+    /* get pose from transform : map to baselink*/
+    now_x = pose_ptr->pose.position.x;
+    now_y = pose_ptr->pose.position.y;
+    now_theta = tf2::getYaw(pose_ptr->pose.orientation);
     // ROS_INFO_STREAM("[Now pose]:" << now_x << "," << now_y << "," << now_theta);
+
+}
+void My_navigation::odomCallback(const nav_msgs::Odometry::ConstPtr& odom_ptr)
+{    
+    /* get pose from odom*/
+    // now_x = odom_ptr->pose.pose.position.x;
+    // now_y = odom_ptr->pose.pose.position.y;
+    // now_theta = tf2::getYaw(odom_ptr->pose.pose.orientation);
+    // ROS_INFO_STREAM("[Now pose]:" << now_x << "," << now_y << "," << now_theta);
+
+    /* get speed from odom*/
+    linear_velocity = sqrt(pow(odom_ptr->twist.twist.linear.x, 2) + pow(odom_ptr->twist.twist.linear.y, 2));
+    angular_velocity = odom_ptr->twist.twist.angular.z;
     // ROS_INFO_STREAM("[Now speed]:" << linear_velocity << "," << angular_velocity);
 }
 
-void My_navigation::goalCallBack(const geometry_msgs::Pose::ConstPtr& pose)
+void My_navigation::goalCallback(const geometry_msgs::Pose::ConstPtr& pose_ptr)
 {
-    goal_x = pose->position.x;
-    goal_y = pose->position.y;
-    goal_theta = tf2::getYaw(pose->orientation);
+    goal_x = pose_ptr->position.x;
+    goal_y = pose_ptr->position.y;
+    goal_theta = tf2::getYaw(pose_ptr->orientation);
     ROS_INFO_STREAM("[New goal!]:" << goal_x << "," << goal_y << "," << goal_theta);
     have_new_goal = true;
     move_state = LINEAR;

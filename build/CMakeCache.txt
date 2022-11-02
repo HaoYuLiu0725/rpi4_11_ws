@@ -542,14 +542,8 @@ rostime_DIR:PATH=/opt/ros/noetic/share/rostime/cmake
 //The directory containing a CMake configuration file for std_msgs.
 std_msgs_DIR:PATH=/opt/ros/noetic/share/std_msgs/cmake
 
-//The directory containing a CMake configuration file for std_srvs.
-std_srvs_DIR:PATH=/opt/ros/noetic/share/std_srvs/cmake
-
 //The directory containing a CMake configuration file for tf2.
 tf2_DIR:PATH=/opt/ros/noetic/share/tf2/cmake
-
-//The directory containing a CMake configuration file for tf2_geometry_msgs.
-tf2_geometry_msgs_DIR:PATH=/opt/ros/noetic/share/tf2_geometry_msgs/cmake
 
 //The directory containing a CMake configuration file for tf2_msgs.
 tf2_msgs_DIR:PATH=/opt/ros/noetic/share/tf2_msgs/cmake
@@ -559,21 +553,6 @@ tf2_py_DIR:PATH=/opt/ros/noetic/share/tf2_py/cmake
 
 //The directory containing a CMake configuration file for tf2_ros.
 tf2_ros_DIR:PATH=/opt/ros/noetic/share/tf2_ros/cmake
-
-//Value Computed by CMake
-turtle_practice_BINARY_DIR:STATIC=/home/haoyu/rpi4_11_ws/build/turtle_practice
-
-//Value Computed by CMake
-turtle_practice_SOURCE_DIR:STATIC=/home/haoyu/rpi4_11_ws/src/turtle_practice
-
-//Value Computed by CMake
-turtle_test_BINARY_DIR:STATIC=/home/haoyu/rpi4_11_ws/build/turtle_test
-
-//Value Computed by CMake
-turtle_test_SOURCE_DIR:STATIC=/home/haoyu/rpi4_11_ws/src/turtle_test
-
-//The directory containing a CMake configuration file for turtlesim.
-turtlesim_DIR:PATH=/opt/ros/noetic/share/turtlesim/cmake
 
 //The directory containing a CMake configuration file for xmlrpcpp.
 xmlrpcpp_DIR:PATH=/opt/ros/noetic/share/xmlrpcpp/cmake
