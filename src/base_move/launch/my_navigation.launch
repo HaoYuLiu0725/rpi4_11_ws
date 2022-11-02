@@ -32,8 +32,8 @@
     <!-- <include file="$(find fake_odom)/launch/fake_odom.launch"/> -->
 
     <!-- tf2_transformListener -->
-    <node name="tf2_transformListener" pkg="base_move" type="tf2_transformListener"/>
+    <node name="tf2_transformListener" pkg="base_move" type="tf2_transformListener" output="screen"/>
 
     <!-- main program -->
-    <node name="main_node" pkg="main_program" type="main_tel2022"/>
+    <node name="main_node" pkg="main_program" type="main_tel2022" output="screen"/>
 </launch>
