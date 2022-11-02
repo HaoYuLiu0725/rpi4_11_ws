@@ -87,6 +87,13 @@ public:
     {
         return target;
     }
+
+    void printOut()
+    {
+        cout << "Position : [" << position.first << "," << position.second
+             << "] Condition : " << condition
+             << " Target : [" << target.position.x << "," << target.position.y << "]\n";
+    }
 };
 
 // Variable Define
@@ -98,10 +105,10 @@ bool moving = false;
 bool doing = false;
 bool finish_mission = false;
 
-double position_x;
-double position_y;
-double orientation_z;
-double orientation_w;
+double position_x = 0;
+double position_y = 0;
+double orientation_z = 0;
+double orientation_w = 0;
 double startMissionTime;
 
 geometry_msgs::Pose next_target;
@@ -143,6 +150,7 @@ void checkStateMachine(ros::Publisher pub1, ros::Publisher pub2)
     {
         if (checkPosition(state_list[i].getPosition('x'), state_list[i].getPosition('y')))
         {
+            cout << "Index : " << i << endl;
             if (state_list[i].getCondition() == 11)
             {
                 if (moving && doing)
@@ -171,6 +179,10 @@ void checkStateMachine(ros::Publisher pub1, ros::Publisher pub2)
                     doMission(pub1, pub2, i);
                 }
             }
+        }
+        else
+        {
+            cout << "Not Find Correspond State" << endl;
         }
     }
 }
@@ -301,6 +313,10 @@ int main(int argc, char **argv)
 
         state nextState(position_, condition_, result_, target_);
         state_list.push_back(nextState);
+    }
+    for (int i = 0; i < state_list.size(); i++)
+    {
+        state_list[i].printOut();
     }
 
     while (ros::ok())
