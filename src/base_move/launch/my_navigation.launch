@@ -33,4 +33,7 @@
 
     <!-- tf2_transformListener -->
     <node name="tf2_transformListener" pkg="base_move" type="tf2_transformListener"/>
+
+    <!-- main program -->
+    <node name="tel2022_main" pkg="main_program" type="main_tel2022"/>
 </launch>
