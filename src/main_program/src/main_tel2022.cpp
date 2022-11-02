@@ -296,7 +296,7 @@ int main(int argc, char **argv)
 
         getline(sin, field, ',');
         angle = atof(field.c_str());
-        myQuaternion.setRPY(0, 0, angle);
+        myQuaternion.setRPY(0, 0, angle * M_PI / 180.0);
         target_.orientation = tf2::toMsg(myQuaternion);
 
         state nextState(position_, condition_, result_, target_);
