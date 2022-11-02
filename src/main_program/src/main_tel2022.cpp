@@ -1,5 +1,6 @@
 #include <ros/ros.h>
 #include <tf/tf.h>
+#include <tf2/utils.h>
 #include <geometry_msgs/Pose2D.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Char.h>
@@ -296,8 +297,7 @@ int main(int argc, char **argv)
         getline(sin, field, ',');
         angle = atof(field.c_str());
         myQuaternion.setRPY(0, 0, angle);
-        target_.orientation.z = myQuaternion.getZ();
-        target_.orientation.w = myQuaternion.getW();
+        target_.orientation = tf2::toMsg(myQuaternion);
 
         state nextState(position_, condition_, result_, target_);
         state_list.push_back(nextState);
