@@ -45,10 +45,10 @@ private:
     pair<double, double> position;
     int condition;
     int result;
-    vector<geometry_msgs::Pose> target;
+    geometry_msgs::Pose target;
 
 public:
-    state(pair<double, double> position, int condition, int result, vector<geometry_msgs::Pose> target)
+    state(pair<double, double> position, int condition, int result, geometry_msgs::Pose target)
     {
         this->position = position;
         this->condition = condition;
@@ -82,9 +82,9 @@ public:
         return result;
     }
 
-    geometry_msgs::Pose getTarget(int order)
+    geometry_msgs::Pose getTarget()
     {
-        return target[order];
+        return target;
     }
 };
 
@@ -120,12 +120,13 @@ bool checkPosition(double x, double y)
     }
 }
 
-void doMission(ros::NodeHandle nh, int index)
+void doMission(ros::Publisher pub1, ros::Publisher pub2, int index)
 {
     int missionType = state_list[index].getResult();
     if (missionType == 1)
     {
         // Publish target to base
+        pub1.publish(state_list[index].getTarget());
         moving = true;
     }
     else if (missionType == 2)
@@ -135,7 +136,7 @@ void doMission(ros::NodeHandle nh, int index)
     }
 }
 
-void checkStateMachine(ros::NodeHandle nh)
+void checkStateMachine(ros::Publisher pub1, ros::Publisher pub2)
 {
     for (int i = 0; i < state_list.size(); i++)
     {
@@ -145,28 +146,28 @@ void checkStateMachine(ros::NodeHandle nh)
             {
                 if (moving && doing)
                 {
-                    doMission(nh, i);
+                    doMission(pub1, pub2, i);
                 }
             }
             else if (state_list[i].getCondition() == 10)
             {
                 if (moving && !doing)
                 {
-                    doMission(nh, i);
+                    doMission(pub1, pub2, i);
                 }
             }
             else if (state_list[i].getCondition() == 1)
             {
                 if (!moving && doing)
                 {
-                    doMission(nh, i);
+                    doMission(pub1, pub2, i);
                 }
             }
             else if (state_list[i].getCondition() == 0)
             {
                 if (!moving && !doing)
                 {
-                    doMission(nh, i);
+                    doMission(pub1, pub2, i);
                 }
             }
         }
@@ -238,24 +239,79 @@ int main(int argc, char **argv)
     std_msgs::Float32 timePublish;
     std_msgs::Int32 pointPublish;
 
-    pair<double, double> position_;
-    vector<int> condition_;
-    vector<int> result_;
-    geometry_msgs::Pose oneTarget;
-    vector<geometry_msgs::Pose> target_;
-
     // Main Node Update Frequency
 
     ros::Rate rate(20);
+
+    // Script Reading
+
+    ifstream inFile;
+    string value;
+    string line;
+    string field;
+    string packagePath = ros::package::getPath("main_program");
+    string filename_mission = "tokyo2022_script";
+
+    pair<double, double> position_;
+    int condition_;
+    int result_;
+    geometry_msgs::Pose target_;
+    double angle;
+    tf2::Quaternion myQuaternion;
+
+    inFile.open(packagePath + "/include/" + filename_mission);
+    cout << "Mission Point CSV File << " << filename_mission << " >> ";
+    if (inFile.fail())
+    {
+        cout << "Could Not Open !" << endl;
+    }
+    else
+    {
+        cout << "Open Successfully !" << endl;
+    }
+    cout << endl;
+    getline(inFile, line);
+    while (getline(inFile, line))
+    {
+        istringstream sin(line);
+
+        getline(sin, field, ',');
+        position_.first = atof(field.c_str());
+
+        getline(sin, field, ',');
+        position_.second = atof(field.c_str());
+
+        getline(sin, field, ',');
+        condition_ = atoi(field.c_str());
+
+        getline(sin, field, ',');
+        result_ = atoi(field.c_str());
+
+        getline(sin, field, ',');
+        target_.position.x = atof(field.c_str());
+
+        getline(sin, field, ',');
+        target_.position.y = atof(field.c_str());
+
+        getline(sin, field, ',');
+        angle = atof(field.c_str());
+        myQuaternion.setRPY(0, 0, angle);
+        target_.orientation.z = myQuaternion.getZ();
+        target_.orientation.w = myQuaternion.getW();
+
+        state nextState(position_, condition_, result_, target_);
+        state_list.push_back(nextState);
+    }
 
     while (ros::ok())
     {
         switch (now_Status)
         {
         case SETUP:
+            now_Status = RUN;
             break;
         case RUN:
-            checkStateMachine(mainClass.nh);
+            checkStateMachine(mainClass._target, mainClass._target);
             break;
         case FINISH:
             break;
