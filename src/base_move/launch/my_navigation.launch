@@ -23,15 +23,13 @@
         <param name="mapPose_topic" value="/map_pose"/>         <!-- Sub [geometry_msgs::PoseStamped] -->
         <param name="odom_topic" value="/odom"/>                <!-- Sub [nav_msgs::Odometry] -->
         <param name="goal_topic" value="/base_goal"/>           <!-- Sub [geometry_msgs::Pose] -->
-        <param name="target_frame_id" value="base_link"/>
-        <param name="source_frame_id" value="map"/>
     </node>
 
     <!-- odometry -->
-    <!-- <include file="$(find odometry)/launch/odometry.launch" /> -->
+    <include file="$(find odometry)/launch/odometry.launch"/>
     
     <!-- fake_odom -->
-    <include file="$(find fake_odom)/launch/fake_odom.launch"/>
+    <!-- <include file="$(find fake_odom)/launch/fake_odom.launch"/> -->
 
     <!-- tf2_transformListener -->
     <node name="tf2_transformListener" pkg="base_move" type="tf2_transformListener"/>

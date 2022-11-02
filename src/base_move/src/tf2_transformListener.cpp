@@ -4,8 +4,6 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <tf2/utils.h>
 
-geometry_msgs::PoseStamped stampedPose;
-
 int main(int argc, char** argv){
   ros::init(argc, argv, "tf2_transformListener");
 
@@ -14,9 +12,11 @@ int main(int argc, char** argv){
   tf2_ros::Buffer tfBuffer;
   tf2_ros::TransformListener tfListener(tfBuffer);
 
+  geometry_msgs::TransformStamped transformStamped;
+  geometry_msgs::PoseStamped stampedPose;
+  
   ros::Rate rate(100.0);
   while (nh.ok()){
-    geometry_msgs::TransformStamped transformStamped;
     try{
       transformStamped = tfBuffer.lookupTransform("map", "base_link", ros::Time(0));
     }
