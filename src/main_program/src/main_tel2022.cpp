@@ -43,12 +43,12 @@ class state
 {
 private:
     pair<double, double> position;
-    vector<int> condition;
-    vector<int> result;
-    vector<pair<double, double>> target;
+    int condition;
+    int result;
+    vector<geometry_msgs::Pose> target;
 
 public:
-    state(pair<double, double> position, vector<int> condition, vector<int> result, vector<pair<double, double>> target)
+    state(pair<double, double> position, int condition, int result, vector<geometry_msgs::Pose> target)
     {
         this->position = position;
         this->condition = condition;
@@ -72,17 +72,17 @@ public:
         }
     }
 
-    vector<int> getConditionList()
+    int getCondition()
     {
         return condition;
     }
 
-    vector<int> getResultList()
+    int getResult()
     {
         return result;
     }
 
-    pair<double, double> getTarget(int order)
+    geometry_msgs::Pose getTarget(int order)
     {
         return target[order];
     }
@@ -120,9 +120,9 @@ bool checkPosition(double x, double y)
     }
 }
 
-void doMission(ros::NodeHandle nh, int index, int order)
+void doMission(ros::NodeHandle nh, int index)
 {
-    int missionType = state_list[index].getResultList()[order];
+    int missionType = state_list[index].getResult();
     if (missionType == 1)
     {
         // Publish target to base
@@ -141,35 +141,32 @@ void checkStateMachine(ros::NodeHandle nh)
     {
         if (checkPosition(state_list[i].getPosition('x'), state_list[i].getPosition('y')))
         {
-            for (int j = 0; j < state_list[i].getConditionList().size(); j++)
+            if (state_list[i].getCondition() == 11)
             {
-                if (state_list[i].getConditionList()[j] == 11)
+                if (moving && doing)
                 {
-                    if (moving && doing)
-                    {
-                        doMission(nh, i, j);
-                    }
+                    doMission(nh, i);
                 }
-                else if (state_list[i].getConditionList()[j] == 10)
+            }
+            else if (state_list[i].getCondition() == 10)
+            {
+                if (moving && !doing)
                 {
-                    if (moving && !doing)
-                    {
-                        doMission(nh, i, j);
-                    }
+                    doMission(nh, i);
                 }
-                else if (state_list[i].getConditionList()[j] == 1)
+            }
+            else if (state_list[i].getCondition() == 1)
+            {
+                if (!moving && doing)
                 {
-                    if (!moving && doing)
-                    {
-                        doMission(nh, i, j);
-                    }
+                    doMission(nh, i);
                 }
-                else if (state_list[i].getConditionList()[j] == 0)
+            }
+            else if (state_list[i].getCondition() == 0)
+            {
+                if (!moving && !doing)
                 {
-                    if (!moving && !doing)
-                    {
-                        doMission(nh, i, j);
-                    }
+                    doMission(nh, i);
                 }
             }
         }
@@ -218,11 +215,11 @@ public:
     ros::Publisher _target = nh.advertise<geometry_msgs::Pose>("base_goal", 1000); // Publish goal to navigation
 
     // ROS Topics Subscribers
-    ros::Subscriber _globalFilter = nh.subscribe<nav_msgs::Odometry>("odom", 1000, &mainProgram::position_callback, this);               // Get position from localization
-    ros::Subscriber _reachedstatus = nh.subscribe<std_msgs::Bool>("/reached_status", 1000, &mainProgram::reached_status_callback, this); // Get reached_status from base navigation
+    ros::Subscriber _globalFilter = nh.subscribe<nav_msgs::Odometry>("odom", 1000, &mainProgram::position_callback, this);              // Get position from localization
+    ros::Subscriber _reachedstatus = nh.subscribe<std_msgs::Bool>("reached_status", 1000, &mainProgram::reached_status_callback, this); // Get reached_status from base navigation
 
     // ROS Service Server
-    ros::ServiceServer _runState = nh.advertiseService("/startRunning", &mainProgram::start_callback, this); // Start Signal Service
+    ros::ServiceServer _runState = nh.advertiseService("startRunning", &mainProgram::start_callback, this); // Start Signal Service
 
     // ROS Service Client
 };
@@ -241,6 +238,12 @@ int main(int argc, char **argv)
     std_msgs::Float32 timePublish;
     std_msgs::Int32 pointPublish;
 
+    pair<double, double> position_;
+    vector<int> condition_;
+    vector<int> result_;
+    geometry_msgs::Pose oneTarget;
+    vector<geometry_msgs::Pose> target_;
+
     // Main Node Update Frequency
 
     ros::Rate rate(20);
@@ -257,9 +260,8 @@ int main(int argc, char **argv)
         case FINISH:
             break;
         }
-        break;
+        ros::spinOnce();
+        rate.sleep();
     }
-    ros::spinOnce();
-    rate.sleep();
     return 0;
 }
