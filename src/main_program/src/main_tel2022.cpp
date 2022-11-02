@@ -181,12 +181,12 @@ class mainProgram
 public:
     // Callback Function Define
 
-    void position_callback(const nav_msgs::Odometry::ConstPtr &msg)
+    void position_callback(const geometry_msgs::PoseStamped::ConstPtr &msg)
     {
-        position_x = msg->pose.pose.position.x;
-        position_y = msg->pose.pose.position.y;
-        orientation_z = msg->pose.pose.orientation.z;
-        orientation_w = msg->pose.pose.orientation.w;
+        position_x = msg->pose.position.x;
+        position_y = msg->pose.position.y;
+        orientation_z = msg->pose.orientation.z;
+        orientation_w = msg->pose.orientation.w;
     }
 
     void reached_status_callback(const std_msgs::Bool::ConstPtr &msg)
@@ -216,7 +216,7 @@ public:
     ros::Publisher _target = nh.advertise<geometry_msgs::Pose>("base_goal", 1000); // Publish goal to navigation
 
     // ROS Topics Subscribers
-    ros::Subscriber _globalFilter = nh.subscribe<nav_msgs::Odometry>("odom", 1000, &mainProgram::position_callback, this);              // Get position from localization
+    ros::Subscriber _globalFilter = nh.subscribe<geometry_msgs::PoseStamped>("map_pose", 1000, &mainProgram::position_callback, this);  // Get position from localization
     ros::Subscriber _reachedstatus = nh.subscribe<std_msgs::Bool>("reached_status", 1000, &mainProgram::reached_status_callback, this); // Get reached_status from base navigation
 
     // ROS Service Server
