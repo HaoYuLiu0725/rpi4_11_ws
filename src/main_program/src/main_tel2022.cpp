@@ -250,7 +250,7 @@ int main(int argc, char **argv)
     string line;
     string field;
     string packagePath = ros::package::getPath("main_program");
-    string filename_mission = "tokyo2022_script";
+    string filename_mission = "tokyo2022_script.csv";
 
     pair<double, double> position_;
     int condition_;
