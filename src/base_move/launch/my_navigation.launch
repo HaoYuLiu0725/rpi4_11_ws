@@ -26,10 +26,10 @@
     </node>
 
     <!-- odometry -->
-    <include file="$(find odometry)/launch/odometry.launch"/>
+    <!-- <include file="$(find odometry)/launch/odometry.launch"/> -->
     
     <!-- fake_odom -->
-    <!-- <include file="$(find fake_odom)/launch/fake_odom.launch"/> -->
+    <include file="$(find fake_odom)/launch/fake_odom.launch"/>
 
     <!-- tf2_transformListener -->
     <node name="tf2_transformListener" pkg="base_move" type="tf2_transformListener" output="screen"/>

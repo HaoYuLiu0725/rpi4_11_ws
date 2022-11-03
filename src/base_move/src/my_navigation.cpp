@@ -126,11 +126,11 @@ void My_navigation::odomCallback(const nav_msgs::Odometry::ConstPtr& odom_ptr)
     // ROS_INFO_STREAM("[Now speed]:" << linear_velocity << "," << angular_velocity);
 }
 
-void My_navigation::goalCallback(const geometry_msgs::Pose::ConstPtr& pose_ptr)
+void My_navigation::goalCallback(const geometry_msgs::PoseStamped::ConstPtr& pose_ptr)
 {
-    goal_x = pose_ptr->position.x;
-    goal_y = pose_ptr->position.y;
-    goal_theta = tf2::getYaw(pose_ptr->orientation);
+    goal_x = pose_ptr->pose.position.x;
+    goal_y = pose_ptr->pose.position.y;
+    goal_theta = tf2::getYaw(pose_ptr->pose.orientation);
     ROS_INFO_STREAM("[New goal!]:" << goal_x << "," << goal_y << "," << goal_theta);
     have_new_goal = true;
     move_state = LINEAR;

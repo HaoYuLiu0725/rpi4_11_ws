@@ -28,7 +28,7 @@ private:
     bool updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
     void mapPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& pose_ptr);
     void odomCallback(const nav_msgs::Odometry::ConstPtr& odom_ptr);
-    void goalCallback(const geometry_msgs::PoseConstPtr& pose_ptr);
+    void goalCallback(const geometry_msgs::PoseStamped::ConstPtr& pose_ptr);
     void twistPublish(double Vx, double Vy, double W);
     void transformCallback(const ros::TimerEvent& e);
     void moveTimerCallback(const ros::TimerEvent& e);

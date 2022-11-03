@@ -112,6 +112,7 @@ double orientation_w = 0;
 double startMissionTime;
 
 geometry_msgs::Pose next_target;
+geometry_msgs::PoseStamped output_target; // **NEW**
 vector<state> state_list;
 
 // Function Define
@@ -134,7 +135,10 @@ void doMission(ros::Publisher pub1, ros::Publisher pub2, int index)
     if (missionType == 1)
     {
         // Publish target to base
-        pub1.publish(state_list[index].getTarget());
+        output_target.header.frame_id = "map";  // **NEW**
+        output_target.header.stamp = ros::Time::now(); // **NEW**
+        output_target.pose = state_list[index].getTarget(); // **NEW**
+        pub1.publish(output_target); // **NEW**
         moving = true;
     }
     else if (missionType == 2)
@@ -226,7 +230,8 @@ public:
     ros::NodeHandle nh;
 
     // ROS Topics Publishers
-    ros::Publisher _target = nh.advertise<geometry_msgs::Pose>("base_goal", 1000); // Publish goal to navigation
+    // **NEW**
+    ros::Publisher _target = nh.advertise<geometry_msgs::PoseStamped>("base_goal", 1000); // Publish goal to navigation
 
     // ROS Topics Subscribers
     ros::Subscriber _globalFilter = nh.subscribe<geometry_msgs::PoseStamped>("map_pose", 1000, &mainProgram::position_callback, this);  // Get position from localization
