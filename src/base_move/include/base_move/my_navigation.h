@@ -93,8 +93,6 @@ private:
     std::string p_mapPose_topic_;
     std::string p_odom_topic_;
     std::string p_goal_topic_;
-    std::string p_target_frame_id_;
-    std::string p_source_frame_id_;
 
     /* param */
     bool have_new_goal;

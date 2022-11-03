@@ -42,8 +42,6 @@ bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty:
     get_param_ok = nh_local_.param<string>("mapPose_topic", p_mapPose_topic_, "/map_pose");
     get_param_ok = nh_local_.param<string>("odom_topic", p_odom_topic_, "/odom");
     get_param_ok = nh_local_.param<string>("goal_topic", p_goal_topic_, "/base_goal");
-    get_param_ok = nh_local_.param<string>("target_frame_id", p_target_frame_id_, "base_link");
-    get_param_ok = nh_local_.param<string>("source_frame_id", p_source_frame_id_, "odom");
 
     /* check param */
     if (get_param_ok)
