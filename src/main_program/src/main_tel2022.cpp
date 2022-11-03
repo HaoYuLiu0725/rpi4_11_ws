@@ -119,7 +119,7 @@ vector<state> state_list;
 
 bool checkPosition(double x, double y)
 {
-    if (pow(pow((x - position_x), 2) + pow((y - position_y), 2), 0.5) <= 0.05)
+    if (pow(pow((x - position_x), 2) + pow((y - position_y), 2), 0.5) <= 0.02)
     {
         return true;
     }
