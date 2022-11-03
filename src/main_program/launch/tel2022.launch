@@ -1,0 +1,17 @@
+<launch>
+    <!-- main program -->
+    <node name="main_node" pkg="main_program" type="main_tel2022" output="screen"/>
+
+    <!-- odometry -->
+    <!-- <include file="$(find odometry)/launch/odometry.launch"/> -->
+    
+    <!-- fake_odom -->
+    <include file="$(find fake_odom)/launch/fake_odom.launch"/>
+
+    <!-- my_navigation -->
+    <include file="$(find base_move)/launch/my_navigation.launch"/>
+
+    <!-- tf2_transformListener -->
+    <node name="base_link_to_map_transformListener" pkg="base_move" type="tf2_transformListener" output="screen"/>
+
+</launch>
