@@ -497,6 +497,9 @@ my_navigation_LIB_DEPENDS:STATIC=general;/opt/ros/noetic/lib/libtf2_ros.so;gener
 //The directory containing a CMake configuration file for nav_msgs.
 nav_msgs_DIR:PATH=/opt/ros/noetic/share/nav_msgs/cmake
 
+//The directory containing a CMake configuration file for nlink_parser.
+nlink_parser_DIR:PATH=nlink_parser_DIR-NOTFOUND
+
 //Value Computed by CMake
 odometry_BINARY_DIR:STATIC=/home/haoyu/rpi4_11_ws/build/odometry
 
@@ -514,6 +517,12 @@ path_generation_LIB_DEPENDS:STATIC=general;/opt/ros/noetic/lib/libtf2_ros.so;gen
 
 //Value Computed by CMake
 path_generation_SOURCE_DIR:STATIC=/home/haoyu/rpi4_11_ws/src/path_generation
+
+//Value Computed by CMake
+remote_control_BINARY_DIR:STATIC=/home/haoyu/rpi4_11_ws/build/ds5_uwb_remote_control/remote_control
+
+//Value Computed by CMake
+remote_control_SOURCE_DIR:STATIC=/home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/remote_control
 
 //The directory containing a CMake configuration file for rosconsole.
 rosconsole_DIR:PATH=/opt/ros/noetic/share/rosconsole/cmake
@@ -550,6 +559,9 @@ rosserial_python_SOURCE_DIR:STATIC=/home/haoyu/rpi4_11_ws/src/rosserial_python
 
 //The directory containing a CMake configuration file for rostime.
 rostime_DIR:PATH=/opt/ros/noetic/share/rostime/cmake
+
+//The directory containing a CMake configuration file for sensor_msgs.
+sensor_msgs_DIR:PATH=/opt/ros/noetic/share/sensor_msgs/cmake
 
 //The directory containing a CMake configuration file for std_msgs.
 std_msgs_DIR:PATH=/opt/ros/noetic/share/std_msgs/cmake
