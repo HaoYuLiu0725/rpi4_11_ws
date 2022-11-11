@@ -1,6 +1,6 @@
 <launch>
     <!-- main program -->
-    <node name="main_node" pkg="main_program" type="main_tel2022" output="screen"/>
+    <!-- <node name="main_node" pkg="main_program" type="main_tel2022" output="screen"/> -->
 
     <!-- odometry -->
     <include file="$(find odometry)/launch/odometry.launch"/>
