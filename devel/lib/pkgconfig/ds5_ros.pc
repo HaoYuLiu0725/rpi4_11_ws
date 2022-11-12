@@ -1,0 +1,8 @@
+prefix=/home/haoyu/rpi4_11_ws/devel
+
+Name: ds5_ros
+Description: Description of ds5_ros
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

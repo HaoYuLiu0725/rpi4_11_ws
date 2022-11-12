@@ -1,0 +1,8 @@
+prefix=/home/haoyu/rpi4_11_ws/install
+
+Name: nlink_uwb
+Description: Description of nlink_uwb
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: nlink_parser roscpp std_msgs geometry_msgs sensor_msgs

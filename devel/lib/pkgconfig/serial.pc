@@ -1,0 +1,8 @@
+prefix=/home/haoyu/rpi4_11_ws/devel
+
+Name: serial
+Description: Description of serial
+Version: 1.2.1
+Cflags: -I/home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/nlink_uwb_tools/serial/include
+Libs: -L${prefix}/lib -lserial -lrt -lpthread
+Requires: 
