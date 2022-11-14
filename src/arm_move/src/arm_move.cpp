@@ -27,15 +27,15 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     get_param_ok = nh_local_.param<double>("storage2_x", p_storage2_x, 82.0);       // [mm]
     get_param_ok = nh_local_.param<double>("storage2_y", p_storage2_y, -199.0);     // [mm]
     get_param_ok = nh_local_.param<double>("storage2_z", p_storage2_z, 74.0);       // [mm]
-    get_param_ok = nh_local_.param<double>("drop_offset", p_drop_offset_, 10.0);    // [mm]
-    get_param_ok = nh_local_.param<double>("suck_offset", p_suck_offset_, -5.0);    // [mm]
-    get_param_ok = nh_local_.param<double>("stack_offset", p_stack_offset_, 63.0);  // [mm]
     get_param_ok = nh_local_.param<double>("square2_x", p_square2_x, 0.0);          // [mm]
     get_param_ok = nh_local_.param<double>("square2_y", p_square2_y, 200.0);        // [mm]
     get_param_ok = nh_local_.param<double>("square2_z", p_square2_z, -15.0);        // [mm]
     get_param_ok = nh_local_.param<double>("touch_board_x", p_touch_board_x, 500.0);// [mm]
     get_param_ok = nh_local_.param<double>("touch_board_y", p_touch_board_y, 0.0);  // [mm]
     get_param_ok = nh_local_.param<double>("touch_board_z", p_touch_board_z, 10.0); // [mm]
+    get_param_ok = nh_local_.param<double>("drop_offset", p_drop_offset_, 10.0);    // [mm]
+    get_param_ok = nh_local_.param<double>("suck_offset", p_suck_offset_, -5.0);    // [mm]
+    get_param_ok = nh_local_.param<double>("stack_offset", p_stack_offset_, 63.0);  // [mm]
 
     double timeout;
     get_param_ok = nh_local_.param<double>("timeout", timeout, 0.2);

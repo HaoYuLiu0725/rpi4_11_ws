@@ -85,15 +85,15 @@ private:
     double p_storage2_x;
     double p_storage2_y;
     double p_storage2_z;
-    double p_drop_offset_;
-    double p_suck_offset_;
-    double p_stack_offset_;
     double p_square2_x;
     double p_square2_y;
     double p_square2_z;
     double p_touch_board_x;
     double p_touch_board_y;
     double p_touch_board_z;
+    double p_drop_offset_;
+    double p_suck_offset_;
+    double p_stack_offset_;
 
     std::string p_mission_target_topic_;
     std::string p_mission_status_topic_;
