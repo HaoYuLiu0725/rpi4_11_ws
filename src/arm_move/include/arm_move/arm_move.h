@@ -53,9 +53,9 @@ private:
     arm_move::mission input_mission;
     std_msgs::Bool mission_status; // true: mission done
 
-    geometry_msgs::Point arm_goal;
+    geometry_msgs::Point init_arm;
     std_msgs::Bool suck;
-    std_msgs::Bool arm_status; // true: mission done
+    std_msgs::Bool arm_status; // true: SCARA moving mission done
 
     ros::Time last_time_;
     ros::Duration timeout_;
@@ -87,6 +87,7 @@ private:
     double p_storage2_z;
     double p_drop_offset_;
     double p_suck_offset_;
+    double p_stack_offset_;
     double p_square2_x;
     double p_square2_y;
     double p_square2_z;

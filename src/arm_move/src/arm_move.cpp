@@ -18,7 +18,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     get_param_ok = nh_local_.param<bool>("active", p_active_, true);
 
     get_param_ok = nh_local_.param<double>("frequency", p_frequency_, 10);
-    get_param_ok = nh_local_.param<double>("init_arm_x", p_init_arm_x, 130.0);      // [mm]
+    get_param_ok = nh_local_.param<double>("init_arm_x", p_init_arm_x, 128.0);      // [mm]
     get_param_ok = nh_local_.param<double>("init_arm_y", p_init_arm_y, 15.0);       // [mm]
     get_param_ok = nh_local_.param<double>("init_arm_z", p_init_arm_z, 10.0);       // [mm]
     get_param_ok = nh_local_.param<double>("storage1_x", p_storage1_x, 82.0);       // [mm]
@@ -29,6 +29,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     get_param_ok = nh_local_.param<double>("storage2_z", p_storage2_z, 74.0);       // [mm]
     get_param_ok = nh_local_.param<double>("drop_offset", p_drop_offset_, 10.0);    // [mm]
     get_param_ok = nh_local_.param<double>("suck_offset", p_suck_offset_, -5.0);    // [mm]
+    get_param_ok = nh_local_.param<double>("stack_offset", p_stack_offset_, 63.0);  // [mm]
     get_param_ok = nh_local_.param<double>("square2_x", p_square2_x, 0.0);          // [mm]
     get_param_ok = nh_local_.param<double>("square2_y", p_square2_y, 200.0);        // [mm]
     get_param_ok = nh_local_.param<double>("square2_z", p_square2_z, -15.0);        // [mm]
@@ -84,10 +85,10 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     /* init state param */
     mission_state = no_mission;
 
-    arm_goal.x = p_init_arm_x;
-    arm_goal.y = p_init_arm_y;
-    arm_goal.z = p_init_arm_z;
-    arm_goal_pub_.publish(arm_goal); // initial arm pose
+    init_arm.x = p_init_arm_x;
+    init_arm.y = p_init_arm_y;
+    init_arm.z = p_init_arm_z;
+    arm_goal_pub_.publish(init_arm); // initial arm pose
 
     suck.data = false; // no suction
     suck_pub_.publish(suck);
@@ -165,11 +166,12 @@ void ArmMove::timerCallback(const ros::TimerEvent& e)
     }
 }
 
-void ArmMove::mission1()
+void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  */
 {
     if(!running && point_num != 0){
         switch(point_num){
             case 1:
+                ROS_INFO_STREAM("[Arm Move]: Mission 1 started");
                 publishSuck(true); // suction on
                 T_point.z += p_suck_offset_;
                 arm_goal_pub_.publish(T_point);
@@ -191,7 +193,7 @@ void ArmMove::mission1()
                 E_point.z += p_suck_offset_;
                 arm_goal_pub_.publish(E_point);
                 ROS_INFO_STREAM("[Arm Move]: Go to E_point");
-                ros::Duration(3).sleep();
+                ros::Duration(1).sleep();
                 publishSuck(true); // suction on
                 point_num += 1;
                 running = true;
@@ -210,7 +212,7 @@ void ArmMove::mission1()
                 L_point.z += p_suck_offset_;
                 arm_goal_pub_.publish(L_point);
                 ROS_INFO_STREAM("[Arm Move]: Go to L_point");
-                ros::Duration(3).sleep();
+                ros::Duration(1).sleep();
                 publishSuck(true); // suction on
                 point_num += 1;
                 running = true;
@@ -232,13 +234,78 @@ void ArmMove::mission1()
         }
     }
     else{
-        ROS_INFO_STREAM("[Arm Move]: SCARA is moving");
+        ROS_INFO_STREAM("[Arm Move]: SCARA is moving (Mission1)");
     }
 }
 
-void ArmMove::mission2()
+void ArmMove::mission2() /* In level 2, put T, E, L block in first square  */
 {
-
+    if(!running && point_num != 0){
+        switch(point_num){
+            case 1:
+                ROS_INFO_STREAM("[Arm Move]: Mission 2 started");
+                arm_goal_pub_.publish(square_2);
+                ROS_INFO_STREAM("[Arm Move]: Go to square_2");
+                point_num += 1;
+                running = true;
+                break;
+            case 2:
+                ROS_INFO_STREAM("[Arm Move]: Reached square_2");
+                publishSuck(false); // suction off(release)
+                storage_1.z += p_suck_offset_;
+                arm_goal_pub_.publish(storage_1);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_1");
+                ros::Duration(1).sleep();
+                publishSuck(true); // suction on
+                point_num += 1;
+                running = true;
+                break;
+            case 3:
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_1");
+                square_2.z += p_stack_offset_;
+                arm_goal_pub_.publish(square_2);
+                ROS_INFO_STREAM("[Arm Move]: Go to square_2");
+                point_num += 1;
+                running = true;
+                break;
+            case 4:
+                ROS_INFO_STREAM("[Arm Move]: Reached square_2");
+                publishSuck(false); // suction off(release)
+                storage_2.z += p_suck_offset_;
+                arm_goal_pub_.publish(storage_2);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_2");
+                ros::Duration(1).sleep();
+                publishSuck(true); // suction on
+                point_num += 1;
+                running = true;
+                break;
+            case 5:
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_2");
+                square_2.z += p_stack_offset_;
+                arm_goal_pub_.publish(square_2);
+                ROS_INFO_STREAM("[Arm Move]: Go to square_2");
+                point_num += 1;
+                running = true;
+                break;
+            case 6:
+                ROS_INFO_STREAM("[Arm Move]: Reached square_2");
+                publishSuck(false); // suction off(release)
+                arm_goal_pub_.publish(init_arm); // initial arm pose
+                ROS_INFO_STREAM("[Arm Move]: Go back to init_arm");
+                point_num += 1;
+                running = true;
+                break;
+            case 7:
+                ROS_INFO_STREAM("[Arm Move]: Reached init_arm");
+                point_num = 0;
+                mission_state = no_mission;
+                ROS_INFO_STREAM("[Arm Move]: Mission2 Finished");
+                break;
+        }
+    }
+    else{
+        ROS_INFO_STREAM("[Arm Move]: SCARA is moving (Mission2)");
+    }
 }
 
 void ArmMove::mission3()
