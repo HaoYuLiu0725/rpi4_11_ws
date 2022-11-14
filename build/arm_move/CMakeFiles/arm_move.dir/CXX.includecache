@@ -6,6 +6,28 @@
 
 #IncludeRegexTransform: 
 
+/home/haoyu/rpi4_11_ws/devel/include/arm_move/mission.h
+string
+-
+vector
+-
+memory
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+geometry_msgs/Point.h
+-
+geometry_msgs/Point.h
+-
+geometry_msgs/Point.h
+-
+
 /home/haoyu/rpi4_11_ws/src/arm_move/include/arm_move/arm_move.h
 cmath
 -
@@ -20,6 +42,8 @@ geometry_msgs/Point.h
 std_msgs/Int16.h
 -
 std_msgs/Bool.h
+-
+arm_move/mission.h
 -
 
 /home/haoyu/rpi4_11_ws/src/arm_move/src/arm_move.cpp
