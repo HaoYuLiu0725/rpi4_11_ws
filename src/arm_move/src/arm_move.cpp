@@ -18,15 +18,17 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     get_param_ok = nh_local_.param<bool>("active", p_active_, true);
 
     get_param_ok = nh_local_.param<double>("frequency", p_frequency_, 10);
-    get_param_ok = nh_local_.param<double>("init_arm_x", p_init_arm_x, 0.0);
-    get_param_ok = nh_local_.param<double>("init_arm_y", p_init_arm_y, 0.0);
-    get_param_ok = nh_local_.param<double>("init_arm_z", p_init_arm_z, 0.0);
-    get_param_ok = nh_local_.param<double>("storage1_x", p_storage1_x, 0.0);
-    get_param_ok = nh_local_.param<double>("storage1_y", p_storage1_y, 0.0);
-    get_param_ok = nh_local_.param<double>("storage1_z", p_storage1_z, 0.0);
-    get_param_ok = nh_local_.param<double>("storage2_x", p_storage2_x, 0.0);
-    get_param_ok = nh_local_.param<double>("storage2_y", p_storage2_y, 0.0);
-    get_param_ok = nh_local_.param<double>("storage2_z", p_storage2_z, 0.0);
+    get_param_ok = nh_local_.param<double>("init_arm_x", p_init_arm_x, 0.0);    // [mm]
+    get_param_ok = nh_local_.param<double>("init_arm_y", p_init_arm_y, 0.0);    // [mm]
+    get_param_ok = nh_local_.param<double>("init_arm_z", p_init_arm_z, 0.0);    // [mm]
+    get_param_ok = nh_local_.param<double>("storage1_x", p_storage1_x, 82.0);   // [mm]
+    get_param_ok = nh_local_.param<double>("storage1_y", p_storage1_y, -99.0);  // [mm]
+    get_param_ok = nh_local_.param<double>("storage1_z", p_storage1_z, 74.0);   // [mm]
+    get_param_ok = nh_local_.param<double>("storage2_x", p_storage2_x, 82.0);   // [mm]
+    get_param_ok = nh_local_.param<double>("storage2_y", p_storage2_y, -199.0); // [mm]
+    get_param_ok = nh_local_.param<double>("storage2_z", p_storage2_z, 74.0);   // [mm]
+    get_param_ok = nh_local_.param<double>("drop_offset", p_drop_offset_, 10.0);// [mm]
+    get_param_ok = nh_local_.param<double>("suck_offset", p_suck_offset_, -5.0);// [mm]
 
     double timeout;
     get_param_ok = nh_local_.param<double>("timeout", timeout, 0.2);
@@ -77,12 +79,18 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     }
 
     /* init state param */
+    mission_state = no_mission;
+
     storage_1.x = p_storage1_x;
     storage_1.y = p_storage1_y;
     storage_1.z = p_storage1_z;
     storage_2.x = p_storage2_x;
     storage_2.y = p_storage2_y;
     storage_2.z = p_storage2_z;
+
+    arm_goal.x = p_init_arm_x;
+    arm_goal.y = p_init_arm_y;
+    arm_goal.z = p_init_arm_z;
 
     // output_twist_.linear.x = 0;
     // output_twist_.linear.y = 0;
@@ -92,4 +100,35 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     publish();
 
     return true;
+}
+
+void ArmMove::missionGoalCallback(const geometry_msgs::Point::ConstPtr& ptr)
+{
+    mission_goal = *ptr;
+}
+
+void ArmMove::missionCallback(const std_msgs::Int16::ConstPtr& ptr)
+{
+    mission_num = *ptr;
+    if(mission_num.data == 1) mission_state = mission_1;
+    else if(mission_num.data == 2) mission_state = mission_2;
+    else if(mission_num.data == 3) mission_state = mission_3;
+    else  mission_state = no_mission;
+}   
+
+void ArmMove::armStatusCallback(const std_msgs::Bool::ConstPtr& ptr)  
+{
+    arm_status = *ptr;
+}  
+
+void ArmMove::timerCallback(const ros::TimerEvent& e)
+{
+
+}
+
+void ArmMove::publish()
+{
+    arm_goal_pub_.publish(arm_goal);
+    suck_pub_.publish(suck);
+    mission_status_pub_.publish(mission_status);
 }

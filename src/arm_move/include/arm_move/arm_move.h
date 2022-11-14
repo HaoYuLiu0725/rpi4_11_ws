@@ -1,4 +1,5 @@
 #pragma once
+/* All value is in [mm] */
 
 #include <cmath>
 #include <vector>
@@ -49,13 +50,13 @@ private:
     ros::Publisher suck_pub_;             // to   SCARA
     ros::Subscriber arm_status_sub_;      // from SCARA
 
-    std::vector<geometry_msgs::Point> mission_point_;
-    std_msgs::Int16 mission_num_;
-    std_msgs::Bool mission_status_;
+    geometry_msgs::Point mission_goal; /*****maybe vector*****/
+    std_msgs::Int16 mission_num;
+    std_msgs::Bool mission_status;
 
-    geometry_msgs::Point arm_goal_;
-    std_msgs::Bool suck_;
-    std_msgs::Bool arm_status_;
+    geometry_msgs::Point arm_goal;
+    std_msgs::Bool suck;
+    std_msgs::Bool arm_status;
 
     ros::Time last_time_;
     ros::Duration timeout_;
@@ -76,6 +77,8 @@ private:
     double p_storage2_x;
     double p_storage2_y;
     double p_storage2_z;
+    double p_drop_offset_;
+    double p_suck_offset_;
 
     std::string p_mission_goal_topic_;
     std::string p_mission_topic_;
@@ -83,5 +86,14 @@ private:
     std::string p_arm_goal_topic_;
     std::string p_suck_topic_;
     std::string p_arm_status_topic_;
+
+    /* state */
+    enum Mission_State
+    {
+        no_mission,
+        mission_1,
+        mission_2,
+        mission_3
+    }mission_state;
 };
 }  // namespace arm_move
