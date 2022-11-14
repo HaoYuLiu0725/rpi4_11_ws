@@ -16,7 +16,8 @@
                 "${workspaceFolder}/src/odometry/include/**",
                 "${workspaceFolder}/src/path_generation/include/**",
                 "${workspaceFolder}/src/fake_odom/include/**",
-                "${workspaceFolder}/src/base_move/include/**"
+                "${workspaceFolder}/src/base_move/include/**",
+                "${workspaceFolder}/src/arm_move/include/**"
             ],
             "name": "ROS",
             "intelliSenseMode": "gcc-x64",
