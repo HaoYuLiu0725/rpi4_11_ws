@@ -12,6 +12,8 @@ ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/init.cpp.o: /home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/src/utils/nutils.h
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/init.cpp.o: /home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/src/utils/protocol_extracter/nprotocol_base.h
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/init.cpp.o: /home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/src/utils/protocol_extracter/nprotocol_extracter.h
+ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/init.cpp.o: /home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/nlink_uwb_tools/serial/include/serial/serial.h
+ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/init.cpp.o: /home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/nlink_uwb_tools/serial/include/serial/v8stdint.h
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/init.cpp.o: /opt/ros/noetic/include/ros/advertise_options.h
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/init.cpp.o: /opt/ros/noetic/include/ros/advertise_service_options.h
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/init.cpp.o: /opt/ros/noetic/include/ros/assert.h
@@ -78,6 +80,8 @@ ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/main.cpp.o: /home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/src/utils/init_serial.h
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/main.cpp.o: /home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/src/utils/protocol_extracter/nprotocol_base.h
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/main.cpp.o: /home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/src/utils/protocol_extracter/nprotocol_extracter.h
+ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/main.cpp.o: /home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/nlink_uwb_tools/serial/include/serial/serial.h
+ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/main.cpp.o: /home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/nlink_uwb_tools/serial/include/serial/v8stdint.h
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/main.cpp.o: /opt/ros/noetic/include/ros/advertise_options.h
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/main.cpp.o: /opt/ros/noetic/include/ros/advertise_service_options.h
 ds5_uwb_remote_control/nlink_uwb_tools/nlink_parser/CMakeFiles/tofsense.dir/src/tofsense/main.cpp.o: /opt/ros/noetic/include/ros/assert.h

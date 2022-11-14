@@ -3,6 +3,6 @@ prefix=/home/haoyu/rpi4_11_ws/devel
 Name: remote_control
 Description: Description of remote_control
 Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
+Cflags: -I/home/haoyu/rpi4_11_ws/src/ds5_uwb_remote_control/remote_control/include
+Libs: -L${prefix}/lib -lremote_control
+Requires: geometry_msgs roscpp rospy std_msgs sensor_msgs nlink_parser
