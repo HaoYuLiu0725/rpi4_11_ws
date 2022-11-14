@@ -1,0 +1,49 @@
+<launch>
+    <!-- rosserial for SCARA -->
+    <node name = "arm_serial_node" pkg = "rosserial_python" type = "serial_node.py" output="screen">
+        <param name="port" value="/dev/USB3"/>
+        <param name="baud" value="115200"/>
+    </node>
+
+    <!-- arm_move -->
+    <node pkg="arm_move" type="arm_move_node" name="arm_move" output="screen">
+        <param name="active" value="true"/>
+        
+        <param name="frequency" value="10"/>
+
+        <!-- init_arm -->
+        <param name="init_arm_x" value="128.0"/>    <!-- [mm] -->
+        <param name="init_arm_y" value="15.0"/>
+        <param name="init_arm_z" value="10.0"/>
+
+        <!-- storage1 -->
+        <param name="storage1_x" value="82.0"/>     <!-- [mm] -->
+        <param name="storage1_y" value="-99.0"/>
+        <param name="storage1_z" value="74.0"/>
+
+        <!-- storage2 -->
+        <param name="storage2_x" value="82.0"/>     <!-- [mm] -->
+        <param name="storage2_y" value="-199.0"/>
+        <param name="storage2_z" value="74.0"/>
+
+        <!-- square2 -->
+        <param name="square2_x" value="0.0"/>       <!-- [mm] -->
+        <param name="square2_y" value="200.0"/>
+        <param name="square2_z" value="-15.0"/>
+
+        <!-- touch_board -->
+        <param name="touch_board_x" value="500.0"/> <!-- [mm] -->
+        <param name="touch_board_y" value="0.0"/>
+        <param name="touch_board_z" value="10.0"/>
+
+        <!-- Offset -->
+        <param name="drop_offset" value="10.0"/>    <!-- [mm] -->
+        <param name="suck_offset" value="-5.0"/>
+        <param name="stack_offset" value="63.0"/>
+    
+        <param name="twist_topic" value="/base_speed"/>    <!-- Sub [geometry_msgs::Twist] -->
+        <param name="odom_topic" value="/odom"/>           <!-- Pub [nav_msgs::Odometry] -->
+        <param name="pose_topic" value="/odom_pose"/>      <!-- Pub [geometry_msgs::PoseWithCovarianceStamped] -->
+    </node>
+
+</launch>
