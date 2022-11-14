@@ -40,10 +40,15 @@
         <param name="drop_offset" value="10.0"/>    <!-- [mm] -->
         <param name="suck_offset" value="-5.0"/>
         <param name="stack_offset" value="63.0"/>
-    
-        <param name="twist_topic" value="/base_speed"/>    <!-- Sub [geometry_msgs::Twist] -->
-        <param name="odom_topic" value="/odom"/>           <!-- Pub [nav_msgs::Odometry] -->
-        <param name="pose_topic" value="/odom_pose"/>      <!-- Pub [geometry_msgs::PoseWithCovarianceStamped] -->
+
+        <!-- with: main program -->
+        <param name="mission_goal_topic" value="/mission_target"/>      <!-- Sub [arm_move::mission] -->
+        <param name="mission_status_topic" value="/mission_status"/>    <!-- Pub [std_msgs::Bool] -->
+
+        <!-- with: rosserial for SCARA -->
+        <param name="arm_goal_topic" value="/arm_goal"/>        <!-- Pub [geometry_msgs::Point] -->
+        <param name="suck_topic" value="/suck"/>                <!-- Pub [std_msgs::Bool] -->
+        <param name="arm_status_topic" value="/arm_status"/>    <!-- Sub [std_msgs::Bool] -->
     </node>
 
 </launch>
