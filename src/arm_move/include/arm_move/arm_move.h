@@ -10,6 +10,7 @@
 #include <geometry_msgs/Point.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/Bool.h>
+#include <arm_move/mission.h>
 
 namespace arm_move
 {
@@ -26,15 +27,15 @@ private:
     }
 
     bool updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
-    void missionGoalCallback(const geometry_msgs::Point::ConstPtr& ptr);  // from main program
-    void missionCallback(const std_msgs::Int16::ConstPtr& ptr);           // from main program
-    void armStatusCallback(const std_msgs::Bool::ConstPtr& ptr);          // from SCARA
+    void missionTargetCallback(const arm_move::mission::ConstPtr& ptr); // from main program
+    void armStatusCallback(const std_msgs::Bool::ConstPtr& ptr);        // from SCARA
     void timerCallback(const ros::TimerEvent& e);
 
-//   void updateTwist();
-//   void updatePose(const ros::TimerEvent& e);
-
-    void publish();
+    void mission1();
+    void mission2();
+    void mission3();
+    void publishSuck(bool state);
+    void publishMissionStatus(bool state);
 
     /* ros node */
     ros::NodeHandle nh_;
@@ -43,26 +44,33 @@ private:
     ros::Timer timer_;
 
     /* ros inter-node */
-    ros::Subscriber mission_goal_sub_;   // from main program
-    ros::Subscriber mission_sub_;         // from main program
-    ros::Publisher mission_status_pub_;   // to   main program
-    ros::Publisher arm_goal_pub_;         // to   SCARA
-    ros::Publisher suck_pub_;             // to   SCARA
-    ros::Subscriber arm_status_sub_;      // from SCARA
+    ros::Subscriber mission_target_sub_;    // from main program
+    ros::Publisher mission_status_pub_;     // to   main program
+    ros::Publisher arm_goal_pub_;           // to   SCARA
+    ros::Publisher suck_pub_;               // to   SCARA
+    ros::Subscriber arm_status_sub_;        // from SCARA
 
-    geometry_msgs::Point mission_goal; /*****maybe vector*****/
-    std_msgs::Int16 mission_num;
-    std_msgs::Bool mission_status;
+    arm_move::mission input_mission;
+    std_msgs::Bool mission_status; // true: mission done
 
     geometry_msgs::Point arm_goal;
     std_msgs::Bool suck;
-    std_msgs::Bool arm_status;
+    std_msgs::Bool arm_status; // true: mission done
 
     ros::Time last_time_;
     ros::Duration timeout_;
 
+    geometry_msgs::Point T_point;
+    geometry_msgs::Point E_point;
+    geometry_msgs::Point L_point;
     geometry_msgs::Point storage_1;
     geometry_msgs::Point storage_2;
+    geometry_msgs::Point square_2;
+    geometry_msgs::Point touch_board;
+
+    bool running; // true: arm is moving
+    bool wait_once;
+    int8_t point_num; // 
 
     /* ros param */
     bool p_active_;
@@ -79,9 +87,14 @@ private:
     double p_storage2_z;
     double p_drop_offset_;
     double p_suck_offset_;
+    double p_square2_x;
+    double p_square2_y;
+    double p_square2_z;
+    double p_touch_board_x;
+    double p_touch_board_y;
+    double p_touch_board_z;
 
-    std::string p_mission_goal_topic_;
-    std::string p_mission_topic_;
+    std::string p_mission_target_topic_;
     std::string p_mission_status_topic_;
     std::string p_arm_goal_topic_;
     std::string p_suck_topic_;
