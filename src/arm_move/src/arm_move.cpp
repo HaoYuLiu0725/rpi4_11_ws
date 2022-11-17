@@ -128,8 +128,8 @@ void ArmMove::missionTargetCallback(const arm_move::mission::ConstPtr& ptr)
         point_num = 1;
         ROS_INFO_STREAM("[Arm Move]: Mission 1 getted");
         ROS_INFO_STREAM("T_point" << T_point);
-        ROS_INFO_STREAM("T_point" << E_point);
-        ROS_INFO_STREAM("T_point" << L_point);
+        ROS_INFO_STREAM("E_point" << E_point);
+        ROS_INFO_STREAM("L_point" << L_point);
     }
     else if(input_mission.type == 2){
         mission_state = mission_2;
