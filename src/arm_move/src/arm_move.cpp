@@ -227,19 +227,19 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_2");
                 publishSuck(false); // suction off(release)
                 ros::Duration(1).sleep();
-                publishArmGoal(T_point.x, T_point.y, storage_2.z + p_drop_offset_);
-                ROS_INFO_STREAM("[Arm Move]: Go to T_point");
+                publishArmGoal(L_point.x, L_point.y, storage_2.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to L_point");
                 nextCase();
                 break;
             case 10:
-                ROS_INFO_STREAM("[Arm Move]: Reached T_point");
+                ROS_INFO_STREAM("[Arm Move]: Reached L_point");
                 publishSuck(true); // suction on
-                publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_);
-                ROS_INFO_STREAM("[Arm Move]: Go to T_point -> Z + suck");
+                publishArmGoal(L_point.x, L_point.y, L_point.z + p_suck_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to L_point -> Z + suck");
                 nextCase();
                 break;
             case 11:
-                ROS_INFO_STREAM("[Arm Move]: Reached T_point -> Z + suck");
+                ROS_INFO_STREAM("[Arm Move]: Reached L_point -> Z + suck");
                 publishArmGoal(square_2.x, square_2.y, square_2.z + 50);
                 ROS_INFO_STREAM("[Arm Move]: Go to square_2 -> wait_mission_2");
                 nextCase();
