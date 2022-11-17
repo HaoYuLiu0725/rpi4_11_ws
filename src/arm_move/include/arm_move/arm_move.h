@@ -38,6 +38,7 @@ private:
     void publishSuck(bool state);
     void publishMissionStatus(bool state);
     void nextCase();
+    void finalCase();
 
     /* ros node */
     ros::NodeHandle nh_;

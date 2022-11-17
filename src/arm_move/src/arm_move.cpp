@@ -250,8 +250,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
             case 12:
                 ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> wait_mission_2");
                 ROS_INFO_STREAM("[Arm Move]: Mission 1 finished");
-                point_num = 0;
-                running = true;
+                finalCase();
                 break;
         }
     }
@@ -359,8 +358,7 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
             case 15:
                 ROS_INFO_STREAM("[Arm Move]: Reached init_arm -> Z");
                 ROS_INFO_STREAM("[Arm Move]: Mission 2 finished");
-                point_num = 0;
-                running = true;
+                finalCase();
                 break;
         }
     }
@@ -398,4 +396,11 @@ void ArmMove::nextCase()
 {
     point_num += 1;
     running = true;
+}
+
+void ArmMove::finalCase()
+{
+    point_num = 0;
+    running = true;
+    mission_state == no_mission;
 }
