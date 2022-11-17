@@ -28,7 +28,7 @@
 
         <!-- square2 -->
         <param name="square2_x" value="0.0"/>       <!-- [mm] -->
-        <param name="square2_y" value="250.0"/>
+        <param name="square2_y" value="150.0"/>
         <param name="square2_z" value="-15.0"/>
 
         <!-- touch_board -->
