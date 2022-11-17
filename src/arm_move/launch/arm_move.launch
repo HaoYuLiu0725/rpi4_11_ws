@@ -13,7 +13,7 @@
 
         <!-- init_arm -->
         <param name="init_arm_x" value="128.0"/>    <!-- [mm] -->
-        <param name="init_arm_y" value="15.0"/>
+        <param name="init_arm_y" value="17.0"/>
         <param name="init_arm_z" value="10.0"/>
 
         <!-- storage1 -->
