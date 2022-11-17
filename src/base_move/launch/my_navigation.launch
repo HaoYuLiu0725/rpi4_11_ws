@@ -8,9 +8,9 @@
         <param name="init_pose_x" value="0"/>
         <param name="init_pose_y" value="0"/>
         <param name="init_pose_yaw" value="$(eval 0 * 3.1415 / 180.0)"/>
-        <param name="MAX_linear_speed" value="0.7"/>        <!-- [m/s] -->
+        <param name="MAX_linear_speed" value="1.0"/>        <!-- [m/s] -->
         <param name="MAX_angular_speed" value="0.8"/>       <!-- [rad/s] -->
-        <param name="linear_acceleration" value="0.15"/>    <!-- [m/s^2] -->
+        <param name="linear_acceleration" value="0.2"/>     <!-- [m/s^2] -->
         <param name="linear_deceleration" value="0.2"/>     <!-- [m/s^2] -->
         <param name="angular_acceleration" value="0.2"/>    <!-- [rad/s^2] -->
         <param name="angular_deceleration" value="0.2"/>    <!-- [rad/s^2] -->
