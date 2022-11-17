@@ -34,8 +34,10 @@ private:
     void mission1();
     void mission2();
     void mission3();
+    void publishArmGoal(double x, double y, double z);
     void publishSuck(bool state);
     void publishMissionStatus(bool state);
+    void nextCase();
 
     /* ros node */
     ros::NodeHandle nh_;
@@ -53,13 +55,14 @@ private:
     arm_move::mission input_mission;
     std_msgs::Bool mission_status; // true: mission done
 
-    geometry_msgs::Point init_arm;
+    geometry_msgs::Point output_point;
     std_msgs::Bool suck;
     std_msgs::Bool arm_status; // true: SCARA moving mission done
 
     ros::Time last_time_;
     ros::Duration timeout_;
 
+    geometry_msgs::Point init_arm;
     geometry_msgs::Point T_point;
     geometry_msgs::Point E_point;
     geometry_msgs::Point L_point;
@@ -70,7 +73,7 @@ private:
 
     bool running; // true: arm is moving
     bool wait_once;
-    int8_t point_num; // 
+    int8_t point_num; // for switch case in each mission
 
     /* ros param */
     bool p_active_;
@@ -93,6 +96,7 @@ private:
     double p_touch_board_z;
     double p_drop_offset_;
     double p_suck_offset_;
+    double p_put_offset_;
     double p_stack_offset_;
 
     std::string p_mission_target_topic_;

@@ -88,7 +88,8 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     init_arm.x = p_init_arm_x;
     init_arm.y = p_init_arm_y;
     init_arm.z = p_init_arm_z;
-    arm_goal_pub_.publish(init_arm); // initial arm pose
+    output_point = init_arm;
+    arm_goal_pub_.publish(output_point); // initial arm pose
 
     suck.data = false; // no suction
     suck_pub_.publish(suck);
@@ -172,145 +173,208 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
         switch(point_num){
             case 1:
                 ROS_INFO_STREAM("[Arm Move]: Mission 1 started");
-                publishSuck(true); // suction on
-                T_point.z += p_suck_offset_;
-                arm_goal_pub_.publish(T_point);
+                publishArmGoal(T_point.x, T_point.y, init_arm.z);
                 ROS_INFO_STREAM("[Arm Move]: Go to T_point");
-                point_num += 1;
-                running = true;
+                nextCase();
                 break;
             case 2:
                 ROS_INFO_STREAM("[Arm Move]: Reached T_point");
-                storage_1.z += p_drop_offset_;
-                arm_goal_pub_.publish(storage_1);
-                ROS_INFO_STREAM("[Arm Move]: Go to storage_1" );
-                point_num += 1;
-                running = true;
+                publishSuck(true); // suction on
+                publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to T_point -> Z + suck");
+                nextCase();
                 break;
             case 3:
-                ROS_INFO_STREAM("[Arm Move]: Reached storage_1");
-                publishSuck(false); // suction off(release)
-                E_point.z += p_suck_offset_;
-                arm_goal_pub_.publish(E_point);
-                ROS_INFO_STREAM("[Arm Move]: Go to E_point");
-                ros::Duration(1).sleep();
-                publishSuck(true); // suction on
-                point_num += 1;
-                running = true;
+                ROS_INFO_STREAM("[Arm Move]: Reached T_point -> Z + suck");
+                publishArmGoal(T_point.x, T_point.y, storage_1.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + drop");
+                nextCase();
                 break;
             case 4:
-                ROS_INFO_STREAM("[Arm Move]: Reached E_point");
-                storage_2.z += p_drop_offset_;
-                arm_goal_pub_.publish(storage_2);
-                ROS_INFO_STREAM("[Arm Move]: Go to storage_2");
-                point_num += 1;
-                running = true;
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_1 -> Z + drop");
+                publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_1");
+                nextCase();
                 break;
             case 5:
-                ROS_INFO_STREAM("[Arm Move]: Reached storage_2");
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_1");
                 publishSuck(false); // suction off(release)
-                L_point.z += p_suck_offset_;
-                arm_goal_pub_.publish(L_point);
-                ROS_INFO_STREAM("[Arm Move]: Go to L_point");
                 ros::Duration(1).sleep();
-                publishSuck(true); // suction on
-                point_num += 1;
-                running = true;
+                publishArmGoal(E_point.x, E_point.y, storage_1.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to E_point");
+                nextCase();
                 break;
             case 6:
-                ROS_INFO_STREAM("[Arm Move]: Reached L_point");
-                square_2.z += p_drop_offset_;
-                arm_goal_pub_.publish(square_2);
-                ROS_INFO_STREAM("[Arm Move]: Go to square_2");
-                point_num += 1;
-                running = true;
+                ROS_INFO_STREAM("[Arm Move]: Reached E_point");
+                publishSuck(true); // suction on
+                publishArmGoal(E_point.x, E_point.y, E_point.z + p_suck_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to E_point -> Z + suck");
+                nextCase();
                 break;
             case 7:
-                ROS_INFO_STREAM("[Arm Move]: Reached square_2");
-                point_num = 0;
-                mission_state = no_mission;
-                ROS_INFO_STREAM("[Arm Move]: Mission1 Finished");
+                ROS_INFO_STREAM("[Arm Move]: Reached E_point -> Z + suck");
+                publishArmGoal(E_point.x, E_point.y, storage_2.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_2 -> Z + drop");
+                nextCase();
+                break;
+            case 8:
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_2 -> Z + drop");
+                publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_2");
+                nextCase();
+                break;
+            case 9:
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_2");
+                publishSuck(false); // suction off(release)
+                ros::Duration(1).sleep();
+                publishArmGoal(T_point.x, T_point.y, storage_2.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to T_point");
+                nextCase();
+                break;
+            case 10:
+                ROS_INFO_STREAM("[Arm Move]: Reached T_point");
+                publishSuck(true); // suction on
+                publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to T_point -> Z + suck");
+                nextCase();
+                break;
+            case 11:
+                ROS_INFO_STREAM("[Arm Move]: Reached T_point -> Z + suck");
+                publishArmGoal(square_2.x, square_2.y, square_2.z + 50);
+                ROS_INFO_STREAM("[Arm Move]: Go to square_2 -> wait_mission_2");
+                nextCase();
+                break;
+            case 12:
+                ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> wait_mission_2");
+                ROS_INFO_STREAM("[Arm Move]: Mission 1 finished");
+                nextCase();
                 break;
         }
     }
-    else{
-        ROS_INFO_STREAM("[Arm Move]: SCARA is moving (Mission1)");
-    }
+    // else{
+    //     ROS_INFO_STREAM("[Arm Move]: SCARA is moving (Mission1)");
+    // }
 }
 
-void ArmMove::mission2() /* In level 2, put T, E, L block in first square  */
+void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
 {
     if(!running && point_num != 0){
         switch(point_num){
             case 1:
                 ROS_INFO_STREAM("[Arm Move]: Mission 2 started");
-                arm_goal_pub_.publish(square_2);
-                ROS_INFO_STREAM("[Arm Move]: Go to square_2");
-                point_num += 1;
-                running = true;
+                publishArmGoal(square_2.x, square_2.y, square_2.z + p_put_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to square_2 -> Z + put");
+                nextCase();
                 break;
             case 2:
-                ROS_INFO_STREAM("[Arm Move]: Reached square_2");
+                ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> Z + put");
                 publishSuck(false); // suction off(release)
-                storage_1.z += p_suck_offset_;
-                arm_goal_pub_.publish(storage_1);
-                ROS_INFO_STREAM("[Arm Move]: Go to storage_1");
                 ros::Duration(1).sleep();
-                publishSuck(true); // suction on
-                point_num += 1;
-                running = true;
+                publishArmGoal(square_2.x, square_2.y, storage_1.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + drop");
+                nextCase();
                 break;
             case 3:
-                ROS_INFO_STREAM("[Arm Move]: Reached storage_1");
-                square_2.z += p_stack_offset_;
-                arm_goal_pub_.publish(square_2);
-                ROS_INFO_STREAM("[Arm Move]: Go to square_2");
-                point_num += 1;
-                running = true;
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_1 -> Z + drop");
+                publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_1");
+                nextCase();
                 break;
             case 4:
-                ROS_INFO_STREAM("[Arm Move]: Reached square_2");
-                publishSuck(false); // suction off(release)
-                storage_2.z += p_suck_offset_;
-                arm_goal_pub_.publish(storage_2);
-                ROS_INFO_STREAM("[Arm Move]: Go to storage_2");
-                ros::Duration(1).sleep();
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_1");
                 publishSuck(true); // suction on
-                point_num += 1;
-                running = true;
+                publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_suck_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + suck");
+                nextCase();
                 break;
             case 5:
-                ROS_INFO_STREAM("[Arm Move]: Reached storage_2");
-                square_2.z += p_stack_offset_;
-                arm_goal_pub_.publish(square_2);
-                ROS_INFO_STREAM("[Arm Move]: Go to square_2");
-                point_num += 1;
-                running = true;
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_1 -> Z + suck"); //got block
+                publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + drop"); // lift up to leave container
+                nextCase();
                 break;
             case 6:
-                ROS_INFO_STREAM("[Arm Move]: Reached square_2");
-                publishSuck(false); // suction off(release)
-                arm_goal_pub_.publish(init_arm); // initial arm pose
-                ROS_INFO_STREAM("[Arm Move]: Go back to init_arm");
-                point_num += 1;
-                running = true;
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_1 -> Z + drop");
+                publishArmGoal(square_2.x, square_2.y, storage_1.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to square_2");
+                nextCase();
                 break;
             case 7:
+                ROS_INFO_STREAM("[Arm Move]: Reached square_2");
+                publishArmGoal(square_2.x, square_2.y, square_2.z + p_stack_offset_ + p_put_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to square_2 -> Z + stack_1");
+                nextCase();
+                break;
+            case 8:
+                ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> Z + stack_1");
+                publishSuck(false); // suction off(release)
+                ros::Duration(1).sleep();
+                publishArmGoal(square_2.x, square_2.y, storage_2.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_2 -> Z + drop");
+                nextCase();
+                break;
+            case 9:
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_2 -> Z + drop");
+                publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_2");
+                nextCase();
+                break;
+            case 10:
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_2");
+                publishSuck(true); // suction on
+                publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_2 -> Z + suck");
+                nextCase();
+                break;
+            case 11:
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_2 -> Z + suck"); //got block
+                publishArmGoal(storage_2.x, storage_2.y, square_2.z + 2*p_stack_offset_ + p_put_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to storage_2 -> Z + stack_2"); // lift up to leave container
+                nextCase();
+                break;
+            case 12:
+                ROS_INFO_STREAM("[Arm Move]: Reached storage_2 -> Z + drop");
+                publishArmGoal(square_2.x, square_2.y, square_2.z + 2*p_stack_offset_ + p_put_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to square_2");
+                nextCase();
+                break;
+            case 13:
+                ROS_INFO_STREAM("[Arm Move]: Reached square_2");
+                publishSuck(false); // suction off(release)
+                ros::Duration(1).sleep();
+                publishArmGoal(init_arm.x, init_arm.y, square_2.z + 2*p_stack_offset_ + p_put_offset_);
+                ROS_INFO_STREAM("[Arm Move]: Go to init_arm");
+                nextCase();
+                break;
+            case 14:
                 ROS_INFO_STREAM("[Arm Move]: Reached init_arm");
-                point_num = 0;
-                mission_state = no_mission;
-                ROS_INFO_STREAM("[Arm Move]: Mission2 Finished");
+                publishArmGoal(init_arm.x, init_arm.y, init_arm.z);
+                ROS_INFO_STREAM("[Arm Move]: Go to init_arm -> Z");
+                nextCase();
+                break;
+            case 15:
+                ROS_INFO_STREAM("[Arm Move]: Reached init_arm -> Z");
+                ROS_INFO_STREAM("[Arm Move]: Mission 2 finished");
+                nextCase();
                 break;
         }
     }
-    else{
-        ROS_INFO_STREAM("[Arm Move]: SCARA is moving (Mission2)");
-    }
+    // else{
+    //     ROS_INFO_STREAM("[Arm Move]: SCARA is moving (Mission2)");
+    // }
 }
 
 void ArmMove::mission3()
 {
     arm_goal_pub_.publish(touch_board);
+}
+
+void ArmMove::publishArmGoal(double x, double y, double z)
+{
+    output_point.x = x;
+    output_point.y = y;
+    output_point.z = z;
+    arm_goal_pub_.publish(output_point);
 }
 
 void ArmMove::publishSuck(bool state)
@@ -323,4 +387,10 @@ void ArmMove::publishMissionStatus(bool state)
 {
     mission_status.data = state;
     mission_status_pub_.publish(mission_status);
+}
+
+void ArmMove::nextCase()
+{
+    point_num += 1;
+    running = true;
 }
