@@ -401,6 +401,7 @@ void ArmMove::nextCase()
 void ArmMove::finalCase()
 {
     point_num = 0;
-    running = true;
-    mission_state == no_mission;
+    running = false;
+    mission_state = no_mission;
+    wait_once = true;
 }
