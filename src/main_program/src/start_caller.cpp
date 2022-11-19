@@ -43,29 +43,29 @@ int main(int argc, char **argv)
         ROS_INFO_STREAM(start_state << ", " << level_2_state << ", " << level_3_state);
         if (start_state == 0 && start_state_past == 1){
             ROS_INFO_STREAM("[start_running !!!]");
-            start_srv.request.startStatus = true;
+            start_srv.request.startTrigger = true;
             start_client.call(start_srv);
             break;
         }
         if (level_num != 1 && level_2_state == 1 && level_3_state == 1){
             level_num = 1;
             ROS_INFO_STREAM("[level]: Set to level 1 !");
-            start_srv.request.startTrigger = 1;
-            start_srv.request.startStatus = false;
+            start_srv.request.startStatus = 1;
+            start_srv.request.startTrigger = false;
             start_client.call(start_srv);
         }
         if (level_2_state == 0 && level_2_state_past == 1){
             level_num = 2;
             ROS_INFO_STREAM("[level]: Set to level 2 !");
-            start_srv.request.startTrigger = 2;
-            start_srv.request.startStatus = false;
+            start_srv.request.startStatus = 2;
+            start_srv.request.startTrigger = false;
             start_client.call(start_srv);
         }
         if (level_3_state == 0 && level_3_state_past == 1){
             level_num = 3;
             ROS_INFO_STREAM("[level]: Set to level 3 !");
-            start_srv.request.startTrigger = 3;
-            start_srv.request.startStatus = false;
+            start_srv.request.startStatus = 3;
+            start_srv.request.startTrigger = false;
             start_client.call(start_srv);
         }
         rate.sleep();
