@@ -9,6 +9,37 @@
 #define level_2_pin 16  // BCM_PIN 16
 #define level_3_pin 12  // BCM_PIN 12
 
+#ifdef __aarch64__
+void timerCallback(const ros::TimerEvent& e)
+{
+    start_state_past = start_state;
+    level_2_state_past = level_2_state;
+    level_3_state_past = level_3_state;
+    start_state = digitalRead(start_pin);
+    level_2_state = digitalRead(level_2_pin);
+    level_3_state = digitalRead(level_3_pin);
+    ROS_INFO_STREAM(start_state << ", " << level_2_state << ", " << level_3_state);
+    if (start_state == 0 && start_state_past == 1){
+        ROS_INFO_STREAM("[start_running !!!]");
+        start_srv.request.startStatus = true;
+        start_client.call(start_srv);
+        break;
+    }
+    if (level_2_state == 0 && level_2_state_past == 1){
+        ROS_INFO_STREAM("[level]: Set to level 2 !");
+        start_srv.request.startTrigger = 2;
+        start_srv.request.startStatus = false;
+        start_client.call(start_srv);
+    }
+    if (level_3_state == 0 && level_3_state_past == 1){
+        ROS_INFO_STREAM("[level]: Set to level 3 !");
+        start_srv.request.startTrigger = 3;
+        start_srv.request.startStatus = false;
+        start_client.call(start_srv);
+    }
+}
+#endif
+
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "start_caller");
@@ -20,45 +51,17 @@ int main(int argc, char **argv)
     pullUpDnControl(level_2_pin, PUD_UP);
     pullUpDnControl(level_3_pin, PUD_UP);
 
+    ros::Timer timer = nh.createTimer(ros::Duration(0.5), &timerCallback);
+
     ros::ServiceClient start_client = nh.serviceClient<main_program::starting>("/startRunning");
     main_program::starting start_srv;
+
     int start_state = -1; // read start state
     int start_state_past = -1;
     int level_2_state = -1; // read level 2 state
     int level_2_state_past = -1;
     int level_3_state = -1; // read level 3 state
     int level_3_state_past = -1;
-
-    while (ros::ok())
-    {
-        start_state_past = start_state;
-        level_2_state_past = level_2_state;
-        level_3_state_past = level_3_state;
-        start_state = digitalRead(start_pin);
-        level_2_state = digitalRead(level_2_pin);
-        level_3_state = digitalRead(level_3_pin);
-        ROS_INFO_STREAM(start_state << ", " << level_2_state << ", " << level_3_state);
-        if (start_state == 0 && start_state_past == 1){
-            ROS_INFO_STREAM("[start_running !!!]");
-            start_srv.request.startStatus = true;
-            start_client.call(start_srv);
-            break;
-        }
-        if (level_2_state == 0 && level_2_state_past == 1){
-            ROS_INFO_STREAM("[level]: Set to level 2 !");
-            start_srv.request.startTrigger = 2;
-            start_srv.request.startStatus = false;
-            start_client.call(start_srv);
-        }
-        if (level_3_state == 0 && level_3_state_past == 1){
-            ROS_INFO_STREAM("[level]: Set to level 3 !");
-            start_srv.request.startTrigger = 3;
-            start_srv.request.startStatus = false;
-            start_client.call(start_srv);
-        }
-   
-        ros::spinOnce();
-    }
-
 #endif
+    ros::spin();
 }
