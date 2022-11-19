@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     {
         gpio_state_past = gpio_state;
         gpio_state = digitalRead(gpio_pin);
-        ROS_INFO(gpio_state);
+        ROS_INFO_STREAM(gpio_state);
         // if (gpio_state == 1 && gpio_state_past == 0)
         // {
         //     ROS_INFO("***************");
