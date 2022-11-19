@@ -6,7 +6,7 @@
 #include <wiringPi.h>
 #endif
 
-#define gpio_pin 26
+#define gpio_pin 37
 
 int main(int argc, char **argv)
 {
