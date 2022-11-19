@@ -25,24 +25,36 @@ int main(int argc, char **argv)
     int start_state = -1; // read start state
     int start_state_past = -1;
     int level_2_state = -1; // read level 2 state
+    int level_2_state_past = -1;
     int level_3_state = -1; // read level 3 state
+    int level_3_state_past = -1;
 
     while (ros::ok())
     {
         start_state_past = start_state;
+        level_2_state_past = level_2_state;
+        level_3_state_past = level_3_state;
         start_state = digitalRead(start_pin);
         level_2_state = digitalRead(level_2_pin);
         level_3_state = digitalRead(level_3_pin);
         ROS_INFO_STREAM(start_state << ", " << level_2_state << ", " << level_3_state);
         if (start_state == 0 && start_state_past == 1){
             ROS_INFO_STREAM("[start_running !!!]");
+            start_srv.request.startStatus = true;
+            start_client.call(start_srv);
             break;
         }
-        if (level_2_state == 0){
+        if (level_2_state == 0 && level_2_state_past == 1){
             ROS_INFO_STREAM("[level]: " << "Set to level 2");
+            start_srv.request.startTrigger = 2;
+            start_srv.request.startStatus = false;
+            start_client.call(start_srv);
         }
-        if (level_3_state == 0){
+        if (level_3_state == 0 && level_3_state_past == 1){
             ROS_INFO_STREAM("[level]: " << "Set to level 3");
+            start_srv.request.startTrigger = 3;
+            start_srv.request.startStatus = false;
+            start_client.call(start_srv);
         }
    
         ros::spinOnce();
