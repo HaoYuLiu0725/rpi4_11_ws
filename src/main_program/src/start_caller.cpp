@@ -45,13 +45,13 @@ int main(int argc, char **argv)
             break;
         }
         if (level_2_state == 0 && level_2_state_past == 1){
-            ROS_INFO_STREAM("[level]: " << "Set to level 2");
+            ROS_INFO_STREAM("[level]: Set to level 2 !");
             start_srv.request.startTrigger = 2;
             start_srv.request.startStatus = false;
             start_client.call(start_srv);
         }
         if (level_3_state == 0 && level_3_state_past == 1){
-            ROS_INFO_STREAM("[level]: " << "Set to level 3");
+            ROS_INFO_STREAM("[level]: Set to level 3 !");
             start_srv.request.startTrigger = 3;
             start_srv.request.startStatus = false;
             start_client.call(start_srv);
