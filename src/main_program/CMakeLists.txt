@@ -163,7 +163,7 @@ add_executable(test_wiringpi_ros src/test_wiringpi_ros.cpp)
 
 EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
 
-if (${ARCHITECTURE} MATCHES "arm64")
+if (${ARCHITECTURE} MATCHES "aarch64")
   target_link_libraries(test_wiringpi_ros ${catkin_LIBRARIES} -lwiringPi)
 else()
   target_link_libraries(test_wiringpi_ros ${catkin_LIBRARIES})

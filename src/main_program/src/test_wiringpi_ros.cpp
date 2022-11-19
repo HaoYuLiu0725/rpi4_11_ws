@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 
-#ifdef __arm64__
+#ifdef __aarch64__
 #include <wiringPi.h>
 #endif
 
@@ -11,7 +11,7 @@ int main (int argc, char **argv)
     ros::init(argc, argv, "test_wiringpi_ros");
     ros::NodeHandle nh;
 
-#ifdef __arm64__
+#ifdef __aarch64__
 
     wiringPiSetupGpio();
     pinMode(LED_PIN, OUTPUT);
