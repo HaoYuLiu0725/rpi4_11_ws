@@ -1,8 +1,8 @@
 #include <ros/ros.h>
 
-#ifdef __arm64__
+// #ifdef __arm64__
 #include <wiringPi.h>
-#endif
+// #endif
 
 #define LED_PIN 26 // change pin number here
 
@@ -11,7 +11,7 @@ int main (int argc, char **argv)
     ros::init(argc, argv, "test_wiringpi_ros");
     ros::NodeHandle nh;
 
-#ifdef __arm64__
+// #ifdef __arm64__
 
     wiringPiSetupGpio();
     pinMode(LED_PIN, OUTPUT);
@@ -27,9 +27,9 @@ int main (int argc, char **argv)
         ros::Duration(1.0).sleep();
     }
 
-#else
+// #else
 
     // here you define the behavior of your node on non ARM systems
 
-#endif
+// #endif
 }
