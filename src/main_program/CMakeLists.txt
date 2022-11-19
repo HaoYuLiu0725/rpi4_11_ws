@@ -160,8 +160,12 @@ target_link_libraries(main_tel2022  ${catkin_LIBRARIES})
 add_dependencies(main_tel2022 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 add_executable(start_caller src/start_caller.cpp)
-target_link_libraries(start_caller  ${catkin_LIBRARIES})
-
+EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
+if (${ARCHITECTURE} MATCHES "arm")
+    target_link_libraries(start_caller ${catkin_LIBRARIES} -lwiringPi)
+else()
+    target_link_libraries(start_caller ${catkin_LIBRARIES})
+endif()
 #############
 ## Install ##
 #############
