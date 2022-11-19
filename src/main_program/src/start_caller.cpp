@@ -43,7 +43,7 @@ int main(int argc, char **argv)
         //     topic_.data = 0;
         //     start_pub.publish(topic_);
         // }
-​
+        
         ros::spinOnce();
     }
 
