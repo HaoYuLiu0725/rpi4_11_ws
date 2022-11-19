@@ -2,6 +2,9 @@
     <!-- main program -->
     <!-- <node name="main_node" pkg="main_program" type="main_tel2022" output="screen"/> -->
 
+    <!-- start caller -->
+    <node name="start_caller" pkg="main_program" type="start_caller" output="screen"/>
+    
     <!-- arm_move -->
     <include file="$(find arm_move)/launch/arm_move.launch"/>
 
