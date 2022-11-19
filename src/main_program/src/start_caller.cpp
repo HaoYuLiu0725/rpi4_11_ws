@@ -23,6 +23,7 @@ int main(int argc, char **argv)
     int level_2_state_past = -1;
     int level_3_state = -1; // read level 3 state
     int level_3_state_past = -1;
+    int level_num = -1;
 
 #ifdef __aarch64__
     wiringPiSetupGpio();
@@ -30,7 +31,7 @@ int main(int argc, char **argv)
     pullUpDnControl(level_2_pin, PUD_UP);
     pullUpDnControl(level_3_pin, PUD_UP);
 
-    ros::Rate rate(5.0);
+    ros::Rate rate(10.0);
     while (nh.ok())
     {
         start_state_past = start_state;
@@ -46,13 +47,22 @@ int main(int argc, char **argv)
             start_client.call(start_srv);
             break;
         }
+        if (level_num != 1 && level_2_state == 1 && level_3_state == 1){
+            level_num = 1;
+            ROS_INFO_STREAM("[level]: Set to level 1 !");
+            start_srv.request.startTrigger = 1;
+            start_srv.request.startStatus = false;
+            start_client.call(start_srv);
+        }
         if (level_2_state == 0 && level_2_state_past == 1){
+            level_num = 2;
             ROS_INFO_STREAM("[level]: Set to level 2 !");
             start_srv.request.startTrigger = 2;
             start_srv.request.startStatus = false;
             start_client.call(start_srv);
         }
         if (level_3_state == 0 && level_3_state_past == 1){
+            level_num = 3;
             ROS_INFO_STREAM("[level]: Set to level 3 !");
             start_srv.request.startTrigger = 3;
             start_srv.request.startStatus = false;
