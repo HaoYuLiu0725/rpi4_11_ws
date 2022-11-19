@@ -4,7 +4,7 @@
 #include <wiringPi.h>
 #endif
 
-#define LED_PIN 26 // change pin number here
+#define LED_PIN 25 // change pin number here
 
 int main (int argc, char **argv)
 {
