@@ -17,7 +17,7 @@ int main(int argc, char **argv)
     pullUpDnControl(start_pin, PUD_UP);
 
     ros::ServiceClient start_client = nh.serviceClient<main_program::starting>("/startRunning");
-    main_program::starting start_srv
+    main_program::starting start_srv;
     int start_state = -1; // read start state
     int start_state_past = -1;
 
