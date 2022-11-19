@@ -40,7 +40,7 @@ int main(int argc, char **argv)
         start_state = digitalRead(start_pin);
         level_2_state = digitalRead(level_2_pin);
         level_3_state = digitalRead(level_3_pin);
-        ROS_INFO_STREAM(start_state << ", " << level_2_state << ", " << level_3_state);
+        ROS_INFO_STREAM("start_state: "<< start_state << ", level_2_state: " << level_2_state << ", level_3_state: " << level_3_state);
         if (start_state == 0 && start_state_past == 1){
             ROS_INFO_STREAM("[start_running !!!]");
             start_srv.request.startTrigger = true;
