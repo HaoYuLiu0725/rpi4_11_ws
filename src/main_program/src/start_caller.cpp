@@ -2,7 +2,7 @@
 #include <std_srvs/Empty.h>
 #include <std_msgs/Int32.h>
 
-#ifdef __arm__
+#ifdef __aarch64__
 #include <wiringPi.h>
 #endif
 
@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "start_caller");
     ros::NodeHandle nh;
 
-#ifdef __arm__
+#ifdef __aarch64__
     wiringPiSetupGpio();
     pullUpDnControl(gpio_pin, PUD_UP);
 
