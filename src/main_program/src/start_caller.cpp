@@ -35,7 +35,8 @@ int main(int argc, char **argv)
         //     topic_.data = 1;
         //     start_pub.publish(topic_);
         //     start_client.call(srv_);
-        //     // ROS_INFO("///////////////");
+        //     // ROS
+        _INFO("///////////////");
         //     break;
         // }
         // else
