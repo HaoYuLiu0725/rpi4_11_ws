@@ -7,7 +7,7 @@
 ​
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "switch_test_state");
+    ros::init(argc, argv, "start_caller");
     ros::NodeHandle nh;
     wiringPiSetupGpio();
     pullUpDnControl(gpio_pin, PUD_UP);
