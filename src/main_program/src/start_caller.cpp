@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 #ifdef __aarch64__
     wiringPiSetupGpio();
     pinMode(gpio_pin, INPUT);
-    pullUpDnControl(gpio_pin, PUD_UP);
+    // pullUpDnControl(gpio_pin, PUD_UP);
 
     // ros::ServiceClient start_client = nh.serviceClient<std_srvs::Empty>("/startRunning");
     ros::Publisher start_pub = nh.advertise<std_msgs::Int32>("/start_running", 10);
