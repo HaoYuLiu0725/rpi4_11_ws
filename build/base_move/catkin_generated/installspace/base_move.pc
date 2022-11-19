@@ -1,8 +1,0 @@
-prefix=/home/haoyu/rpi4_11_ws/install
-
-Name: base_move
-Description: Description of base_move
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib -lbase_move
-Requires: geometry_msgs nav_msgs roscpp rospy std_msgs tf2 tf2_ros

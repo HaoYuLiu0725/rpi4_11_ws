@@ -1,8 +1,0 @@
-prefix=/home/haoyu/rpi4_11_ws/devel
-
-Name: msg_serialize
-Description: Description of msg_serialize
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: nlink_parser roscpp

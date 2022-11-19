@@ -1,8 +1,0 @@
-prefix=/home/haoyu/rpi4_11_ws/install
-
-Name: arm_move
-Description: Description of arm_move
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib -larm_move
-Requires: geometry_msgs roscpp std_msgs message_runtime
