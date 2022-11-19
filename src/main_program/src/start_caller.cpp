@@ -1,12 +1,11 @@
 #include <ros/ros.h>
-#include <std_srvs/Empty.h>
-#include <std_msgs/Int32.h>
+#include <main_program/starting.h>
 
 #ifdef __aarch64__
 #include <wiringPi.h>
 #endif
 
-#define gpio_pin 26
+#define start_pin 26 // BCM_PIN 26
 
 int main(int argc, char **argv)
 {
@@ -15,29 +14,23 @@ int main(int argc, char **argv)
 
 #ifdef __aarch64__
     wiringPiSetupGpio();
-    pullUpDnControl(gpio_pin, PUD_UP);
+    pullUpDnControl(start_pin, PUD_UP);
 
-    // ros::ServiceClient start_client = nh.serviceClient<std_srvs::Empty>("/startRunning");
-    ros::Publisher start_pub = nh.advertise<std_msgs::Int32>("/start_running", 10);
-    std_srvs::Empty srv_;
-    std_msgs::Int32 topic_;
-    int gpio_state = -1; // read gpio state
-    int gpio_state_past = -1;
+    ros::ServiceClient start_client = nh.serviceClient<main_program::starting>("/startRunning");
+    main_program::starting start_srv
+    int start_state = -1; // read start state
+    int start_state_past = -1;
 
     while (ros::ok())
     {
-        gpio_state_past = gpio_state;
-        gpio_state = digitalRead(gpio_pin);
-        ROS_INFO_STREAM(gpio_state);
-        // if (gpio_state == 1 && gpio_state_past == 0)
-        // {
-        //     ROS_INFO("***************");
-        //     topic_.data = 1;
-        //     start_pub.publish(topic_);
-        //     start_client.call(srv_);
-        //     ROSINFO("///////////////");
-        //     break;
-        // }
+        start_state_past = start_state;
+        start_state = digitalRead(start_pin);
+        ROS_INFO_STREAM(start_state);
+        if (start_state == 0 && start_state_past == 1)
+        {
+            ROS_INFO_STREAM("[start_state:]" << start_state);
+            break;
+        }
         // else
         // {
         //     topic_.data = 0;
