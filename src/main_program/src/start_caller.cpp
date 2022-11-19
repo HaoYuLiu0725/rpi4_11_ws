@@ -6,8 +6,8 @@
 #endif
 
 #define start_pin 26    // BCM_PIN 26
-#define level_2_pin 12  // BCM_PIN 12
-#define level_3_pin 16  // BCM_PIN 16
+#define level_2_pin 16  // BCM_PIN 16
+#define level_3_pin 12  // BCM_PIN 12
 
 int main(int argc, char **argv)
 {
