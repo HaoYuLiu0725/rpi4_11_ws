@@ -1,0 +1,4 @@
+int16 startStatus
+bool startTrigger
+---
+bool setupStatus
