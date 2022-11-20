@@ -17,12 +17,12 @@
         <param name="init_arm_z" value="10.0"/>
 
         <!-- storage1 -->
-        <param name="storage1_x" value="82.0"/>     <!-- [mm] -->
+        <param name="storage1_x" value="77.0"/>     <!-- [mm] -->
         <param name="storage1_y" value="-99.0"/>
         <param name="storage1_z" value="74.0"/>
 
         <!-- storage2 -->
-        <param name="storage2_x" value="82.0"/>     <!-- [mm] -->
+        <param name="storage2_x" value="77S.0"/>     <!-- [mm] -->
         <param name="storage2_y" value="-199.0"/>
         <param name="storage2_z" value="74.0"/>
 
