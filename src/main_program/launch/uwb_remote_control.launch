@@ -2,14 +2,14 @@
     <node pkg="remote_control" type="remote_control_node" name="remote_control" output="screen">
         <param name="active" value="true"/>
 
-        <param name="frequency" value="50"/>
+        <param name="frequency" value="100"/>           <!-- [Hz] -->
         <param name="MAX_linear_speed" value="0.6"/>    <!-- [m/s] -->
         <param name="MAX_angular_speed" value="1.2"/>   <!-- [rad/s] -->
         <param name="init_arm_x" value="128.0"/>        <!-- [mm] -->
         <param name="init_arm_y" value="17.0"/>         <!-- [mm] -->
         <param name="init_arm_z" value="10.0"/>         <!-- [mm] -->
-        <param name="arm_MAX_XYspeed" value="100.0"/>    <!-- [mm/s] -->
-        <param name="arm_MAX_XYspeed" value="10.0"/>     <!-- [mm/s] -->
+        <param name="arm_MAX_XYspeed" value="200.0"/>    <!-- [mm/s] -->
+        <param name="arm_MAX_XYspeed" value="20.0"/>     <!-- [mm/s] -->
   
         <param name="joy_topic" value="/nlink1/ds5_joy"/>   <!-- Sub [sensor_msgs::Joy] -->
         <param name="twist_topic" value="/cmd_vel"/>        <!-- Pub [geometry_msgs::Twist] -->
