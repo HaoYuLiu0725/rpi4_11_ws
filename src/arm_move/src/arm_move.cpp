@@ -205,6 +205,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                     break;
                 }
                 else{   // suction success
+                    ROS_INFO_STREAM("[Arm Move]: Suction Success !");
                     more_suck_offset = 0;
                     redo_count = 0;
                 }
@@ -240,6 +241,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                     break;
                 }
                 else{   // suction success
+                    ROS_INFO_STREAM("[Arm Move]: Suction Success !");
                     more_suck_offset = 0;
                     redo_count = 0;
                 }
@@ -275,6 +277,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                     break;
                 }
                 else{   // suction success
+                    ROS_INFO_STREAM("[Arm Move]: Suction Success !");
                     more_suck_offset = 0;
                     redo_count = 0;
                 }
@@ -332,6 +335,7 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                     break;
                 }
                 else{   // suction success
+                    ROS_INFO_STREAM("[Arm Move]: Suction Success !");
                     more_suck_offset = 0;
                     redo_count = 0;
                 }
@@ -379,6 +383,7 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                     break;
                 }
                 else{   // suction success
+                    ROS_INFO_STREAM("[Arm Move]: Suction Success !");
                     more_suck_offset = 0;
                     redo_count = 0;
                 }
