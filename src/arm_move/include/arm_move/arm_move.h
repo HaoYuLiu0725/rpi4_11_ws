@@ -29,6 +29,7 @@ private:
     bool updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
     void missionTargetCallback(const arm_move::mission::ConstPtr& ptr); // from main program
     void armStatusCallback(const std_msgs::Bool::ConstPtr& ptr);        // from SCARA
+    void suckStatusCallback(const std_msgs::Bool::ConstPtr& ptr);       // from SCARA
     void timerCallback(const ros::TimerEvent& e);
 
     void mission1();
@@ -52,13 +53,15 @@ private:
     ros::Publisher arm_goal_pub_;           // to   SCARA
     ros::Publisher suck_pub_;               // to   SCARA
     ros::Subscriber arm_status_sub_;        // from SCARA
+    ros::Subscriber suck_status_sub_;        // from SCARA
 
     arm_move::mission input_mission;
     std_msgs::Bool mission_status; // true: mission done
 
     geometry_msgs::Point output_point;
     std_msgs::Bool suck;
-    std_msgs::Bool arm_status; // true: SCARA moving mission done
+    std_msgs::Bool arm_status;  // true: SCARA moving mission done ; false: SCARA can't reach current point
+    std_msgs::Bool suck_status; // true: block suction successfully ; false: block release successfully
 
     ros::Time last_time_;
     ros::Duration timeout_;
@@ -73,7 +76,7 @@ private:
     geometry_msgs::Point touch_board;
 
     bool running; // true: arm is moving
-    bool wait_once;
+    bool pub_once;
     int8_t point_num; // for switch case in each mission
 
     /* ros param */
@@ -105,6 +108,7 @@ private:
     std::string p_arm_goal_topic_;
     std::string p_suck_topic_;
     std::string p_arm_status_topic_;
+    std::string p_suck_status_topic_;
 
     /* state */
     enum Mission_State

@@ -47,6 +47,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     get_param_ok = nh_local_.param<string>("arm_goal_topic", p_arm_goal_topic_, "/arm_goal");
     get_param_ok = nh_local_.param<string>("suck_topic", p_suck_topic_, "/suck");
     get_param_ok = nh_local_.param<string>("arm_status_topic", p_arm_status_topic_, "/arm_status");
+    get_param_ok = nh_local_.param<string>("suck_status_topic", p_suck_status_topic_, "/suck_status");
 
     /* check param */
     if (get_param_ok)
@@ -70,6 +71,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
             arm_goal_pub_ = nh_.advertise<geometry_msgs::Point>(p_arm_goal_topic_, 10);
             suck_pub_ = nh_.advertise<std_msgs::Bool>(p_suck_topic_, 10);
             arm_status_sub_ = nh_.subscribe(p_arm_status_topic_, 10, &ArmMove::armStatusCallback, this);
+            suck_status_sub_ = nh_.subscribe(p_suck_status_topic_, 10, &ArmMove::suckStatusCallback, this);
             timer_.start();
         }
         else
@@ -79,6 +81,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
             arm_goal_pub_.shutdown();
             suck_pub_.shutdown();
             arm_status_sub_.shutdown();
+            suck_status_sub_.shutdown();
             timer_.stop();
         }
     }
@@ -111,7 +114,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     touch_board.y = p_touch_board_y;
     touch_board.z = p_touch_board_z;
 
-    wait_once = true;
+    pub_once = true;
     running = false;
     point_num = 0;
 
@@ -127,7 +130,7 @@ void ArmMove::missionTargetCallback(const arm_move::mission::ConstPtr& ptr)
         E_point = input_mission.E;
         L_point = input_mission.L;
         point_num = 1;
-        ROS_INFO_STREAM("[Arm Move]: Mission 1 getted");
+        ROS_INFO_STREAM("[Arm Move]: Mission 1 received");
         ROS_INFO_STREAM("T_point" << T_point);
         ROS_INFO_STREAM("E_point" << E_point);
         ROS_INFO_STREAM("L_point" << L_point);
@@ -135,15 +138,15 @@ void ArmMove::missionTargetCallback(const arm_move::mission::ConstPtr& ptr)
     else if(input_mission.type == 2){
         mission_state = mission_2;
         point_num = 1;
-        ROS_INFO_STREAM("[Arm Move]: Mission 2 getted");
+        ROS_INFO_STREAM("[Arm Move]: Mission 2 received");
     }
     else if(input_mission.type == 3){
         mission_state = mission_3;
         point_num = 1;
-        ROS_INFO_STREAM("[Arm Move]: Mission 3 getted");
+        ROS_INFO_STREAM("[Arm Move]: Mission 3 received");
     }
     else mission_state = no_mission;
-    wait_once = true;
+    pub_once = true;
 }
 
 void ArmMove::armStatusCallback(const std_msgs::Bool::ConstPtr& ptr)  
@@ -153,12 +156,17 @@ void ArmMove::armStatusCallback(const std_msgs::Bool::ConstPtr& ptr)
     else running = true;
 }  
 
+void ArmMove::suckStatusCallback(const std_msgs::Bool::ConstPtr& ptr)  
+{
+    suck_status = *ptr;
+}
+
 void ArmMove::timerCallback(const ros::TimerEvent& e)
 {
-    if (mission_state == no_mission && wait_once){
+    if (mission_state == no_mission && pub_once){
         publishMissionStatus(true); // mission done or no mission
         ROS_INFO_STREAM("[Arm Move]: Mission finished, wait for new mission!");
-        wait_once = false;
+        pub_once = false;
     }
     else if (mission_state == mission_1){
         mission1();
@@ -186,7 +194,8 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 publishSuck(true); // suction on
                 publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to T_point -> Z + suck");
-                nextCase();
+                if (suck_status.data) nextCase(); // block suction successfully
+                else publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_ - 3);
                 break;
             case 3:
                 ROS_INFO_STREAM("[Arm Move]: Reached T_point -> Z + suck");
@@ -213,7 +222,8 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 publishSuck(true); // suction on
                 publishArmGoal(E_point.x, E_point.y, E_point.z + p_suck_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to E_point -> Z + suck");
-                nextCase();
+                if (suck_status.data) nextCase(); // block suction successfully
+                else publishArmGoal(E_point.x, E_point.y, E_point.z + p_suck_offset_ - 3);
                 break;
             case 7:
                 ROS_INFO_STREAM("[Arm Move]: Reached E_point -> Z + suck");
@@ -240,7 +250,8 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 publishSuck(true); // suction on
                 publishArmGoal(L_point.x, L_point.y, L_point.z + p_suck_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to L_point -> Z + suck");
-                nextCase();
+                if (suck_status.data) nextCase(); // block suction successfully
+                else publishArmGoal(L_point.x, L_point.y, L_point.z + p_suck_offset_ - 3);
                 break;
             case 11:
                 ROS_INFO_STREAM("[Arm Move]: Reached L_point -> Z + suck");
@@ -289,7 +300,8 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                 publishSuck(true); // suction on
                 publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_2 -> Z + suck");
-                nextCase();
+                if (suck_status.data) nextCase(); // block suction successfully
+                else publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_ - 3);
                 break;
             case 5:
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_2 -> Z + suck"); //got block
@@ -328,7 +340,8 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                 publishSuck(true); // suction on
                 publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_suck_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + suck");
-                nextCase();
+                if (suck_status.data) nextCase(); // block suction successfully
+                else publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_ - 3);
                 break;
             case 11:
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_1 -> Z + suck"); //got block
@@ -404,5 +417,5 @@ void ArmMove::finalCase()
     point_num = 0;
     running = false;
     mission_state = no_mission;
-    wait_once = true;
+    pub_once = true;
 }

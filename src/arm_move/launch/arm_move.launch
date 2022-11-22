@@ -50,6 +50,8 @@
         <param name="arm_goal_topic" value="/arm_goal"/>        <!-- Pub [geometry_msgs::Point] -->
         <param name="suck_topic" value="/suck"/>                <!-- Pub [std_msgs::Bool] -->
         <param name="arm_status_topic" value="/arm_status"/>    <!-- Sub [std_msgs::Bool] -->
+        <param name="suck_status_topic" value="/suck_status"/>    <!-- Sub [std_msgs::Bool] -->
+
     </node>
 
 </launch>
