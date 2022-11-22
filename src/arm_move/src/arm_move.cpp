@@ -198,6 +198,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 break;
             case 3:
                 if (!suck_status.data){ // suction faild
+                    ROS_INFO_STREAM("[Arm Move]: suction faild !");
                     publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_ - 3);
                 }
                 ROS_INFO_STREAM("[Arm Move]: Reached T_point -> Z + suck");
@@ -228,6 +229,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 break;
             case 7:
                 if (!suck_status.data){ // suction faild
+                    ROS_INFO_STREAM("[Arm Move]: suction faild !");
                     publishArmGoal(E_point.x, E_point.y, E_point.z + p_suck_offset_ - 3);
                 }
                 ROS_INFO_STREAM("[Arm Move]: Reached E_point -> Z + suck");
@@ -258,6 +260,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 break;
             case 11:
                 if (!suck_status.data){ // suction faild
+                    ROS_INFO_STREAM("[Arm Move]: suction faild !");
                     publishArmGoal(L_point.x, L_point.y, L_point.z + p_suck_offset_ - 3);
                 }
                 ROS_INFO_STREAM("[Arm Move]: Reached L_point -> Z + suck");
@@ -310,6 +313,7 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                 break;
             case 5:
                 if (!suck_status.data){ // suction faild
+                    ROS_INFO_STREAM("[Arm Move]: suction faild !");
                     publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_ - 3);
                 }
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_2 -> Z + suck"); //got block
@@ -352,6 +356,7 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                 break;
             case 11:
                 if (!suck_status.data){ // suction faild
+                    ROS_INFO_STREAM("[Arm Move]: suction faild !");
                     publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_suck_offset_ - 3);
                 }
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_1 -> Z + suck"); //got block
