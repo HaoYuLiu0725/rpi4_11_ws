@@ -11,7 +11,7 @@
         <param name="baud" value="115200"/>
     </node>
 
-    <!-- remote_control -->
+    <!-- UWB remote_control -->
     <include file="$(find remote_control)/launch/robot.launch"/>
     
 </launch>
