@@ -10,7 +10,6 @@
 #include <geometry_msgs/Point.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/Bool.h>
-#include <std_msgs/Float32.h>
 #include <arm_move/mission.h>
 
 namespace arm_move
@@ -30,7 +29,7 @@ private:
     bool updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
     void missionTargetCallback(const arm_move::mission::ConstPtr& ptr); // from main program
     void armStatusCallback(const std_msgs::Bool::ConstPtr& ptr);        // from SCARA
-    void suckStatusCallback(const std_msgs::Float32::ConstPtr& ptr);       // from SCARA
+    void suckStatusCallback(const std_msgs::Bool::ConstPtr& ptr);       // from SCARA
     void timerCallback(const ros::TimerEvent& e);
 
     void mission1();
@@ -62,7 +61,7 @@ private:
     geometry_msgs::Point output_point;
     std_msgs::Bool suck;
     std_msgs::Bool arm_status;  // true: SCARA moving mission done ; false: SCARA can't reach current point
-    std_msgs::Float32 suck_status; // true: block suction successfully ; false: block release successfully
+    std_msgs::Bool suck_status; // true: block suction successfully ; false: block release successfully
 
     ros::Time last_time_;
     ros::Duration timeout_;

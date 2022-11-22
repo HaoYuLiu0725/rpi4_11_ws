@@ -156,7 +156,7 @@ void ArmMove::armStatusCallback(const std_msgs::Bool::ConstPtr& ptr)
     else running = true;
 }  
 
-void ArmMove::suckStatusCallback(const std_msgs::Float32::ConstPtr& ptr)  
+void ArmMove::suckStatusCallback(const std_msgs::Bool::ConstPtr& ptr)  
 {
     suck_status = *ptr;
     ROS_INFO_STREAM("[Arm Move]: suckStatus value: " << suck_status.data);
