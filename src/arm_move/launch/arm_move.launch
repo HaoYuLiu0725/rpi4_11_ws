@@ -22,7 +22,7 @@
         <param name="storage1_z" value="74.0"/>
 
         <!-- storage2 -->
-        <param name="storage2_x" value="77S.0"/>     <!-- [mm] -->
+        <param name="storage2_x" value="77.0"/>     <!-- [mm] -->
         <param name="storage2_y" value="-199.0"/>
         <param name="storage2_z" value="74.0"/>
 
@@ -50,7 +50,7 @@
         <param name="arm_goal_topic" value="/arm_goal"/>        <!-- Pub [geometry_msgs::Point] -->
         <param name="suck_topic" value="/suck"/>                <!-- Pub [std_msgs::Bool] -->
         <param name="arm_status_topic" value="/arm_status"/>    <!-- Sub [std_msgs::Bool] -->
-        <param name="suck_status_topic" value="/suck_status"/>    <!-- Sub [std_msgs::Bool] -->
+        <param name="suck_status_topic" value="/suck_status"/>  <!-- Sub [std_msgs::Bool] -->
 
     </node>
 
