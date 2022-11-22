@@ -118,6 +118,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     running = false;
     point_num = 0;
     more_suck_offset = 0;
+    redo_count = 0;
 
     return true;
 }
@@ -199,11 +200,14 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 nextCase();
                 break;
             case 3:
-                if (!suck_status.data){     // suction faild
-                    lastCase(-5);
-                    break;  
+                if (!suck_status.data && redo_count < 3){   // suction faild
+                    lastCase(-2.5);
+                    break;
                 }
-                else more_suck_offset = 0;  // suction success
+                else{   // suction success
+                    more_suck_offset = 0;
+                    redo_count = 0;
+                }
                 ROS_INFO_STREAM("[Arm Move]: Reached T_point -> Z + suck");
                 publishArmGoal(T_point.x, T_point.y, storage_1.z + p_drop_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + drop");
@@ -231,11 +235,14 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 nextCase();
                 break;
             case 7:
-                if (!suck_status.data){     // suction faild
-                    lastCase(-5);
-                    break;  
+                if (!suck_status.data && redo_count < 3){   // suction faild
+                    lastCase(-2.5);
+                    break;
                 }
-                else more_suck_offset = 0;  // suction success
+                else{   // suction success
+                    more_suck_offset = 0;
+                    redo_count = 0;
+                }
                 ROS_INFO_STREAM("[Arm Move]: Reached E_point -> Z + suck");
                 publishArmGoal(E_point.x, E_point.y, storage_2.z + p_drop_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_2 -> Z + drop");
@@ -263,11 +270,14 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 nextCase();
                 break;
             case 11:
-                if (!suck_status.data){     // suction faild
-                    lastCase(-5);
-                    break;  
+                if (!suck_status.data && redo_count < 3){   // suction faild
+                    lastCase(-2.5);
+                    break;
                 }
-                else more_suck_offset = 0;  // suction success
+                else{   // suction success
+                    more_suck_offset = 0;
+                    redo_count = 0;
+                }
                 ROS_INFO_STREAM("[Arm Move]: Reached L_point -> Z + suck");
                 publishArmGoal(square_2.x, square_2.y, square_2.z + 50);
                 ROS_INFO_STREAM("[Arm Move]: Go to square_2 -> wait_mission_2");
@@ -317,11 +327,14 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                 nextCase();
                 break;
             case 5:
-                if (!suck_status.data){     // suction faild
-                    lastCase(-5);
-                    break;  
+                if (!suck_status.data && redo_count < 3){   // suction faild
+                    lastCase(-2.5);
+                    break;
                 }
-                else more_suck_offset = 0;  // suction success
+                else{   // suction success
+                    more_suck_offset = 0;
+                    redo_count = 0;
+                }
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_2 -> Z + suck"); //got block
                 publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_drop_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_2 -> Z + drop"); // lift up to leave container
@@ -361,11 +374,14 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                 nextCase();
                 break;
             case 11:
-                if (!suck_status.data){     // suction faild
-                    lastCase(-5);
-                    break;  
+                if (!suck_status.data && redo_count < 3){   // suction faild
+                    lastCase(-2.5);
+                    break;
                 }
-                else more_suck_offset = 0;  // suction success
+                else{   // suction success
+                    more_suck_offset = 0;
+                    redo_count = 0;
+                }
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_1 -> Z + suck"); //got block
                 publishArmGoal(storage_1.x, storage_1.y, square_2.z + 2*p_stack_offset_ + p_put_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + stack_2"); // lift up to leave container
@@ -433,6 +449,7 @@ void ArmMove::lastCase(double offset)
     point_num -= 1;
     running = false;
     more_suck_offset += offset;
+    redo_count += 1;
 }
 void ArmMove::nextCase()
 {

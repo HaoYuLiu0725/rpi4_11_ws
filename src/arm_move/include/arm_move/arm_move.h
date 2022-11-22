@@ -80,6 +80,7 @@ private:
     bool pub_once; // for mission_status_pub_ to pub only once
     int8_t point_num; // for switch case in each mission
     double more_suck_offset; // for suction failed on getting block, add more offset
+    int8_t redo_count;
 
     /* ros param */
     bool p_active_;
