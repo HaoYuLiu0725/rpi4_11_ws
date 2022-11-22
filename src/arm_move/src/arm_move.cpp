@@ -194,10 +194,12 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 publishSuck(true); // suction on
                 publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to T_point -> Z + suck");
-                if (suck_status.data) nextCase(); // block suction successfully
-                else publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_ - 3);
+                nextCase();
                 break;
             case 3:
+                if (!suck_status.data){ // suction faild
+                    publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_ - 3);
+                }
                 ROS_INFO_STREAM("[Arm Move]: Reached T_point -> Z + suck");
                 publishArmGoal(T_point.x, T_point.y, storage_1.z + p_drop_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + drop");
@@ -222,10 +224,12 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 publishSuck(true); // suction on
                 publishArmGoal(E_point.x, E_point.y, E_point.z + p_suck_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to E_point -> Z + suck");
-                if (suck_status.data) nextCase(); // block suction successfully
-                else publishArmGoal(E_point.x, E_point.y, E_point.z + p_suck_offset_ - 3);
+                nextCase();
                 break;
             case 7:
+                if (!suck_status.data){ // suction faild
+                    publishArmGoal(E_point.x, E_point.y, E_point.z + p_suck_offset_ - 3);
+                }
                 ROS_INFO_STREAM("[Arm Move]: Reached E_point -> Z + suck");
                 publishArmGoal(E_point.x, E_point.y, storage_2.z + p_drop_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_2 -> Z + drop");
@@ -250,10 +254,12 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 publishSuck(true); // suction on
                 publishArmGoal(L_point.x, L_point.y, L_point.z + p_suck_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to L_point -> Z + suck");
-                if (suck_status.data) nextCase(); // block suction successfully
-                else publishArmGoal(L_point.x, L_point.y, L_point.z + p_suck_offset_ - 3);
+                nextCase();
                 break;
             case 11:
+                if (!suck_status.data){ // suction faild
+                    publishArmGoal(L_point.x, L_point.y, L_point.z + p_suck_offset_ - 3);
+                }
                 ROS_INFO_STREAM("[Arm Move]: Reached L_point -> Z + suck");
                 publishArmGoal(square_2.x, square_2.y, square_2.z + 50);
                 ROS_INFO_STREAM("[Arm Move]: Go to square_2 -> wait_mission_2");
