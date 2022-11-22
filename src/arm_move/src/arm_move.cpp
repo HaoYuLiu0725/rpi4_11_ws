@@ -159,7 +159,7 @@ void ArmMove::armStatusCallback(const std_msgs::Bool::ConstPtr& ptr)
 void ArmMove::suckStatusCallback(const std_msgs::Float32::ConstPtr& ptr)  
 {
     suck_status = *ptr;
-    ROS_INFO_STREAM("[Arm Move]:suckStatus value" << suck_status.data);
+    ROS_INFO_STREAM("[Arm Move]: suckStatus value: " << suck_status.data);
 }
 
 void ArmMove::timerCallback(const ros::TimerEvent& e)
@@ -201,7 +201,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 if (!suck_status.data){ // suction faild
                     ROS_INFO_STREAM("[Arm Move]: suction faild !");
                     ros::Duration(3).sleep();
-                    publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_ - 3);
+                    publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_ - 10);
                 }
                 ROS_INFO_STREAM("[Arm Move]: Reached T_point -> Z + suck");
                 publishArmGoal(T_point.x, T_point.y, storage_1.z + p_drop_offset_);
@@ -233,7 +233,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 if (!suck_status.data){ // suction faild
                     ROS_INFO_STREAM("[Arm Move]: suction faild !");
                     ros::Duration(3).sleep();
-                    publishArmGoal(E_point.x, E_point.y, E_point.z + p_suck_offset_ - 3);
+                    publishArmGoal(E_point.x, E_point.y, E_point.z + p_suck_offset_ - 10);
                 }
                 ROS_INFO_STREAM("[Arm Move]: Reached E_point -> Z + suck");
                 publishArmGoal(E_point.x, E_point.y, storage_2.z + p_drop_offset_);
@@ -265,7 +265,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
                 if (!suck_status.data){ // suction faild
                     ROS_INFO_STREAM("[Arm Move]: suction faild !");
                     ros::Duration(3).sleep();
-                    publishArmGoal(L_point.x, L_point.y, L_point.z + p_suck_offset_ - 3);
+                    publishArmGoal(L_point.x, L_point.y, L_point.z + p_suck_offset_ - 10);
                 }
                 ROS_INFO_STREAM("[Arm Move]: Reached L_point -> Z + suck");
                 publishArmGoal(square_2.x, square_2.y, square_2.z + 50);
@@ -319,7 +319,7 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                 if (!suck_status.data){ // suction faild
                     ROS_INFO_STREAM("[Arm Move]: suction faild !");
                     ros::Duration(3).sleep();
-                    publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_ - 3);
+                    publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_ - 10);
                 }
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_2 -> Z + suck"); //got block
                 publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_drop_offset_);
@@ -363,7 +363,7 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                 if (!suck_status.data){ // suction faild
                     ROS_INFO_STREAM("[Arm Move]: suction faild !");
                     ros::Duration(3).sleep();
-                    publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_suck_offset_ - 3);
+                    publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_suck_offset_ - 10);
                 }
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_1 -> Z + suck"); //got block
                 publishArmGoal(storage_1.x, storage_1.y, square_2.z + 2*p_stack_offset_ + p_put_offset_);
