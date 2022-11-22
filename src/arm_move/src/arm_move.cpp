@@ -431,7 +431,7 @@ void ArmMove::lastCase(double offset)
 {
     ROS_INFO_STREAM("[Arm Move]: Suction Failed !");
     point_num -= 1;
-    running = true;
+    running = false;
     more_suck_offset += offset;
 }
 void ArmMove::nextCase()
