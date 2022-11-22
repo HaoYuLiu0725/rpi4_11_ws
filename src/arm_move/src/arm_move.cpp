@@ -19,7 +19,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
 
     get_param_ok = nh_local_.param<double>("frequency", p_frequency_, 10);
     get_param_ok = nh_local_.param<double>("init_arm_x", p_init_arm_x, 128.0);      // [mm]
-    get_param_ok = nh_local_.param<double>("init_arm_y", p_init_arm_y, 15.0);       // [mm]
+    get_param_ok = nh_local_.param<double>("init_arm_y", p_init_arm_y, 17.0);       // [mm]
     get_param_ok = nh_local_.param<double>("init_arm_z", p_init_arm_z, 10.0);       // [mm]
     get_param_ok = nh_local_.param<double>("storage1_x", p_storage1_x, 82.0);       // [mm]
     get_param_ok = nh_local_.param<double>("storage1_y", p_storage1_y, -99.0);      // [mm]
