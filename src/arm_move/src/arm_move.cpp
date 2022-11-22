@@ -306,10 +306,12 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                 publishSuck(true); // suction on
                 publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_2 -> Z + suck");
-                if (suck_status.data) nextCase(); // block suction successfully
-                else publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_ - 3);
+                nextCase();
                 break;
             case 5:
+                if (!suck_status.data){ // suction faild
+                    publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_ - 3);
+                }
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_2 -> Z + suck"); //got block
                 publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_drop_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_2 -> Z + drop"); // lift up to leave container
@@ -346,10 +348,12 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
                 publishSuck(true); // suction on
                 publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_suck_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + suck");
-                if (suck_status.data) nextCase(); // block suction successfully
-                else publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_ - 3);
+                nextCase();
                 break;
             case 11:
+                if (!suck_status.data){ // suction faild
+                    publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_suck_offset_ - 3);
+                }
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_1 -> Z + suck"); //got block
                 publishArmGoal(storage_1.x, storage_1.y, square_2.z + 2*p_stack_offset_ + p_put_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + stack_2"); // lift up to leave container
