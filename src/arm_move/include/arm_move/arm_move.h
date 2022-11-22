@@ -38,6 +38,7 @@ private:
     void publishArmGoal(double x, double y, double z);
     void publishSuck(bool state);
     void publishMissionStatus(bool state);
+    void lastCase(double offset);
     void nextCase();
     void finalCase();
 
@@ -76,8 +77,9 @@ private:
     geometry_msgs::Point touch_board;
 
     bool running; // true: arm is moving
-    bool pub_once;
+    bool pub_once; // for mission_status_pub_ to pub only once
     int8_t point_num; // for switch case in each mission
+    double more_suck_offset; // for suction failed on getting block, add more offset
 
     /* ros param */
     bool p_active_;
