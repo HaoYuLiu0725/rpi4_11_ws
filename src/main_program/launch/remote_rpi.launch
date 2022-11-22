@@ -12,6 +12,6 @@
     </node>
 
     <!-- UWB remote_control -->
-    <include file="$(find remote_control)/launch/robot.launch"/>
+    <include file="$(find main_program)/launch/uwb_remote_control.launch"/>
     
 </launch>
