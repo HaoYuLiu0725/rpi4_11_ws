@@ -1,5 +1,5 @@
 <launch>
-    <node pkg="remote_control" type="remote_control_node" name="remote_control" output="screen">
+    <node pkg="main_program" type="uwb_remote_control" name="uwb_remote_control" output="screen">
         <param name="active" value="true"/>
 
         <param name="frequency" value="100"/>           <!-- [Hz] -->
