@@ -276,10 +276,11 @@ private:
         // (button up - button down)
         double dz = (input_joy_.buttons[13] - input_joy_.buttons[14]) * p_arm_MAX_Zspeed_ * dt;
 
-        double yaw = update_tf_theta(output_point_.x, output_point_.y);
-
-        output_point_.x += (dx * cos(yaw) - dy * sin(yaw));
-        output_point_.y += (dx * sin(yaw) + dy * cos(yaw));
+        // double yaw = update_tf_theta(output_point_.x, output_point_.y);
+        // output_point_.x += (dx * cos(yaw) - dy * sin(yaw));
+        // output_point_.y += (dx * sin(yaw) + dy * cos(yaw));
+        output_point_.x += dx;
+        output_point_.y += dy;
         output_point_.z += dz;
 
         output_point_.x = SATURATION(output_point_.x, p_X_min_, p_X_max_);
@@ -500,7 +501,7 @@ private:
         running = false;
         mission_state = no_mission;
     }
-    
+    /***************************************************************************************************/
     double a1 = 235;
     double a2 = 281;
 
@@ -511,8 +512,11 @@ private:
         double alpha = acos((pow(a1, 2) + pow(l, 2) - pow(a2, 2)) / (2 * a1 * l));
         double theta_1 = atan2(y, x) - alpha;
         double theta_2 = acos((pow(x, 2) + pow(y, 2) - pow(a1, 2) - pow(a2, 2)) / (2 * a1 * a2));
-        return(theta_1 + theta_2);
+        double theta = theta_1 + theta_2;
+        return(theta);
     }
+    /***************************************************************************************************/
+
 };
 
 int main(int argc, char** argv)
