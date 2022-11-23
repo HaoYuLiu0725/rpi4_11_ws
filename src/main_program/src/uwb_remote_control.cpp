@@ -204,6 +204,8 @@ private:
         output_suck_.data = false;
 
         doMission = false;
+        running = false;
+        point_num = 0;
 
         publish();
 
@@ -300,6 +302,7 @@ private:
         if(input_joy_.buttons[12]){ 
             doMission = true;
             mission_state = goto_init_arm;
+            point_num = 1;
             ROS_INFO_STREAM("[Arm Move]/[Get Mission]: GoTo_init_arm");
         }
 
@@ -307,6 +310,7 @@ private:
         if(input_joy_.buttons[5]){
             doMission = true;
             mission_state = goto_storage1;
+            point_num = 1;
             ROS_INFO_STREAM("[Arm Move]/[Get Mission]: GoTo_storage1");
         }
 
@@ -314,6 +318,7 @@ private:
         if(input_joy_.buttons[4]){
             doMission = true;
             mission_state = goto_storage2;
+            point_num = 1;
             ROS_INFO_STREAM("[Arm Move]/[Get Mission]: GoTo_storage2");
         }
 
@@ -321,6 +326,7 @@ private:
         if(input_joy_.buttons[3]){
             doMission = true;
             mission_state = goto_putSquare;
+            point_num = 1;
             ROS_INFO_STREAM("[Arm Move]/[Get Mission]: GoTo_putSquare");
         }
 
