@@ -300,29 +300,34 @@ private:
         if(input_joy_.buttons[12]){ 
             doMission = true;
             mission_state = goto_init_arm;
+            ROS_INFO_STREAM("[Arm Move]/[Mission]: GoTo_init_arm");
         }
 
         /* rear right 1 (R1) */
         if(input_joy_.buttons[5]){
             doMission = true;
             mission_state = goto_storage1;
+            ROS_INFO_STREAM("[Arm Move]/[Mission]: GoTo_storage1");
         }
 
         /* rear left 1 (L1) */
         if(input_joy_.buttons[4]){
             doMission = true;
             mission_state = goto_storage2;
+            ROS_INFO_STREAM("[Arm Move]/[Mission]: GoTo_storage2");
         }
 
         /* button square */
         if(input_joy_.buttons[3]){
             doMission = true;
             mission_state = goto_putSquare;
+            ROS_INFO_STREAM("[Arm Move]/[Mission]: GoTo_putSquare");
         }
 
         /*button share*/
         if(input_joy_.buttons[12]){ 
             // abort any mission !!!
+            ROS_INFO_STREAM("[Arm Move]/[Mission]: Abort mission !!!");
             doMission = false;
             finalCase();
         }
