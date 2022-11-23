@@ -22,12 +22,12 @@
         <!-- storage 1 -->
         <param name="storage1_x" value="84.0"/>     <!-- [mm] -->
         <param name="storage1_y" value="-99.0"/>
-        <param name="storage1_z" value="74.0"/>
+        <param name="storage1_z" value="110.0"/>
 
         <!-- storage 2 -->
         <param name="storage2_x" value="84.0"/>     <!-- [mm] -->
         <param name="storage2_y" value="-199.0"/>
-        <param name="storage2_z" value="74.0"/>
+        <param name="storage2_z" value="110.0"/>
 
         <!-- put square -->
         <param name="putSquare_x" value="0.0"/>       <!-- [mm] -->
