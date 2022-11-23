@@ -30,11 +30,13 @@ private:
     ros::Publisher twist_pub_;
     ros::Publisher point_pub_;
     ros::Publisher suck_pub_;
+    ros::Subscriber arm_status_sub_;        // from SCARA
 
     sensor_msgs::Joy input_joy_;
     geometry_msgs::Twist output_twist_;
     geometry_msgs::Point output_point_;
     std_msgs::Bool output_suck_;
+    std_msgs::Bool arm_status;  // true: SCARA moving mission done ; false: SCARA can't reach current point
 
     ros::Time last_time_;
     ros::Duration timeout_;
@@ -43,6 +45,11 @@ private:
     geometry_msgs::Point storage_1;
     geometry_msgs::Point storage_2;
     geometry_msgs::Point putSquare;
+
+    bool doMission;
+    bool running; // true: arm is moving
+    int8_t point_num; // for switch case in each mission
+    double safe_z_point; // safe z point that won't collide while moving, equal to p_storage1_z and p_storage2_z
 
     /* ros param */
     bool p_active_;
@@ -75,6 +82,16 @@ private:
     std::string p_twist_topic_;
     std::string p_point_topic_;
     std::string p_suck_topic_;
+    std::string p_arm_status_topic_;
+
+    enum Mission_State
+    {
+        no_mission,
+        goto_init_arm,
+        goto_storage1,
+        goto_storage2,
+        goto_putSquare
+    }mission_state;
 
     void initialize()
     {
@@ -122,6 +139,7 @@ private:
         get_param_ok = nh_local_.param<string>("twist_topic", p_twist_topic_, "/cmd_vel");
         get_param_ok = nh_local_.param<string>("point_topic", p_point_topic_, "/arm_goal");
         get_param_ok = nh_local_.param<string>("suck_topic", p_suck_topic_, "/suck");
+        get_param_ok = nh_local_.param<string>("arm_status_topic", p_arm_status_topic_, "/arm_status");
 
         /* check param */
         if (get_param_ok){
@@ -142,6 +160,7 @@ private:
                 twist_pub_ = nh_.advertise<geometry_msgs::Twist>(p_twist_topic_, 10);
                 point_pub_ = nh_.advertise<geometry_msgs::Point>(p_point_topic_, 10);
                 suck_pub_ = nh_.advertise<std_msgs::Bool>(p_suck_topic_, 10);
+                arm_status_sub_ = nh_.subscribe(p_arm_status_topic_, 10, &RemoteControl::armStatusCallback, this);
                 timer_.start();
             }
             else
@@ -150,6 +169,7 @@ private:
                 twist_pub_.shutdown();
                 point_pub_.shutdown();
                 suck_pub_.shutdown();
+                arm_status_sub_.shutdown();
                 timer_.stop();
             }
         }
@@ -180,7 +200,10 @@ private:
         putSquare.y = p_putSquare_y;
         putSquare.z = p_putSquare_z;
 
+        safe_z_point = p_storage1_z;
         output_suck_.data = false;
+
+        doMission = false;
 
         publish();
 
@@ -192,16 +215,42 @@ private:
         input_joy_ = *ptr;
         last_time_ = ros::Time::now();
     }
+    
+    void armStatusCallback(const std_msgs::Bool::ConstPtr& ptr)  
+    {
+        arm_status = *ptr;
+        if(arm_status.data) running = false;
+        else running = true;
+    }  
 
     void timerCallback(const ros::TimerEvent& e)
     {
         if(ros::Time::now().toSec() - last_time_.toSec() > timeout_.toSec()){
             return;
         }
+
         updateTwist();
         updatePoint(e);
         updateBool();
-        publish();
+
+        if(!doMission || mission_state == no_mission){
+            publish();
+        }
+        else{
+            /* misson state machine*/
+            if(mission_state == goto_init_arm){
+                GoTo_init_arm();
+            }
+            else if(mission_state == goto_storage1){
+                GoTo_storage1();
+            }
+            else if(mission_state == goto_storage2){
+                GoTo_storage2();
+            }
+            else if(mission_state == goto_putSquare){
+                GoTo_putSquare();
+            }
+        }
     }
 
     void updateTwist()
@@ -237,12 +286,46 @@ private:
 
     void updateBool()
     {
-        if(input_joy_.buttons[1]) output_suck_.data = true;     // button circle
-        if(input_joy_.buttons[0]) output_suck_.data = false;    // button cross
-        if(input_joy_.buttons[12]) output_point_ = init_arm;    // button options
-        if(input_joy_.buttons[5]) output_point_ = storage_1;    // rear right 1 (R1)
-        if(input_joy_.buttons[4]) output_point_ = storage_2;    // rear left 1 (L1)
-        if(input_joy_.buttons[3]) output_point_ = putSquare;    // button square
+        /* button circle */
+        if(input_joy_.buttons[1]){  
+            output_suck_.data = true;
+        }  
+
+        /* button cross */     
+        if(input_joy_.buttons[0]){  
+            output_suck_.data = false;
+        }
+
+        /* button options */
+        if(input_joy_.buttons[12]){ 
+            doMission = true;
+            mission_state = goto_init_arm;
+        }
+
+        /* rear right 1 (R1) */
+        if(input_joy_.buttons[5]){
+            doMission = true;
+            mission_state = goto_storage1;
+        }
+
+        /* rear left 1 (L1) */
+        if(input_joy_.buttons[4]){
+            doMission = true;
+            mission_state = goto_storage2;
+        }
+
+        /* button square */
+        if(input_joy_.buttons[3]){
+            doMission = true;
+            mission_state = goto_putSquare;
+        }
+
+        /*button share*/
+        if(input_joy_.buttons[12]){ 
+            // abort any mission !!!
+            doMission = false;
+            finalCase();
+        }
     }
 
     void publish()
@@ -255,6 +338,155 @@ private:
 
         /* suck */
         suck_pub_.publish(output_suck_);
+    }
+
+    void publishArmGoal(double x, double y, double z)
+    {
+        output_point_.x = x;
+        output_point_.y = y;
+        output_point_.z = z;
+        point_pub_.publish(output_point_);
+    }
+
+    void GoTo_init_arm()
+    {
+        if(!running && point_num != 0){
+            switch(point_num){
+                case 1:
+                    ROS_INFO_STREAM("[Arm Move]/[Mission]: GoTo_init_arm");
+                    output_point_.z = safe_z_point;
+                    point_pub_.publish(output_point_); // go to safe_z_point
+                    ROS_INFO_STREAM("[Arm Move]: go to safe_z_point");
+                    nextCase();
+                    break;
+                case 2:
+                    ROS_INFO_STREAM("[Arm Move]: reached safe_z_point !");
+                    publishArmGoal(init_arm.x, init_arm.y, safe_z_point);
+                    ROS_INFO_STREAM("[Arm Move]: go to init_arm");
+                    nextCase();
+                    break;
+                case 3:
+                    ROS_INFO_STREAM("[Arm Move]: reached init_arm !");
+                    publishArmGoal(init_arm.x, init_arm.y, init_arm.z);
+                    ROS_INFO_STREAM("[Arm Move]: go to init_arm -> Z");
+                    nextCase();
+                    break;
+                case 4:
+                    ROS_INFO_STREAM("[Arm Move]: reached init_arm -> Z");
+                    ROS_INFO_STREAM("[Arm Move]/[Mission Finish]: GoTo_init_arm");
+                    finalCase();
+                    break;
+            }
+        }
+    }
+
+    void GoTo_storage1()
+    {
+        if(!running && point_num != 0){
+            switch(point_num){
+                case 1:
+                    ROS_INFO_STREAM("[Arm Move]/[Mission]: GoTo_storage1");
+                    output_point_.z = safe_z_point;
+                    point_pub_.publish(output_point_); // go to safe_z_point
+                    ROS_INFO_STREAM("[Arm Move]: go to safe_z_point");
+                    nextCase();
+                    break;
+                case 2:
+                    ROS_INFO_STREAM("[Arm Move]: reached safe_z_point !");
+                    publishArmGoal(storage_1.x, storage_1.y, safe_z_point);
+                    ROS_INFO_STREAM("[Arm Move]: go to storage1");
+                    nextCase();
+                    break;
+                case 3:
+                    ROS_INFO_STREAM("[Arm Move]: reached storage1 !");
+                    publishArmGoal(storage_1.x, storage_1.y, storage_1.z);
+                    ROS_INFO_STREAM("[Arm Move]: go to storage1 -> Z");
+                    nextCase();
+                    break;
+                case 4:
+                    ROS_INFO_STREAM("[Arm Move]: reached storage1 -> Z");
+                    ROS_INFO_STREAM("[Arm Move]/[Mission Finish]: GoTo_storage1");
+                    finalCase();
+                    break;
+            }
+        }
+    }
+
+    void GoTo_storage2()
+    {
+        if(!running && point_num != 0){
+            switch(point_num){
+                case 1:
+                    ROS_INFO_STREAM("[Arm Move]/[Mission]: GoTo_storage2");
+                    output_point_.z = safe_z_point;
+                    point_pub_.publish(output_point_); // go to safe_z_point
+                    ROS_INFO_STREAM("[Arm Move]: go to safe_z_point");
+                    nextCase();
+                    break;
+                case 2:
+                    ROS_INFO_STREAM("[Arm Move]: reached safe_z_point !");
+                    publishArmGoal(storage_2.x, storage_2.y, safe_z_point);
+                    ROS_INFO_STREAM("[Arm Move]: go to storage2");
+                    nextCase();
+                    break;
+                case 3:
+                    ROS_INFO_STREAM("[Arm Move]: reached storage2 !");
+                    publishArmGoal(storage_2.x, storage_2.y, storage_2.z);
+                    ROS_INFO_STREAM("[Arm Move]: go to storage2 -> Z");
+                    nextCase();
+                    break;
+                case 4:
+                    ROS_INFO_STREAM("[Arm Move]: reached storage2 -> Z");
+                    ROS_INFO_STREAM("[Arm Move]/[Mission Finish]: GoTo_storage2");
+                    finalCase();
+                    break;
+            }
+        }
+    }
+
+    void GoTo_putSquare()
+    {
+        if(!running && point_num != 0){
+            switch(point_num){
+                case 1:
+                    ROS_INFO_STREAM("[Arm Move]/[Mission]: GoTo_putSquare");
+                    output_point_.z = safe_z_point;
+                    point_pub_.publish(output_point_); // go to safe_z_point
+                    ROS_INFO_STREAM("[Arm Move]: go to safe_z_point");
+                    nextCase();
+                    break;
+                case 2:
+                    ROS_INFO_STREAM("[Arm Move]: reached safe_z_point !");
+                    publishArmGoal(putSquare.x, putSquare.y, safe_z_point);
+                    ROS_INFO_STREAM("[Arm Move]: go to putSquare");
+                    nextCase();
+                    break;
+                case 3:
+                    ROS_INFO_STREAM("[Arm Move]: reached putSquare !");
+                    publishArmGoal(putSquare.x, putSquare.y, putSquare.z);
+                    ROS_INFO_STREAM("[Arm Move]: go to putSquare -> Z");
+                    nextCase();
+                    break;
+                case 4:
+                    ROS_INFO_STREAM("[Arm Move]: reached putSquare -> Z");
+                    ROS_INFO_STREAM("[Arm Move]/[Mission Finish]: GoTo_putSquare");
+                    finalCase();
+                    break;
+            }
+        }
+    }
+
+    void nextCase()
+    {
+        point_num += 1;
+        running = true;
+    }
+
+    void finalCase()
+    {
+        point_num = 0;
+        running = false;
+        mission_state = no_mission;
     }
 };
 
