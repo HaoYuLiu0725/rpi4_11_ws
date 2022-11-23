@@ -276,14 +276,15 @@ private:
         // (button up - button down)
         double dz = (input_joy_.buttons[13] - input_joy_.buttons[14]) * p_arm_MAX_Zspeed_ * dt;
 
-        output_point_.x += dx;
-        output_point_.y += dy;
+        double yaw = update_tf_theta(output_point_.x, output_point_.y);
+
+        output_point_.x += (dx * cos(yaw) - dy * sin(yaw));
+        output_point_.y += (dx * sin(yaw) + dy * cos(yaw));
         output_point_.z += dz;
 
         output_point_.x = SATURATION(output_point_.x, p_X_min_, p_X_max_);
         output_point_.y = SATURATION(output_point_.y, p_Y_min_, p_Y_max_);
         output_point_.z = SATURATION(output_point_.z, p_Z_min_, p_Z_max_);
-
     }
 
     void updateBool()
@@ -498,6 +499,19 @@ private:
         point_num = 0;
         running = false;
         mission_state = no_mission;
+    }
+    
+    double a1 = 235;
+    double a2 = 281;
+
+    double update_tf_theta(double x, double y)
+    {
+        double l = sqrt(pow(x, 2) + pow(y, 2));
+        /* alpha = acos(a1^2 + l^2 - a2^2) / (2*a1*l) */
+        double alpha = acos((pow(a1, 2) + pow(l, 2) - pow(a2, 2)) / (2 * a1 * l));
+        double theta_1 = atan2(y, x) - alpha;
+        double theta_2 = acos((pow(x, 2) + pow(y, 2) - pow(a1, 2) - pow(a2, 2)) / (2 * a1 * a2));
+        return(theta_1 + theta_2);
     }
 };
 
