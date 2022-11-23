@@ -11,7 +11,10 @@
         <param name="baud" value="115200"/>
     </node>
 
-    <!-- UWB remote_control -->
-    <include file="$(find main_program)/launch/uwb_remote_control.launch"/>
+    <!-- rosserial for Arduino -->
+    <node name = "Arduino_serial_node" pkg = "rosserial_python" type = "serial_node.py" output="screen">
+        <param name="port" value="/dev/USB3"/>
+        <param name="baud" value="115200"/>
+    </node>
     
 </launch>
