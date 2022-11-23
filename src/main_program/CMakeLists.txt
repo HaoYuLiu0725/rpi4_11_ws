@@ -158,6 +158,9 @@ add_executable(main_tel2022 src/main_tel2022.cpp)
 target_link_libraries(main_tel2022  ${catkin_LIBRARIES})
 add_dependencies(main_tel2022 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
+add_executable(uwb_remote_control src/uwb_remote_control.cpp)
+target_link_libraries(uwb_remote_control  ${catkin_LIBRARIES})
+
 add_executable(test_wiringpi_ros src/test_wiringpi_ros.cpp)
 EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
 if (${ARCHITECTURE} MATCHES "aarch64")
