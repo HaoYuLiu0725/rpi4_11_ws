@@ -448,6 +448,7 @@ void ArmMove::publishMissionStatus(bool state)
     mission_status.data = state;
     mission_status_pub_.publish(mission_status);
 }
+
 void ArmMove::lastCase(double offset)
 {
     ROS_INFO_STREAM("[Arm Move]: Suction Failed !");
@@ -456,6 +457,7 @@ void ArmMove::lastCase(double offset)
     more_suck_offset += offset;
     redo_count += 1;
 }
+
 void ArmMove::nextCase()
 {
     point_num += 1;
