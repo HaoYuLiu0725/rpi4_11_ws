@@ -35,6 +35,15 @@ private:
     void mission1();
     void mission2();
     void mission3();
+    void goTo_T_Point();
+    void goTo_E_Point();
+    void goTo_L_Point();
+    void goTo_Storage_1();
+    void goTo_Storage_2();
+    void goTo_Square_2();
+    void check_TEL_Point();
+    void check_Storage();
+    
     void publishArmGoal(double x, double y, double z);
     void publishSuck(bool state);
     void publishMissionStatus(bool state);
@@ -81,6 +90,11 @@ private:
     int8_t point_num; // for switch case in each mission
     double more_suck_offset; // for suction failed on getting block, add more offset
     int8_t redo_count;
+    bool get_T;
+    bool get_E;
+    bool get_L;
+    bool have_storage1;
+    bool have_storage2;
 
     /* ros param */
     bool p_active_;
@@ -121,5 +135,15 @@ private:
         mission_2,
         mission_3
     }mission_state;
+
+    enum Goto_State
+    {
+        Goto_T_point,
+        Goto_E_point,
+        Goto_L_point,
+        Goto_storage_1,
+        Goto_storage_2,
+        Goto_square_2
+    }goto_state;
 };
 }  // namespace arm_move
