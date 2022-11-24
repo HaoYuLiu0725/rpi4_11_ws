@@ -146,9 +146,9 @@ void ArmMove::missionTargetCallback(const arm_move::mission::ConstPtr& ptr)
         if(E_point.x == 0 && E_point.y == 0 && E_point.z == 0) get_E = false;
         if(L_point.x == 0 && L_point.y == 0 && L_point.z == 0) get_L = false;
 
-        if(get_T) {goto_state = Goto_T_point; ROS_INFO_STREAM("[Arm Move]: Mission 1 started");}
-        else if(get_E) {goto_state = Goto_E_point; ROS_INFO_STREAM("[Arm Move]: Mission 1 started");}
-        else if(get_L) {goto_state = Goto_L_point; ROS_INFO_STREAM("[Arm Move]: Mission 1 started");}
+        if(get_T) {goto_state = Goto_T_point; ROS_INFO_STREAM("[Arm Move]: Mission 1 started -> T");}
+        else if(get_E) {goto_state = Goto_E_point; ROS_INFO_STREAM("[Arm Move]: Mission 1 started -> E");}
+        else if(get_L) {goto_state = Goto_L_point; ROS_INFO_STREAM("[Arm Move]: Mission 1 started -> L");}
         else mission_state = no_mission;
     }
     else if(input_mission.type == 2){
