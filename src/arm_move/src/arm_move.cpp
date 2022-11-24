@@ -427,6 +427,7 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
 void ArmMove::mission3()
 {
     arm_goal_pub_.publish(touch_board);
+    mission_state = no_mission;
 }
 
 void ArmMove::publishArmGoal(double x, double y, double z)
