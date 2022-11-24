@@ -24,6 +24,7 @@ int main(int argc, char **argv)
     int level_3_state = -1; // read level 3 state
     int level_3_state_past = -1;
     int level_num = -1;
+    start_srv.request.startTrigger = false;
 
 #ifdef __aarch64__
     wiringPiSetupGpio();
