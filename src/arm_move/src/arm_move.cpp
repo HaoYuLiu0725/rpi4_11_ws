@@ -579,6 +579,7 @@ void ArmMove::backToInitArm()
                 nextCase();
                 break;
             case 2:
+                ROS_INFO_STREAM("[Arm Move]: Reached MAX_Z");
                 output_point.x = init_arm.x;
                 output_point.y = init_arm.y;
                 arm_goal_pub_.publish(output_point);
@@ -586,9 +587,15 @@ void ArmMove::backToInitArm()
                 nextCase();
                 break;
             case 3:
+                ROS_INFO_STREAM("[Arm Move]: Reached init_arm");
                 output_point.z = init_arm.z;
                 arm_goal_pub_.publish(output_point);
                 ROS_INFO_STREAM("[Arm Move]: Back to init_arm -> Z");
+                nextCase();
+                break;
+            case 4:
+                ROS_INFO_STREAM("[Arm Move]: Reached init_arm -> Z");
+                ROS_INFO_STREAM("[Arm Move]: Mission 1 finished");
                 finalCase();
                 break;
         }
@@ -609,7 +616,7 @@ void ArmMove::mission3()
     arm_goal_pub_.publish(touch_board);
     mission_state = no_mission;
 }
-
+/*--------------------------------------------------------------------------------------------------*/
 void ArmMove::publishArmGoal(double x, double y, double z)
 {
     output_point.x = x;
