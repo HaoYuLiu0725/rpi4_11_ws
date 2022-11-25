@@ -33,10 +33,10 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     get_param_ok = nh_local_.param<double>("touch_board_x", p_touch_board_x, 500.0);// [mm]
     get_param_ok = nh_local_.param<double>("touch_board_y", p_touch_board_y, 0.0);  // [mm]
     get_param_ok = nh_local_.param<double>("touch_board_z", p_touch_board_z, 10.0); // [mm]
-    get_param_ok = nh_local_.param<double>("drop_offset", p_drop_offset_, 10.0);    // [mm]
-    get_param_ok = nh_local_.param<double>("suck_offset", p_suck_offset_, -5.0);    // [mm]
-    get_param_ok = nh_local_.param<double>("put_offset", p_put_offset_, -5.0);      // [mm]
-    get_param_ok = nh_local_.param<double>("stack_offset", p_stack_offset_, 63.0);  // [mm]
+    get_param_ok = nh_local_.param<double>("drop_offset", p_drop_offset_, 35.0);    // [mm]
+    get_param_ok = nh_local_.param<double>("suck_offset", p_suck_offset_, -2.0);    // [mm]
+    get_param_ok = nh_local_.param<double>("put_offset", p_put_offset_, 3.0);      // [mm]
+    get_param_ok = nh_local_.param<double>("stack_offset", p_stack_offset_, 62.0);  // [mm]
 
     double timeout;
     get_param_ok = nh_local_.param<double>("timeout", timeout, 0.2);
@@ -378,15 +378,14 @@ void ArmMove::goTo_Square_2()
     if(!running && point_num != 0){
         switch(point_num){
             case 1:
-                output_point.x = square_2.x;
-                output_point.y = square_2.y;
+                output_point.z = 55;
                 arm_goal_pub_.publish(output_point);
-                ROS_INFO_STREAM("[Arm Move]: Go to square_2");
+                ROS_INFO_STREAM("[Arm Move]: Go to safty Z");
                 nextCase();
                 break;
             case 2:
-                ROS_INFO_STREAM("[Arm Move]: Reached square_2");
-                publishArmGoal(square_2.x, square_2.y, square_2.z + 50);
+                output_point.x = square_2.x;
+                output_point.y = square_2.y;
                 ROS_INFO_STREAM("[Arm Move]: Go to square_2 -> wait_mission_2");
                 nextCase();
                 break;
