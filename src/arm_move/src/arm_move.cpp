@@ -125,6 +125,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     get_L = true;
     have_storage1 = false;
     have_storage2 = false;
+    have_on_hand = false;
 
     return true;
 }
@@ -516,6 +517,7 @@ void ArmMove::goTo_Square_2()
             case 3:
                 ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> wait_mission_2");
                 ROS_INFO_STREAM("[Arm Move]: Mission 1 finished");
+                have_on_hand = true;
                 finalCase();
                 break; 
         }

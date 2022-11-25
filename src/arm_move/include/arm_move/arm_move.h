@@ -95,6 +95,7 @@ private:
     bool get_L;
     bool have_storage1;
     bool have_storage2;
+    bool have_on_hand;
 
     /* ros param */
     bool p_active_;
