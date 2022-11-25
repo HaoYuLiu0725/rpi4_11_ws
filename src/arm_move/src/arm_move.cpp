@@ -321,7 +321,8 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
             case 15:
                 ROS_INFO_STREAM("[Arm Move]: Reached init_arm -> Z");
                 ROS_INFO_STREAM("[Arm Move]: Mission 2 finished");
-                
+                finalCase();
+                break;    
         }
     }
     // else{
