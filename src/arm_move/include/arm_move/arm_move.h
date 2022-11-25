@@ -33,8 +33,6 @@ private:
     void timerCallback(const ros::TimerEvent& e);
 
     void mission1();
-    void mission2();
-    void mission3();
     void goTo_T_Point();
     void goTo_E_Point();
     void goTo_L_Point();
@@ -44,10 +42,14 @@ private:
     void check_TEL_Point();
     void check_Storage();
 
+    void mission2();
     void stack_Square_2();
     void stack_Storage_2();
     void stack_Storage_1();
     void check_Stack();
+    void backToInitArm();
+
+    void mission3();
     
     void publishArmGoal(double x, double y, double z);
     void publishSuck(bool state);

@@ -563,10 +563,14 @@ void ArmMove::stack_Storage_1()
                 ros::Duration(1).sleep();
                 have_storage1 = false; // block in storage1 stack complete
                 check_Stack();
-                finalCase();
                 break;
         }
     } 
+}
+void ArmMove::backToInitArm()
+{
+    publishArmGoal(init_arm.x, init_arm.y, init_arm.z);
+    finalCase();
 }
 
 void ArmMove::check_Stack() /* change state */ 
@@ -574,7 +578,10 @@ void ArmMove::check_Stack() /* change state */
     if(have_on_hand) {goto_state = Goto_square_2; point_num = 1;}
     else if(have_storage2) {goto_state = Goto_storage_2; point_num = 1;}
     else if(have_storage1) {goto_state = Goto_storage_1; point_num = 1;}
-    else mission_state = no_mission;
+    else {
+        backToInitArm();
+        mission_state = no_mission;
+    }
 }
 
 /*----- Mission 3-----------------------------------------------------------------------------------*/
