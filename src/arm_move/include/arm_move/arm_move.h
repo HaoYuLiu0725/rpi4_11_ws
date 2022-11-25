@@ -43,6 +43,11 @@ private:
     void goTo_Square_2();
     void check_TEL_Point();
     void check_Storage();
+
+    void stack_Square_2();
+    void stack_Storage_2();
+    void stack_Storage_1();
+    void check_Stack();
     
     void publishArmGoal(double x, double y, double z);
     void publishSuck(bool state);
@@ -96,6 +101,7 @@ private:
     bool have_storage1;
     bool have_storage2;
     bool have_on_hand;
+    int8_t block_stacked;
 
     /* ros param */
     bool p_active_;
