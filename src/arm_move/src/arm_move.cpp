@@ -208,6 +208,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
     else if(goto_state == Goto_storage_1) goTo_Storage_1();        
     else if(goto_state == Goto_storage_2) goTo_Storage_2();
     else if(goto_state == Goto_square_2) goTo_Square_2();
+    else mission_state = no_mission;
 }
 
 void ArmMove::goTo_T_Point()
@@ -421,6 +422,7 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
     if(goto_state == Goto_square_2) stack_Square_2();
     else if(goto_state == Goto_storage_2) stack_Storage_2();
     else if(goto_state == Goto_storage_1) stack_Storage_1();
+    else if(goto_state == Backto_init_arm) backToInitArm();
     else mission_state = no_mission;
 }
 
@@ -569,8 +571,29 @@ void ArmMove::stack_Storage_1()
 }
 void ArmMove::backToInitArm()
 {
-    publishArmGoal(init_arm.x, init_arm.y, init_arm.z);
-    finalCase();
+    if(!running && point_num != 0){
+        switch(point_num){
+            case 1:
+                output_point.z = 118;
+                arm_goal_pub_.publish(output_point);
+                ROS_INFO_STREAM("[Arm Move]: Go to MAX_Z");
+                nextCase();
+                break;
+            case 2:
+                output_point.x = init_arm.x;
+                output_point.y = init_arm.y;
+                arm_goal_pub_.publish(output_point);
+                ROS_INFO_STREAM("[Arm Move]: Back to init_arm");
+                nextCase();
+                break;
+            case 3:
+                output_point.z = init_arm.z;
+                arm_goal_pub_.publish(output_point);
+                ROS_INFO_STREAM("[Arm Move]: Back to init_arm -> Z");
+                finalCase();
+                break;
+        }
+    }
 }
 
 void ArmMove::check_Stack() /* change state */ 
@@ -578,10 +601,7 @@ void ArmMove::check_Stack() /* change state */
     if(have_on_hand) {goto_state = Goto_square_2; point_num = 1;}
     else if(have_storage2) {goto_state = Goto_storage_2; point_num = 1;}
     else if(have_storage1) {goto_state = Goto_storage_1; point_num = 1;}
-    else {
-        backToInitArm();
-        mission_state = no_mission;
-    }
+    else {goto_state = Backto_init_arm; point_num = 1;}
 }
 
 /*----- Mission 3-----------------------------------------------------------------------------------*/

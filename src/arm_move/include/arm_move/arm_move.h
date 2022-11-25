@@ -152,7 +152,8 @@ private:
         Goto_L_point,
         Goto_storage_1,
         Goto_storage_2,
-        Goto_square_2
+        Goto_square_2,
+        Backto_init_arm
     }goto_state;
 };
 }  // namespace arm_move
