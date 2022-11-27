@@ -399,6 +399,7 @@ void ArmMove::goTo_Square_2()
             case 2:
                 output_point.x = square_2.x;
                 output_point.y = square_2.y;
+                arm_goal_pub_.publish(output_point);
                 ROS_INFO_STREAM("[Arm Move]: Go to square_2 -> wait_mission_2");
                 nextCase();
                 break;
