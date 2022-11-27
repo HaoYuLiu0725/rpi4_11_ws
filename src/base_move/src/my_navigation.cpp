@@ -92,6 +92,7 @@ bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty:
     move_state = LINEAR;
     speed_state = ACCELERATE;
     print_once = true;
+    turn_direction = true;
 
     output_twist_.linear.x = 0;
     output_twist_.linear.y = 0;
@@ -135,6 +136,10 @@ void My_navigation::goalCallback(const geometry_msgs::PoseStamped::ConstPtr& pos
     have_new_goal = true;
     move_state = LINEAR;
     speed_state = ACCELERATE;
+    // check turn direction
+    double error = goal_theta - now_theta;
+    if (error < 0) turn_direction = false;
+    if (abs(error) > M_PI) turn_direction = !turn_direction;
 }
 
 void My_navigation::twistPublish(double Vx, double Vy, double W)
@@ -209,11 +214,8 @@ void My_navigation::turn()
         twistPublish(0, 0, 0);
     }
     else{
-        double W = t_angular_speed;
-        double error = goal_theta - now_theta;
-        if (error < 0) W = -t_angular_speed;
-        if (abs(error) > M_PI) W = -W;
-        twistPublish(0, 0, W);
+        if (turn_direction) twistPublish(0, 0, t_angular_speed);
+        else twistPublish(0, 0, -t_angular_speed);
     }
 }
 
