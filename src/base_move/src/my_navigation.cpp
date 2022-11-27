@@ -309,7 +309,7 @@ void My_navigation::speedTimerCallback(const ros::TimerEvent& e)
             reached_status_.data = true;
             reached_pub_.publish(reached_status_);
             have_new_goal = false;
-            ROS_INFO_STREAM("[speed reached_status:]" << (reached_status_.data ? "true" : "false"));
+            ROS_INFO_STREAM("[speed reached_status]: " << (reached_status_.data ? "true" : "false"));
             t_linear_speed = 0.0;
             t_angular_speed = 0.0;
             speed_state = ACCELERATE;
