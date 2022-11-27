@@ -107,7 +107,7 @@ void My_navigation::mapPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& 
     now_x = pose_ptr->pose.position.x;
     now_y = pose_ptr->pose.position.y;
     now_theta = tf2::getYaw(pose_ptr->pose.orientation);
-    // ROS_INFO_STREAM("[Now pose]:" << now_x << "," << now_y << "," << now_theta);
+    ROS_INFO_STREAM("[Now pose]:" << now_x << "," << now_y << "," << now_theta);
 
 }
 void My_navigation::odomCallback(const nav_msgs::Odometry::ConstPtr& odom_ptr)
@@ -232,16 +232,18 @@ void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
             reached_status_.data = true;
             reached_pub_.publish(reached_status_);
             have_new_goal = false;
-            ROS_INFO_STREAM("[move reached_status:]" << (reached_status_.data ? "true" : "false"));
+            ROS_INFO_STREAM("[move reached_status]: " << (reached_status_.data ? "true" : "false"));
         }
 
         if (move_state == LINEAR){
+            ROS_INFO_STREAM("Moving......");
             linear();
         }
         else if (move_state == STOP_LINEAR){
             stopLinear();
         }
         else if (move_state == TURN){
+            ROS_INFO_STREAM("Turning......");
             turn();
         }
         else if (move_state == STOP_TURN){
@@ -307,7 +309,7 @@ void My_navigation::speedTimerCallback(const ros::TimerEvent& e)
             reached_status_.data = true;
             reached_pub_.publish(reached_status_);
             have_new_goal = false;
-            ROS_INFO_STREAM("[move reached_status:]" << (reached_status_.data ? "true" : "false"));
+            ROS_INFO_STREAM("[speed reached_status:]" << (reached_status_.data ? "true" : "false"));
             t_linear_speed = 0.0;
             t_angular_speed = 0.0;
             speed_state = ACCELERATE;
