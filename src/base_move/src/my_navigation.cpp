@@ -110,6 +110,7 @@ void My_navigation::mapPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& 
     now_x = pose_ptr->pose.position.x;
     now_y = pose_ptr->pose.position.y;
     now_theta = tf2::getYaw(pose_ptr->pose.orientation);
+    if (goal_theta >= 3.14 || goal_theta <= -3.14) goal_theta = 3.1415926;
     ROS_INFO_STREAM("[Now pose]:" << now_x << "," << now_y << "," << now_theta);
 }
 
@@ -132,6 +133,7 @@ void My_navigation::goalCallback(const geometry_msgs::PoseStamped::ConstPtr& pos
     goal_x = pose_ptr->pose.position.x;
     goal_y = pose_ptr->pose.position.y;
     goal_theta = tf2::getYaw(pose_ptr->pose.orientation);
+    if (goal_theta >= 3.14 || goal_theta <= -3.14) goal_theta = 3.1415926;
     ROS_INFO_STREAM("[New goal!]:" << goal_x << "," << goal_y << "," << goal_theta);
     have_new_goal = true;
     move_state = LINEAR;
