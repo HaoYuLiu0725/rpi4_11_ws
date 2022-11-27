@@ -97,16 +97,16 @@ private:
 
     bool running; // true: arm is moving
     bool pub_once; // for mission_status_pub_ to pub only once
-    int8_t point_num; // for switch case in each mission
+    int  point_num; // for switch case in each mission
     double more_suck_offset; // for suction failed on getting block, add more offset
-    int8_t redo_count;
+    int  redo_count;
     bool get_T;
     bool get_E;
     bool get_L;
     bool have_storage1;
     bool have_storage2;
     bool have_on_hand;
-    int8_t block_stacked;
+    int block_stacked;
 
     /* ros param */
     bool p_active_;
