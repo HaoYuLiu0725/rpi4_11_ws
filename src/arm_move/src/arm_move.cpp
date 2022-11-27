@@ -223,6 +223,7 @@ void ArmMove::goTo_T_Point()
     if(!running && point_num != 0){
         switch(point_num){
             case 1:
+                publishVibrate(true); // vibration ON
                 output_point.x = T_point.x;
                 output_point.y = T_point.y;
                 arm_goal_pub_.publish(output_point);
@@ -259,6 +260,7 @@ void ArmMove::goTo_E_Point()
     if(!running && point_num != 0){
         switch(point_num){
             case 1:
+                publishVibrate(true); // vibration ON
                 output_point.x = E_point.x;
                 output_point.y = E_point.y;
                 arm_goal_pub_.publish(output_point);
@@ -295,6 +297,7 @@ void ArmMove::goTo_L_Point()
     if(!running && point_num != 0){
         switch(point_num){
             case 1:
+                publishVibrate(true); // vibration ON
                 output_point.x = L_point.x;
                 output_point.y = L_point.y;
                 arm_goal_pub_.publish(output_point);
@@ -347,9 +350,6 @@ void ArmMove::goTo_Storage_1()
                 publishSuck(false); // suction OFF(release)
                 ros::Duration(1).sleep();
                 have_storage1 = true; //storage1 have block
-                publishVibrate(true); // vibration ON
-                ros::Duration(p_vibrate_time_).sleep();
-                publishVibrate(false); // vibration OFF
                 check_TEL_Point();
                 break;
         }
@@ -377,9 +377,6 @@ void ArmMove::goTo_Storage_2()
                 publishSuck(false); // suction OFF(release)
                 ros::Duration(1).sleep();
                 have_storage2 = true; //storage2 have block
-                publishVibrate(true); // vibration ON
-                ros::Duration(p_vibrate_time_).sleep();
-                publishVibrate(false); // vibration OFF
                 check_TEL_Point();
                 break;
         }
@@ -419,7 +416,7 @@ void ArmMove::check_TEL_Point() /* change state */
     else if(get_E) {goto_state = Goto_E_point; point_num = 1;}
     else if(get_L) {goto_state = Goto_L_point; point_num = 1;}
     /* mission finish*/
-    else mission_state = no_mission;
+    else{ mission_state = no_mission; publishVibrate(false);} // vibration OFF
 }
 
 void ArmMove::check_Storage() /* change state */ 
