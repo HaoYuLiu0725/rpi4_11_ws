@@ -42,7 +42,7 @@
         <param name="put_offset" value="3.0"/>        
         <param name="stack_offset" value="62.0"/>
 
-        <param name="vibrate_time" value="3"/>
+        <param name="vibrate_time" value="3"/>      <!-- [s] -->
 
         <!-- with: main program -->
         <param name="mission_goal_topic" value="/mission_target"/>      <!-- Sub [arm_move::mission] -->
