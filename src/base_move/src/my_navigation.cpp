@@ -86,11 +86,12 @@ bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty:
     now_x = p_init_pose_x;
     now_y = p_init_pose_y;
     now_theta = p_init_pose_yaw;
-    bool have_new_goal = false;
+    have_new_goal = false;
     t_linear_speed = 0;
     t_angular_speed = 0;
     move_state = LINEAR;
     speed_state = ACCELERATE;
+    print_once = true;
 
     output_twist_.linear.x = 0;
     output_twist_.linear.y = 0;
@@ -101,15 +102,16 @@ bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty:
 
     return true;
 }
+
 void My_navigation::mapPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& pose_ptr)
 {
     /* get pose from transform : map to baselink*/
     now_x = pose_ptr->pose.position.x;
     now_y = pose_ptr->pose.position.y;
     now_theta = tf2::getYaw(pose_ptr->pose.orientation);
-    // ROS_INFO_STREAM("[Now pose]:" << now_x << "," << now_y << "," << now_theta);
-
+    ROS_INFO_STREAM("[Now pose]:" << now_x << "," << now_y << "," << now_theta);
 }
+
 void My_navigation::odomCallback(const nav_msgs::Odometry::ConstPtr& odom_ptr)
 {    
     /* get pose from odom*/
@@ -192,6 +194,7 @@ void My_navigation::stopLinear()
 {
     if (hasStopped()){
         ROS_INFO_STREAM("[Reached goal_XY !]");
+        print_once = true;
         move_state = TURN;
     }
     else{
@@ -218,6 +221,7 @@ void My_navigation::stopTurn()
 {
     if (hasStopped()){
         ROS_INFO_STREAM("[Reached goal_Theta !]");
+        print_once = true;
         move_state = LINEAR;
     }
     else{
@@ -236,14 +240,14 @@ void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
         }
 
         if (move_state == LINEAR){
-            ROS_INFO_STREAM("Moving......");
+            if (print_once) {ROS_INFO_STREAM("Moving......"); print_once = false;}
             linear();
         }
         else if (move_state == STOP_LINEAR){
             stopLinear();
         }
         else if (move_state == TURN){
-            ROS_INFO_STREAM("Turning......");
+            if (print_once) {ROS_INFO_STREAM("Turning......"); print_once = false;}
             turn();
         }
         else if (move_state == STOP_TURN){

@@ -101,6 +101,7 @@ private:
     double linear_velocity, angular_velocity;
     double t_linear_speed; // m/s, target linear speed
     double t_angular_speed; // rad/s, target angular speed
+    bool print_once;
 
     /* state */
     enum Move_State
