@@ -404,6 +404,7 @@ void ArmMove::goTo_Square_2()
                 ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> wait_mission_2");
                 ROS_INFO_STREAM("[Arm Move]: Mission 1 finished");
                 have_on_hand = true;
+                check_TEL_Point();
                 finalCase();
                 break; 
         }
@@ -416,7 +417,7 @@ void ArmMove::check_TEL_Point() /* change state */
     else if(get_E) {goto_state = Goto_E_point; point_num = 1;}
     else if(get_L) {goto_state = Goto_L_point; point_num = 1;}
     /* mission finish*/
-    else{ mission_state = no_mission; publishVibrate(false);} // vibration OFF
+    else{mission_state = no_mission; publishVibrate(false);} // vibration OFF
 }
 
 void ArmMove::check_Storage() /* change state */ 
