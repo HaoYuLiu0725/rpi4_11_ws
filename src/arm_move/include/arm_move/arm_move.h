@@ -53,6 +53,7 @@ private:
     
     void publishArmGoal(double x, double y, double z);
     void publishSuck(bool state);
+    void publishVibrate(bool state);
     void publishMissionStatus(bool state);
     void lastCase(double offset);
     void nextCase();
@@ -69,14 +70,16 @@ private:
     ros::Publisher mission_status_pub_;     // to   main program
     ros::Publisher arm_goal_pub_;           // to   SCARA
     ros::Publisher suck_pub_;               // to   SCARA
+    ros::Publisher vibrate_pub_;            // to   SCARA
     ros::Subscriber arm_status_sub_;        // from SCARA
-    ros::Subscriber suck_status_sub_;        // from SCARA
+    ros::Subscriber suck_status_sub_;       // from SCARA
 
     arm_move::mission input_mission;
     std_msgs::Bool mission_status; // true: mission done
 
     geometry_msgs::Point output_point;
     std_msgs::Bool suck;
+    std_msgs::Bool vibrate;
     std_msgs::Bool arm_status;  // true: SCARA moving mission done ; false: SCARA can't reach current point
     std_msgs::Bool suck_status; // true: block suction successfully ; false: block release successfully
 
@@ -128,13 +131,16 @@ private:
     double p_suck_offset_;
     double p_put_offset_;
     double p_stack_offset_;
+    double p_vibrate_time_;
 
     std::string p_mission_target_topic_;
     std::string p_mission_status_topic_;
     std::string p_arm_goal_topic_;
     std::string p_suck_topic_;
+    std::string p_vibrate_topic_;
     std::string p_arm_status_topic_;
     std::string p_suck_status_topic_;
+
 
     /* state */
     enum Mission_State

@@ -35,8 +35,9 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     get_param_ok = nh_local_.param<double>("touch_board_z", p_touch_board_z, 10.0); // [mm]
     get_param_ok = nh_local_.param<double>("drop_offset", p_drop_offset_, 35.0);    // [mm]
     get_param_ok = nh_local_.param<double>("suck_offset", p_suck_offset_, -2.0);    // [mm]
-    get_param_ok = nh_local_.param<double>("put_offset", p_put_offset_, 3.0);      // [mm]
+    get_param_ok = nh_local_.param<double>("put_offset", p_put_offset_, 3.0);       // [mm]
     get_param_ok = nh_local_.param<double>("stack_offset", p_stack_offset_, 62.0);  // [mm]
+    get_param_ok = nh_local_.param<double>("vibrate_time", p_vibrate_time_, 3.0);   // [s]
 
     double timeout;
     get_param_ok = nh_local_.param<double>("timeout", timeout, 0.2);
@@ -46,6 +47,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     get_param_ok = nh_local_.param<string>("mission_status_topic", p_mission_status_topic_, "/mission_status");
     get_param_ok = nh_local_.param<string>("arm_goal_topic", p_arm_goal_topic_, "/arm_goal");
     get_param_ok = nh_local_.param<string>("suck_topic", p_suck_topic_, "/suck");
+    get_param_ok = nh_local_.param<string>("vibrate_topic", p_vibrate_topic_, "/vibrate");
     get_param_ok = nh_local_.param<string>("arm_status_topic", p_arm_status_topic_, "/arm_status");
     get_param_ok = nh_local_.param<string>("suck_status_topic", p_suck_status_topic_, "/suck_status");
 
@@ -70,6 +72,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
             mission_status_pub_ = nh_.advertise<std_msgs::Bool>(p_mission_status_topic_, 10);
             arm_goal_pub_ = nh_.advertise<geometry_msgs::Point>(p_arm_goal_topic_, 10);
             suck_pub_ = nh_.advertise<std_msgs::Bool>(p_suck_topic_, 10);
+            vibrate_pub_ = nh_.advertise<std_msgs::Bool>(p_vibrate_topic_, 10);
             arm_status_sub_ = nh_.subscribe(p_arm_status_topic_, 10, &ArmMove::armStatusCallback, this);
             suck_status_sub_ = nh_.subscribe(p_suck_status_topic_, 10, &ArmMove::suckStatusCallback, this);
             timer_.start();
@@ -80,6 +83,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
             mission_status_pub_.shutdown();
             arm_goal_pub_.shutdown();
             suck_pub_.shutdown();
+            vibrate_pub_.shutdown();
             arm_status_sub_.shutdown();
             suck_status_sub_.shutdown();
             timer_.stop();
@@ -97,6 +101,9 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
 
     suck.data = false; // no suction
     suck_pub_.publish(suck);
+
+    vibrate.data = false; // no vibration
+    vibrate_pub_.publish(vibrate);
 
     mission_status.data = true; // no mission
     mission_status_pub_.publish(mission_status);
@@ -224,17 +231,17 @@ void ArmMove::goTo_T_Point()
                 break;
             case 2:
                 ROS_INFO_STREAM("[Arm Move]: Reached T_point");
-                publishSuck(true); // suction on
+                publishSuck(true); // suction ON
                 publishArmGoal(T_point.x, T_point.y, T_point.z + p_suck_offset_ + more_suck_offset);
                 ROS_INFO_STREAM("[Arm Move]: Go to T_point -> Z + suck");
                 nextCase();
                 break;
             case 3:
-                if (!suck_status.data && redo_count < 3){   // suction faild
+                if (!suck_status.data && redo_count < 3){   // suction FAILED
                     lastCase(-2.5);
                     break;
                 }
-                else{   // suction success
+                else{   // suction SUCCESS
                     ROS_INFO_STREAM("[Arm Move]: Suction Success !");
                     more_suck_offset = 0;
                     redo_count = 0;
@@ -260,17 +267,17 @@ void ArmMove::goTo_E_Point()
                 break;
             case 2:
                 ROS_INFO_STREAM("[Arm Move]: Reached E_point");
-                publishSuck(true); // suction on
+                publishSuck(true); // suction ON
                 publishArmGoal(E_point.x, E_point.y, E_point.z + p_suck_offset_ + more_suck_offset);
                 ROS_INFO_STREAM("[Arm Move]: Go to E_point -> Z + suck");
                 nextCase();
                 break;
             case 3:
-                if (!suck_status.data && redo_count < 3){   // suction faild
+                if (!suck_status.data && redo_count < 3){   // suction FAILED
                     lastCase(-2.5);
                     break;
                 }
-                else{   // suction success
+                else{   // suction SUCCESS
                     ROS_INFO_STREAM("[Arm Move]: Suction Success !");
                     more_suck_offset = 0;
                     redo_count = 0;
@@ -296,17 +303,17 @@ void ArmMove::goTo_L_Point()
                 break;
             case 2:
                 ROS_INFO_STREAM("[Arm Move]: Reached L_point");
-                publishSuck(true); // suction on
+                publishSuck(true); // suction ON
                 publishArmGoal(L_point.x, L_point.y, L_point.z + p_suck_offset_ + more_suck_offset);
                 ROS_INFO_STREAM("[Arm Move]: Go to L_point -> Z + suck");
                 nextCase();
                 break;
             case 3:
-                if (!suck_status.data && redo_count < 3){   // suction faild
+                if (!suck_status.data && redo_count < 3){   // suction FAILED
                     lastCase(-2.5);
                     break;
                 }
-                else{   // suction success
+                else{   // suction SUCCESS
                     ROS_INFO_STREAM("[Arm Move]: Suction Success !");
                     more_suck_offset = 0;
                     redo_count = 0;
@@ -337,9 +344,12 @@ void ArmMove::goTo_Storage_1()
                 break;
             case 3:
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_1");
-                publishSuck(false); // suction off(release)
+                publishSuck(false); // suction OFF(release)
                 ros::Duration(1).sleep();
                 have_storage1 = true; //storage1 have block
+                publishVibrate(true); // vibration ON
+                ros::Duration(p_vibrate_time_).sleep();
+                publishVibrate(false); // vibration OFF
                 check_TEL_Point();
                 break;
         }
@@ -364,9 +374,12 @@ void ArmMove::goTo_Storage_2()
                 break;
             case 3:
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_2");
-                publishSuck(false); // suction off(release)
+                publishSuck(false); // suction OFF(release)
                 ros::Duration(1).sleep();
                 have_storage2 = true; //storage2 have block
+                publishVibrate(true); // vibration ON
+                ros::Duration(p_vibrate_time_).sleep();
+                publishVibrate(false); // vibration OFF
                 check_TEL_Point();
                 break;
         }
@@ -436,7 +449,7 @@ void ArmMove::stack_Square_2()
                 break;
             case 2:
                 ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> Z + put");
-                publishSuck(false); // suction off(release)
+                publishSuck(false); // suction OFF(release)
                 ros::Duration(1).sleep();
                 have_on_hand = false; // block on hand stack complete
                 block_stacked += 1;
@@ -464,17 +477,17 @@ void ArmMove::stack_Storage_2()
                 break;
             case 3:
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_2");
-                publishSuck(true); // suction on
+                publishSuck(true); // suction ON
                 publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_suck_offset_ + more_suck_offset);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_2 -> Z + suck");
                 nextCase();
                 break;
             case 4:
-                if (!suck_status.data && redo_count < 3){   // suction faild
+                if (!suck_status.data && redo_count < 3){   // suction FAILD
                     lastCase(-2.5);
                     break;
                 }
-                else{   // suction success
+                else{   // suction SUCCESS
                     ROS_INFO_STREAM("[Arm Move]: Suction Success !");
                     more_suck_offset = 0;
                     redo_count = 0;
@@ -498,7 +511,7 @@ void ArmMove::stack_Storage_2()
                 break;
             case 7:
                 ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> Z + stack: " << block_stacked);
-                publishSuck(false); // suction off(release)
+                publishSuck(false); // suction OFF(release)
                 ros::Duration(1).sleep();
                 have_storage2 = false; // block in storage2 stack complete
                 block_stacked += 1;
@@ -526,17 +539,17 @@ void ArmMove::stack_Storage_1()
                 break;
             case 3:
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_1");
-                publishSuck(true); // suction on
+                publishSuck(true); // suction ON
                 publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_suck_offset_ + more_suck_offset);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + suck");
                 nextCase();
                 break;
             case 4:
-                if (!suck_status.data && redo_count < 3){   // suction faild
+                if (!suck_status.data && redo_count < 3){   // suction FAILED
                     lastCase(-2.5);
                     break;
                 }
-                else{   // suction success
+                else{   // suction SUCCESS
                     ROS_INFO_STREAM("[Arm Move]: Suction Success !");
                     more_suck_offset = 0;
                     redo_count = 0;
@@ -560,7 +573,7 @@ void ArmMove::stack_Storage_1()
                 break;
             case 7:
                 ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> Z + stack: " << block_stacked);
-                publishSuck(false); // suction off(release)
+                publishSuck(false); // suction OFF(release)
                 ros::Duration(1).sleep();
                 have_storage1 = false; // block in storage1 stack complete
                 check_Stack();
@@ -629,6 +642,12 @@ void ArmMove::publishSuck(bool state)
 {
     suck.data = state;
     suck_pub_.publish(suck);
+}
+
+void ArmMove::publishVibrate(bool state)
+{
+    vibrate.data = state;
+    vibrate_pub_.publish(vibrate);
 }
 
 void ArmMove::publishMissionStatus(bool state)
