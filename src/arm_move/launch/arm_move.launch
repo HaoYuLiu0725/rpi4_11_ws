@@ -32,9 +32,9 @@
         <param name="square2_z" value="-15.0"/>
 
         <!-- touch_board -->
-        <param name="touch_board_x" value="500.0"/> <!-- [mm] -->
-        <param name="touch_board_y" value="0.0"/>
-        <param name="touch_board_z" value="20.0"/>
+        <param name="touch_board_x" value="155.0"/> <!-- [mm] -->
+        <param name="touch_board_y" value="1.0"/>
+        <param name="touch_board_z" value="10.0"/>
 
         <!-- Offset -->
         <param name="drop_offset" value="35.0"/>    <!-- [mm] -->
