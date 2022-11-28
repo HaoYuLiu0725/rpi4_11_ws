@@ -239,7 +239,8 @@ void My_navigation::stopTurn()
 void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
 {
     if(have_new_goal){
-        if (move_state == ALL_STOP || (hasReachedGoal_XY() && hasReachedGoal_Theta())){
+        if (hasReachedGoal_XY() && hasReachedGoal_Theta()){
+            move_state = ALL_STOP;
             reached_status_.data = true;
             reached_pub_.publish(reached_status_);
             have_new_goal = false;
@@ -260,6 +261,7 @@ void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
         else if (move_state == STOP_TURN){
             stopTurn();
         }
+        else twistPublish(0, 0, 0);
     }
     else{
         twistPublish(0, 0, 0);
@@ -317,6 +319,7 @@ void My_navigation::speedTimerCallback(const ros::TimerEvent& e)
 {
     if(have_new_goal){
         if (hasReachedGoal_XY() && hasReachedGoal_Theta()){
+            move_state = ALL_STOP;
             reached_status_.data = true;
             reached_pub_.publish(reached_status_);
             have_new_goal = false;
@@ -356,5 +359,7 @@ void My_navigation::speedTimerCallback(const ros::TimerEvent& e)
             }
             // ROS_INFO("t_angular_speed: %f", t_angular_speed);
         }
+        else twistPublish(0, 0, 0);
     }
+    else twistPublish(0, 0, 0);
 }
