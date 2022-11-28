@@ -171,9 +171,8 @@ bool My_navigation::hasStopped()
 
 bool My_navigation::timeToDecelerate(double &speed, double deceleration)
 {
-    double decelerate_distance = pow(speed, 2) / (2 * deceleration);
+    decelerate_distance = pow(speed, 2) / (2 * deceleration);
     // ROS_INFO("decelerate_distance: %f", decelerate_distance);
-    double remain_distance;
     if (move_state == LINEAR){
         remain_distance = sqrt(pow(goal_x - now_x, 2) + pow(goal_y - now_y, 2));
     }
@@ -193,9 +192,9 @@ void My_navigation::linear()
         twistPublish(0, 0, 0);
     }
     else{
-        double angle = atan2( goal_y - now_y , goal_x - now_x ) - now_theta;
-        double Vx = t_linear_speed * cos(angle);
-        double Vy = t_linear_speed * sin(angle);
+        angle = atan2( goal_y - now_y , goal_x - now_x ) - now_theta;
+        Vx = t_linear_speed * cos(angle);
+        Vy = t_linear_speed * sin(angle);
         twistPublish(Vx, Vy, 0);
     }
 }

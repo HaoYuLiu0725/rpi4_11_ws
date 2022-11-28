@@ -99,6 +99,9 @@ private:
     double now_x, now_y, now_theta;
     double goal_x, goal_y, goal_theta;
     double linear_velocity, angular_velocity;
+    double decelerate_distance;
+    double remain_distance;
+    double angle, Vx, Vy;
     double t_linear_speed; // m/s, target linear speed
     double t_angular_speed; // rad/s, target angular speed
     bool print_once;
