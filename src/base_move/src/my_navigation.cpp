@@ -111,7 +111,7 @@ void My_navigation::mapPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& 
     now_y = pose_ptr->pose.position.y;
     now_theta = tf2::getYaw(pose_ptr->pose.orientation);
     if (goal_theta >= 3.14 || goal_theta <= -3.14) goal_theta = 3.1415926;
-    ROS_INFO_STREAM("[Now pose]:" << now_x << "," << now_y << "," << now_theta);
+    // ROS_INFO_STREAM("[Now pose]:" << now_x << "," << now_y << "," << now_theta);
 }
 
 void My_navigation::odomCallback(const nav_msgs::Odometry::ConstPtr& odom_ptr)
