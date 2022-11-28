@@ -448,7 +448,6 @@ void ArmMove::check_Storage() /* change state */
         ROS_INFO_STREAM("[Arm Move]: Go to safty Z");
         check_TEL_Point();
     }
-    
 }
 
 /*----- Mission 2-----------------------------------------------------------------------------------*/
