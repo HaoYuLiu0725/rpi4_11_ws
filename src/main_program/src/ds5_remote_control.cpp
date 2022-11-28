@@ -143,10 +143,10 @@ private:
 
         /* check param */
         if (get_param_ok){
-            ROS_INFO_STREAM("[UWB Remote Control]: " << "param set ok");
+            ROS_INFO_STREAM("[ds5 Remote Control]: " << "param set ok");
         }
         else{
-            ROS_WARN_STREAM("[UWB Remote Control]: " << "param set fail");
+            ROS_WARN_STREAM("[ds5 Remote Control]: " << "param set fail");
         }
 
         /* ros node param */
@@ -502,23 +502,23 @@ private:
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "uwb_remote_control");
+  ros::init(argc, argv, "ds5_remote_control");
   ros::NodeHandle nh("");
   ros::NodeHandle nh_local("~");
 
   try
   {
-    ROS_INFO("[UWB Remote Control]: Initializing node");
+    ROS_INFO("[ds5 Remote Control]: Initializing node");
     RemoteControl remote_control(nh, nh_local);
     ros::spin();
   }
   catch (const char* s)
   {
-    ROS_FATAL_STREAM("[UWB Remote Control]: " << s);
+    ROS_FATAL_STREAM("[ds5 Remote Control]: " << s);
   }
   catch (...)
   {
-    ROS_FATAL_STREAM("[UWB Remote Control]: Unexpected error");
+    ROS_FATAL_STREAM("[ds5 Remote Control]: Unexpected error");
   }
 
   return 0;
