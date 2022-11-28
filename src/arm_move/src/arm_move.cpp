@@ -607,7 +607,7 @@ void ArmMove::backToInitArm()
                 break;
             case 4:
                 ROS_INFO_STREAM("[Arm Move]: Reached init_arm -> Z");
-                ROS_INFO_STREAM("[Arm Move]: Mission 1 finished");
+                ROS_INFO_STREAM("[Arm Move]: Mission 2 finished");
                 finalCase();
                 break;
         }
