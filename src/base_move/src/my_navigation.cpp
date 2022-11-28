@@ -138,6 +138,7 @@ void My_navigation::goalCallback(const geometry_msgs::PoseStamped::ConstPtr& pos
     have_new_goal = true;
     move_state = LINEAR;
     speed_state = ACCELERATE;
+    print_once  = true;
     // check turn direction
     turn_direction = true;
     double error = goal_theta - now_theta;
@@ -238,7 +239,7 @@ void My_navigation::stopTurn()
 void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
 {
     if(have_new_goal){
-        if (hasReachedGoal_XY() && hasReachedGoal_Theta()){
+        if (move_state == ALL_STOP || (hasReachedGoal_XY() && hasReachedGoal_Theta())){
             reached_status_.data = true;
             reached_pub_.publish(reached_status_);
             have_new_goal = false;
