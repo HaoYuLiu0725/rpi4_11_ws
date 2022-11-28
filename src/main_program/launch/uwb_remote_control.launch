@@ -34,7 +34,7 @@
         <param name="putSquare_y" value="150.0"/>
         <param name="putSquare_z" value="50.0"/>
   
-        <param name="joy_topic" value="/nlink1/ds5_joy"/>       <!-- Sub [sensor_msgs::Joy] -->
+        <param name="joy_topic" value="/ds5_joy"/>              <!-- Sub [sensor_msgs::Joy] -->
         <param name="twist_topic" value="/cmd_vel"/>            <!-- Pub [geometry_msgs::Twist] -->
         <param name="point_topic" value="/arm_goal"/>           <!-- Pub [geometry_msgs::Point] -->
         <param name="suck_topic" value="/suck"/>                <!-- Pub [std_msgs::Bool] -->
@@ -48,6 +48,7 @@
         </node>
         <node pkg="remote_control" type="joy_deserialization" name="joy_deserialization" output="screen">
             <remap from="node_frame" to="nlink_linktrack_nodeframe0"/>
+            <remap from="/nlink1/ds5_joy" to="/ds5_joy"/>
         </node>
     </group>
 
