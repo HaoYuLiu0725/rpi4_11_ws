@@ -249,11 +249,12 @@ private:
         }
 
         updateTwist();
-        updatePoint(e);
         updateBool();
+        publish();
 
         if(!doMission || mission_state == no_mission){
-            publish();
+            updatePoint(e);
+            point_pub_.publish(output_point_);
         }
         else{
             /* misson state machine*/
@@ -376,7 +377,7 @@ private:
         twist_pub_.publish(output_twist_);
 
         /* point */
-        point_pub_.publish(output_point_);
+        // point_pub_.publish(output_point_);
 
         /* suck */
         suck_pub_.publish(output_suck_);
