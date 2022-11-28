@@ -5,7 +5,7 @@
         <param name="frequency" value="100"/>           <!-- [Hz] -->
         <param name="MAX_linear_speed" value="0.4"/>    <!-- [m/s] -->
         <param name="MAX_angular_speed" value="1.2"/>   <!-- [rad/s] -->
-        <param name="arm_MAX_XYspeed" value="100.0"/>   <!-- [mm/s] -->
+        <param name="arm_MAX_XYspeed" value="150.0"/>   <!-- [mm/s] -->
         <param name="arm_MAX_Zspeed" value="50.0"/>     <!-- [mm/s] -->
         <param name="X_max" value="516.0"/>             <!-- [mm] -->
         <param name="X_min" value="-281.0"/>            <!-- [mm] -->
