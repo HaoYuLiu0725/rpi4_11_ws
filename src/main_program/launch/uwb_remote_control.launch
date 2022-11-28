@@ -38,6 +38,8 @@
         <param name="twist_topic" value="/cmd_vel"/>            <!-- Pub [geometry_msgs::Twist] -->
         <param name="point_topic" value="/arm_goal"/>           <!-- Pub [geometry_msgs::Point] -->
         <param name="suck_topic" value="/suck"/>                <!-- Pub [std_msgs::Bool] -->
+        <param name="vibrate_topic" value="/vibrate"/>          <!-- Pub [std_msgs::Bool] -->
+        <param name="light_topic" value="/light"/>              <!-- Pub [std_msgs::Bool] -->
         <param name="arm_status_topic" value="/arm_status"/>    <!-- Sub [std_msgs::Bool] -->
     </node>
 

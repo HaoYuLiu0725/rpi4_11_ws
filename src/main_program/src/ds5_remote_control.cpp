@@ -30,12 +30,16 @@ private:
     ros::Publisher twist_pub_;
     ros::Publisher point_pub_;
     ros::Publisher suck_pub_;
+    ros::Publisher vibrate_pub_;
+    ros::Publisher light_pub_;
     ros::Subscriber arm_status_sub_;        // from SCARA
 
     sensor_msgs::Joy input_joy_;
     geometry_msgs::Twist output_twist_;
     geometry_msgs::Point output_point_;
     std_msgs::Bool output_suck_;
+    std_msgs::Bool output_vibrate_;
+    std_msgs::Bool output_light_;
     std_msgs::Bool arm_status;  // true: SCARA moving mission done ; false: SCARA can't reach current point
 
     ros::Time last_time_;
@@ -82,6 +86,8 @@ private:
     std::string p_twist_topic_;
     std::string p_point_topic_;
     std::string p_suck_topic_;
+    std::string p_vibrate_topic_;
+    std::string p_light_topic_;
     std::string p_arm_status_topic_;
 
     enum Mission_State
@@ -139,6 +145,8 @@ private:
         get_param_ok = nh_local_.param<string>("twist_topic", p_twist_topic_, "/cmd_vel");
         get_param_ok = nh_local_.param<string>("point_topic", p_point_topic_, "/arm_goal");
         get_param_ok = nh_local_.param<string>("suck_topic", p_suck_topic_, "/suck");
+        get_param_ok = nh_local_.param<string>("vibrate_topic", p_vibrate_topic_, "/vibrate");
+        get_param_ok = nh_local_.param<string>("light_topic", p_light_topic_, "/light");
         get_param_ok = nh_local_.param<string>("arm_status_topic", p_arm_status_topic_, "/arm_status");
 
         /* check param */
@@ -160,6 +168,8 @@ private:
                 twist_pub_ = nh_.advertise<geometry_msgs::Twist>(p_twist_topic_, 10);
                 point_pub_ = nh_.advertise<geometry_msgs::Point>(p_point_topic_, 10);
                 suck_pub_ = nh_.advertise<std_msgs::Bool>(p_suck_topic_, 10);
+                vibrate_pub_ = nh_.advertise<std_msgs::Bool>(p_vibrate_topic_, 10);
+                light_pub_ = nh_.advertise<std_msgs::Bool>(p_light_topic_, 10);
                 arm_status_sub_ = nh_.subscribe(p_arm_status_topic_, 10, &RemoteControl::armStatusCallback, this);
                 timer_.start();
             }
@@ -169,6 +179,8 @@ private:
                 twist_pub_.shutdown();
                 point_pub_.shutdown();
                 suck_pub_.shutdown();
+                vibrate_pub_.shutdown();
+                light_pub_.shutdown();
                 arm_status_sub_.shutdown();
                 timer_.stop();
             }
@@ -202,6 +214,8 @@ private:
 
         safe_z_point = p_storage1_z;
         output_suck_.data = false;
+        output_vibrate_.data = false;
+        output_light_.data = false;
 
         doMission = false;
         running = false;
@@ -287,17 +301,32 @@ private:
 
     void updateBool()
     {
-        /* button circle */
+        /* button circle: suction ON */
         if(input_joy_.buttons[1]){  
             output_suck_.data = true;
         }  
 
-        /* button cross */     
+        /* button cross: suction OFF (release) */
         if(input_joy_.buttons[0]){  
             output_suck_.data = false;
         }
 
-        /* button options */
+        /* button right: vibration ON */
+        if(input_joy_.buttons[16]){  
+            output_vibrate_.data = true;
+        }
+        
+        /* button left: vibration OFF */
+        if(input_joy_.buttons[15]){  
+            output_vibrate_.data = false;
+        }
+
+        /* button triangle: light ON/OFF */
+        if(input_joy_.buttons[2]){  
+            output_light_.data = !output_light_.data;
+        }
+
+        /* button options: arm go to initial pose */
         if(input_joy_.buttons[12]){ 
             doMission = true;
             mission_state = goto_init_arm;
@@ -305,7 +334,7 @@ private:
             ROS_INFO_STREAM("[Arm Move]/[Get Mission]: GoTo_init_arm");
         }
 
-        /* rear right 1 (R1) */
+        /* rear right 1 (R1): arm go to storage1 */
         if(input_joy_.buttons[5]){
             doMission = true;
             mission_state = goto_storage1;
@@ -313,7 +342,7 @@ private:
             ROS_INFO_STREAM("[Arm Move]/[Get Mission]: GoTo_storage1");
         }
 
-        /* rear left 1 (L1) */
+        /* rear left 1 (L1): arm go to storage2 */
         if(input_joy_.buttons[4]){
             doMission = true;
             mission_state = goto_storage2;
@@ -321,7 +350,7 @@ private:
             ROS_INFO_STREAM("[Arm Move]/[Get Mission]: GoTo_storage2");
         }
 
-        /* button square */
+        /* button square: arm go to putSquare */
         if(input_joy_.buttons[3]){
             doMission = true;
             mission_state = goto_putSquare;
@@ -329,7 +358,7 @@ private:
             ROS_INFO_STREAM("[Arm Move]/[Get Mission]: GoTo_putSquare");
         }
 
-        /*button share*/
+        /* button share: Abort mission */
         if(input_joy_.buttons[11]){ 
             // abort any mission !!!
             ROS_INFO_STREAM("[Arm Move]/[Mission]: Abort mission !!!");
@@ -348,6 +377,10 @@ private:
 
         /* suck */
         suck_pub_.publish(output_suck_);
+        /* vibrate */
+        vibrate_pub_.publish(output_vibrate_);
+        /* light */
+        light_pub_.publish(output_light_);
     }
 
     void publishArmGoal(double x, double y, double z)
