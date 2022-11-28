@@ -54,6 +54,7 @@ private:
     bool running; // true: arm is moving
     int8_t point_num; // for switch case in each mission
     double safe_z_point; // safe z point that won't collide while moving, equal to p_storage1_z and p_storage2_z
+    int triangle_last_state;
 
     /* ros param */
     bool p_active_;
@@ -220,6 +221,7 @@ private:
         doMission = false;
         running = false;
         point_num = 0;
+        triangle_last_state = -1;
 
         publish();
 
@@ -228,6 +230,7 @@ private:
 
     void joyCallback(const sensor_msgs::Joy::ConstPtr& ptr)
     {
+        triangle_last_state = input_joy_.buttons[2]; // button triangle
         input_joy_ = *ptr;
         last_time_ = ros::Time::now();
     }
@@ -322,7 +325,7 @@ private:
         }
 
         /* button triangle: light ON/OFF */
-        if(input_joy_.buttons[2]){  
+        if(triangle_last_state == 0 && input_joy_.buttons[2] == 1){  
             output_light_.data = !output_light_.data;
         }
 
