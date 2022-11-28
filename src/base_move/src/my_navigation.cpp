@@ -139,6 +139,7 @@ void My_navigation::goalCallback(const geometry_msgs::PoseStamped::ConstPtr& pos
     move_state = LINEAR;
     speed_state = ACCELERATE;
     // check turn direction
+    turn_direction = true;
     double error = goal_theta - now_theta;
     if (error < 0) turn_direction = false;
     if (abs(error) > M_PI) turn_direction = !turn_direction;
@@ -154,17 +155,17 @@ void My_navigation::twistPublish(double Vx, double Vy, double W)
 /*--------------------check status--------------------*/
 bool My_navigation::hasReachedGoal_XY()
 {
-  return fabsf(now_x - goal_x) < p_linear_margin_ && fabsf(now_y - goal_y) < p_linear_margin_;
+  return fabsf(now_x - goal_x) <= p_linear_margin_ && fabsf(now_y - goal_y) <= p_linear_margin_;
 }
 
 bool My_navigation::hasReachedGoal_Theta()
 {
-  return fabsf(now_theta - goal_theta) < p_angular_margin_;
+  return fabsf(now_theta - goal_theta) <= p_angular_margin_;
 }
 
 bool My_navigation::hasStopped()
 {
-  return fabsf(angular_velocity) < p_stop_margin_ && fabsf(linear_velocity) < p_stop_margin_;
+  return fabsf(angular_velocity) <= p_stop_margin_ && fabsf(linear_velocity) <= p_stop_margin_;
 }
 
 bool My_navigation::timeToDecelerate(double &speed, double deceleration)
@@ -178,6 +179,7 @@ bool My_navigation::timeToDecelerate(double &speed, double deceleration)
     else if (move_state == TURN){
         remain_distance = fabsf(goal_theta - now_theta);
     }
+    else return true;
     // ROS_INFO("remain_distance: %f", remain_distance);
     return (remain_distance <= decelerate_distance);
 }
@@ -226,7 +228,7 @@ void My_navigation::stopTurn()
     if (hasStopped()){
         ROS_INFO_STREAM("[Reached goal_Theta !]");
         print_once = true;
-        move_state = LINEAR;
+        move_state = ALL_STOP;
     }
     else{
         twistPublish(0, 0, 0);
@@ -257,6 +259,7 @@ void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
         else if (move_state == STOP_TURN){
             stopTurn();
         }
+        else twistPublish(0, 0, 0);
     }
     else{
         twistPublish(0, 0, 0);

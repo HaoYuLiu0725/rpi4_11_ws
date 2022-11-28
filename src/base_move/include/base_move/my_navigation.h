@@ -111,6 +111,7 @@ private:
         STOP_LINEAR,
         TURN,
         STOP_TURN,
+        ALL_STOP
     }move_state;
     enum Speed_State
     {
