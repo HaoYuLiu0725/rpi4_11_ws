@@ -242,12 +242,17 @@ void ArmMove::goTo_T_Point()
                     lastCase(-2.5);
                     break;
                 }
+                else if (!suck_status.data && redo_count >= 3){ // get block FAILED
+                    ROS_INFO_STREAM("[Arm Move]: Get Block Failed !");
+                    have_on_hand = false;   
+                }
                 else{   // suction SUCCESS
                     ROS_INFO_STREAM("[Arm Move]: Suction Success !");
+                    have_on_hand = true; 
                     more_suck_offset = 0;
                     redo_count = 0;
+                    ROS_INFO_STREAM("[Arm Move]: Reached T_point -> Z + suck");
                 }
-                ROS_INFO_STREAM("[Arm Move]: Reached T_point -> Z + suck");
                 get_T = false; //finished T_point
                 check_Storage();
                 break;
@@ -279,12 +284,17 @@ void ArmMove::goTo_E_Point()
                     lastCase(-2.5);
                     break;
                 }
+                else if (!suck_status.data && redo_count >= 3){ // get block FAILED
+                    ROS_INFO_STREAM("[Arm Move]: Get Block Failed !");
+                    have_on_hand = false;   
+                }
                 else{   // suction SUCCESS
                     ROS_INFO_STREAM("[Arm Move]: Suction Success !");
+                    have_on_hand = true; 
                     more_suck_offset = 0;
                     redo_count = 0;
+                    ROS_INFO_STREAM("[Arm Move]: Reached E_point -> Z + suck");
                 }
-                ROS_INFO_STREAM("[Arm Move]: Reached E_point -> Z + suck");
                 get_E = false; //finished T_point
                 check_Storage();
                 break;
@@ -316,12 +326,17 @@ void ArmMove::goTo_L_Point()
                     lastCase(-2.5);
                     break;
                 }
+                else if (!suck_status.data && redo_count >= 3){ // get block FAILED
+                    ROS_INFO_STREAM("[Arm Move]: Get Block Failed !");
+                    have_on_hand = false;   
+                }
                 else{   // suction SUCCESS
                     ROS_INFO_STREAM("[Arm Move]: Suction Success !");
+                    have_on_hand = true; 
                     more_suck_offset = 0;
                     redo_count = 0;
+                    ROS_INFO_STREAM("[Arm Move]: Reached L_point -> Z + suck");
                 }
-                ROS_INFO_STREAM("[Arm Move]: Reached L_point -> Z + suck");
                 get_L = false; //finished L_point
                 check_Storage();
                 break;
@@ -422,9 +437,18 @@ void ArmMove::check_TEL_Point() /* change state */
 
 void ArmMove::check_Storage() /* change state */ 
 {
-    if(!have_storage1) {goto_state = Goto_storage_1; point_num = 1;}
-    else if(!have_storage2) {goto_state = Goto_storage_2; point_num = 1;}
-    else {goto_state = Goto_square_2; point_num = 1;}
+    if(have_on_hand){
+        if(!have_storage1) {goto_state = Goto_storage_1; point_num = 1;}
+        else if(!have_storage2) {goto_state = Goto_storage_2; point_num = 1;}
+        else {goto_state = Goto_square_2; point_num = 1;}
+    }
+    else{
+        output_point.z = 55;
+        arm_goal_pub_.publish(output_point);
+        ROS_INFO_STREAM("[Arm Move]: Go to safty Z");
+        check_TEL_Point();
+    }
+    
 }
 
 /*----- Mission 2-----------------------------------------------------------------------------------*/
