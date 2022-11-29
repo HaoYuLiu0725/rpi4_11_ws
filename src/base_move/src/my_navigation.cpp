@@ -277,7 +277,7 @@ void My_navigation::accelerate(double *speed, double deceleration, double MAX_sp
         speed_state = MAX_SPEED;
     }
     else{
-        ROS_INFO_STREAM("accelerate: " << speed);
+        ROS_INFO_STREAM("accelerate: " << *speed);
         *speed += acceleration / p_speed_frequency_;
     }
 }
@@ -300,7 +300,7 @@ void My_navigation::decelerate(double *speed, double deceleration)
         twistPublish(0, 0, 0);
     }
     else{
-        ROS_INFO_STREAM("Decelerate ! " << speed);
+        ROS_INFO_STREAM("Decelerate ! " << *speed);
         *speed -= deceleration / p_speed_frequency_;
     }
 }
