@@ -143,6 +143,7 @@ add_executable(my_navigation_node     src/nodes/my_navigation_node.cpp)
 add_executable(my_odometry            src/my_odometry.cpp)
 add_executable(call_goal              src/call_goal.cpp)
 add_executable(tf2_transformListener  src/tf2_transformListener.cpp)
+add_executable(print_map_pose         src/print_map_pose.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -163,6 +164,7 @@ target_link_libraries(my_navigation_node    my_navigation)
 target_link_libraries(my_odometry           ${catkin_LIBRARIES})
 target_link_libraries(call_goal             ${catkin_LIBRARIES})
 target_link_libraries(tf2_transformListener ${catkin_LIBRARIES})
+target_link_libraries(print_map_pose        ${catkin_LIBRARIES})
 
 #############
 ## Install ##
