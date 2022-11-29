@@ -37,17 +37,17 @@ private:
     bool hasReachedGoal_XY();
     bool hasReachedGoal_Theta();
     bool hasStopped();
-    bool timeToDecelerate(double &speed, double deceleration);
+    bool timeToDecelerate(double *speed, double deceleration);
     /* move_timer */
     void linear();
     void stopLinear();
     void turn();
     void stopTurn();
     /* speed_timer */
-    void accelerate(double &speed, double deceleration, double MAX_speed, double acceleration);
-    void max_speed(double &speed, double deceleration, double MAX_speed);
-    void decelerate(double &speed, double deceleration);
-    void stop(double &speed);
+    void accelerate(double *speed, double deceleration, double MAX_speed, double acceleration);
+    void max_speed(double *speed, double deceleration, double MAX_speed);
+    void decelerate(double *speed, double deceleration);
+    void stop(double *speed);
 
     /* ros node */
     ros::NodeHandle nh_;

@@ -169,9 +169,9 @@ bool My_navigation::hasStopped()
   return fabsf(angular_velocity) <= p_stop_margin_ && fabsf(linear_velocity) <= p_stop_margin_;
 }
 
-bool My_navigation::timeToDecelerate(double &speed, double deceleration)
+bool My_navigation::timeToDecelerate(double *speed, double deceleration)
 {
-    decelerate_distance = pow(speed, 2) / (2 * deceleration);
+    decelerate_distance = pow(*speed, 2) / (2 * deceleration);
     ROS_INFO("decelerate_distance: %f", decelerate_distance);
     if (move_state == LINEAR){
         remain_distance = sqrt(pow(goal_x - now_x, 2) + pow(goal_y - now_y, 2));
@@ -268,32 +268,32 @@ void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
 }
 
 /*--------------------speed_timer---------------------------*/
-void My_navigation::accelerate(double &speed, double deceleration, double MAX_speed, double acceleration)
+void My_navigation::accelerate(double *speed, double deceleration, double MAX_speed, double acceleration)
 {
     if (timeToDecelerate(speed, deceleration)){
         speed_state = DECELERATE;
     }
-    else if (fabsf(speed - MAX_speed) < 0.01){
+    else if (fabsf(*speed - MAX_speed) < 0.01){
         speed_state = MAX_SPEED;
     }
     else{
         ROS_INFO_STREAM("accelerate: " << speed);
-        speed += acceleration / p_speed_frequency_;
+        *speed += acceleration / p_speed_frequency_;
     }
 }
 
-void My_navigation::max_speed(double &speed, double deceleration, double MAX_speed)
+void My_navigation::max_speed(double *speed, double deceleration, double MAX_speed)
 {
     if (timeToDecelerate(speed, deceleration)){
         speed_state = DECELERATE;
     }
     else{
         ROS_INFO("max_speed");
-        speed = MAX_speed;
+        *speed = MAX_speed;
     }
 }
 
-void My_navigation::decelerate(double &speed, double deceleration)
+void My_navigation::decelerate(double *speed, double deceleration)
 {
     if (hasReachedGoal_XY() && hasReachedGoal_Theta()){
         speed_state = STOP;
@@ -301,10 +301,10 @@ void My_navigation::decelerate(double &speed, double deceleration)
     }
     else{
         ROS_INFO_STREAM("Decelerate ! " << speed);
-        speed -= deceleration / p_speed_frequency_;
+        *speed -= deceleration / p_speed_frequency_;
     }
 }
-void My_navigation::stop(double &speed)
+void My_navigation::stop(double *speed)
 {
     if (hasStopped()){
         ROS_INFO("stop !");
@@ -312,7 +312,7 @@ void My_navigation::stop(double &speed)
     }
     else{
         twistPublish(0, 0, 0);
-        speed = 0.0;
+        *speed = 0.0;
     }
 }
 
@@ -332,31 +332,31 @@ void My_navigation::speedTimerCallback(const ros::TimerEvent& e)
 
         if (move_state == LINEAR){
             if (speed_state == ACCELERATE){
-                accelerate(t_linear_speed, p_linear_deceleration_, p_MAX_linear_speed_, p_linear_acceleration_);
+                accelerate(&t_linear_speed, p_linear_deceleration_, p_MAX_linear_speed_, p_linear_acceleration_);
             }
             else if (speed_state == MAX_SPEED){
-                max_speed(t_linear_speed, p_linear_deceleration_, p_MAX_linear_speed_);
+                max_speed(&t_linear_speed, p_linear_deceleration_, p_MAX_linear_speed_);
             }
             else if (speed_state == DECELERATE){
-                decelerate(t_linear_speed, p_linear_deceleration_);
+                decelerate(&t_linear_speed, p_linear_deceleration_);
             }
             else if (speed_state == STOP){
-                stop(t_linear_speed);
+                stop(&t_linear_speed);
             }
             // ROS_INFO("t_linear_speed: %f", t_linear_speed);
         }
         else if (move_state == TURN){
             if (speed_state == ACCELERATE){
-                accelerate(t_angular_speed, p_angular_deceleration_, p_MAX_angular_speed_, p_angular_acceleration_);
+                accelerate(&t_angular_speed, p_angular_deceleration_, p_MAX_angular_speed_, p_angular_acceleration_);
             }
             else if (speed_state == MAX_SPEED){
-                max_speed(t_angular_speed, p_angular_deceleration_, p_MAX_angular_speed_);
+                max_speed(&t_angular_speed, p_angular_deceleration_, p_MAX_angular_speed_);
             }
             else if (speed_state == DECELERATE){
-                decelerate(t_angular_speed, p_angular_deceleration_);
+                decelerate(&t_angular_speed, p_angular_deceleration_);
             }
             else if (speed_state == STOP){
-                stop(t_angular_speed);
+                stop(&t_angular_speed);
             }
             // ROS_INFO("t_angular_speed: %f", t_angular_speed);
         }
