@@ -300,7 +300,7 @@ void My_navigation::decelerate(double &speed, double deceleration)
         twistPublish(0, 0, 0);
     }
     else{
-        ROS_INFO("decelerate");
+        ROS_INFO("Decelerate !");
         speed -= deceleration / p_speed_frequency_;
     }
 }
