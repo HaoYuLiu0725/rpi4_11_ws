@@ -7,7 +7,7 @@
 #include <std_srvs/Empty.h>
 
 #include <geometry_msgs/Twist.h>
-#include <geometry_msgs/Pose.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Odometry.h>
 #include <tf2/utils.h>
 #include <std_msgs/Bool.h>
