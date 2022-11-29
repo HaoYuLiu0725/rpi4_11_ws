@@ -14,8 +14,8 @@
     <param name="cov_vy" value="0.00005"/>
     <param name="cov_vyaw" value="0.00005"/>
   
-    <param name="odom_topic" value="odom"/>
-    <param name="pose_topic" value="odom_pose"/>
+    <param name="odom_topic" value="/odom"/>
+    <param name="pose_topic" value="/odom_pose"/>
     <param name="fixed_frame_id" value="odom"/>
     <param name="target_frame_id" value="base_link"/>
   </node>
