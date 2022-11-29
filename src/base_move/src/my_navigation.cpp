@@ -297,6 +297,7 @@ void My_navigation::decelerate(double &speed, double deceleration)
 {
     if (hasReachedGoal_XY() && hasReachedGoal_Theta()){
         speed_state = STOP;
+        twistPublish(0, 0, 0);
     }
     else{
         ROS_INFO("decelerate");
