@@ -247,14 +247,14 @@ void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
         }
 
         if (move_state == LINEAR){
-            if (print_once) {ROS_INFO_STREAM("Moving......"); print_once = false;}
+            if (print_once) {speed_state = ACCELERATE; ROS_INFO_STREAM("Moving......"); print_once = false;}
             linear();
         }
         else if (move_state == STOP_LINEAR){
             stopLinear();
         }
         else if (move_state == TURN){
-            if (print_once) {ROS_INFO_STREAM("Turning......"); print_once = false;}
+            if (print_once) {speed_state = ACCELERATE; ROS_INFO_STREAM("Turning......"); print_once = false;}
             turn();
         }
         else if (move_state == STOP_TURN){
