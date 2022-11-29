@@ -443,7 +443,8 @@ void ArmMove::check_Storage() /* change state */
         else {goto_state = Goto_square_2; point_num = 1;}
     }
     else{
-        output_point.z = 55;
+        publishSuck(false); // suction OFF
+        output_point.z = 80;
         arm_goal_pub_.publish(output_point);
         ROS_INFO_STREAM("[Arm Move]: Go to safty Z");
         check_TEL_Point();
