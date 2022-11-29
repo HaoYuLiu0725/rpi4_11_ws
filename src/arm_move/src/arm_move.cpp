@@ -167,7 +167,7 @@ void ArmMove::missionTargetCallback(const arm_move::mission::ConstPtr& ptr)
         if(have_on_hand) {goto_state = Goto_square_2; ROS_INFO_STREAM("[Arm Move]: Mission 2 started -> square_2");}
         else if(have_storage2) {goto_state = Goto_storage_2; ROS_INFO_STREAM("[Arm Move]: Mission 2 started -> storage_2");}
         else if(have_storage1) {goto_state = Goto_storage_1; ROS_INFO_STREAM("[Arm Move]: Mission 2 started -> storage_1");}
-        else mission_state = no_mission;
+        else goto_state = Backto_init_arm;
     }
     else if(input_mission.type == 3){
         mission_state = mission_3;
