@@ -172,7 +172,7 @@ bool My_navigation::hasStopped()
 bool My_navigation::timeToDecelerate(double &speed, double deceleration)
 {
     decelerate_distance = pow(speed, 2) / (2 * deceleration);
-    // ROS_INFO("decelerate_distance: %f", decelerate_distance);
+    ROS_INFO("decelerate_distance: %f", decelerate_distance);
     if (move_state == LINEAR){
         remain_distance = sqrt(pow(goal_x - now_x, 2) + pow(goal_y - now_y, 2));
     }
@@ -180,7 +180,7 @@ bool My_navigation::timeToDecelerate(double &speed, double deceleration)
         remain_distance = fabsf(goal_theta - now_theta);
     }
     else return true;
-    // ROS_INFO("remain_distance: %f", remain_distance);
+    ROS_INFO("remain_distance: %f", remain_distance);
     return (remain_distance <= decelerate_distance);
 }
 
@@ -277,7 +277,7 @@ void My_navigation::accelerate(double &speed, double deceleration, double MAX_sp
         speed_state = MAX_SPEED;
     }
     else{
-        // ROS_INFO("accelerate");
+        ROS_INFO("accelerate");
         speed += acceleration / p_speed_frequency_;
     }
 }
@@ -288,28 +288,29 @@ void My_navigation::max_speed(double &speed, double deceleration, double MAX_spe
         speed_state = DECELERATE;
     }
     else{
-        // ROS_INFO("max_speed");
+        ROS_INFO("max_speed");
         speed = MAX_speed;
     }
 }
 
 void My_navigation::decelerate(double &speed, double deceleration)
 {
-    if (hasStopped()){
+    if (hasReachedGoal_XY() && hasReachedGoal_Theta()){
         speed_state = STOP;
     }
     else{
-        // ROS_INFO("decelerate");
+        ROS_INFO("decelerate");
         speed -= deceleration / p_speed_frequency_;
     }
 }
 void My_navigation::stop(double &speed)
 {
     if (hasStopped()){
-        // ROS_INFO("stop !");
+        ROS_INFO("stop !");
         speed_state = ACCELERATE;
     }
     else{
+        twistPublish(0, 0, 0);
         speed = 0.0;
     }
 }
