@@ -688,12 +688,14 @@ void ArmMove::lastCase(double offset)
     running = false;
     more_suck_offset += offset;
     redo_count += 1;
+    ros::Duration(0.5).sleep();
 }
 
 void ArmMove::nextCase()
 {
     point_num += 1;
     running = true;
+    ros::Duration(0.5).sleep();
 }
 
 void ArmMove::finalCase()
