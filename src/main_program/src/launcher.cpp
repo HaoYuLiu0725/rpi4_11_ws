@@ -4,7 +4,7 @@
 #include <wiringPi.h>
 #endif
 
-#define launch_pin  20    // BCM_PIN 20
+#define launch_pin 16   // BCM_PIN 20
 
 int main(int argc, char **argv)
 {
