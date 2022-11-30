@@ -297,7 +297,7 @@ void My_navigation::max_speed(double *speed, double deceleration, double MAX_spe
 
 void My_navigation::decelerate(double *speed, double deceleration)
 {
-    if (*speed <= 0 || (hasReachedGoal_XY() && hasReachedGoal_Theta())){
+    if ((move_state == LINEAR && hasReachedGoal_XY()) || (move_state == TURN && hasReachedGoal_Theta())){
         speed_state = STOP;
         *speed = 0.0;
         twistPublish(0, 0, 0);
