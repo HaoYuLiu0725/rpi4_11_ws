@@ -307,7 +307,10 @@ void My_navigation::decelerate(double *speed, double deceleration)
         twistPublish(0, 0, 0);
     }
     else{
-        ROS_INFO_STREAM("Decelerate ! " << now_theta << " " << goal_theta);
+        if(move_state == TURN)
+        {
+            ROS_INFO_STREAM("Decelerate ! " << now_theta << " " << goal_theta);
+        }
         *speed -= deceleration / p_speed_frequency_;
     }
 }
