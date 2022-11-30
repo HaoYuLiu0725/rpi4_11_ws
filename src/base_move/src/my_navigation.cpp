@@ -232,7 +232,7 @@ void My_navigation::stopTurn()
     if (hasStopped()){
         ROS_INFO_STREAM("[Reached goal_Theta !]");
         print_once = true;
-        move_state = ALL_STOP;
+        move_state = LINEAR;
     }
     else{
         twistPublish(0, 0, 0);
