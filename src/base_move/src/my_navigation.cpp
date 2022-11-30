@@ -301,7 +301,16 @@ void My_navigation::max_speed(double *speed, double deceleration, double MAX_spe
 
 void My_navigation::decelerate(double *speed, double deceleration)
 {
-    if ((move_state == LINEAR && hasReachedGoal_XY()) || (move_state == TURN && hasReachedGoal_Theta())){
+    if (move_state == LINEAR && hasReachedGoal_XY())
+    {
+        ROS_INFO_STREAM("Linear Stop");
+        speed_state = STOP;
+        *speed = 0.0;
+        twistPublish(0, 0, 0);
+    }
+    else if (move_state == TURN && hasReachedGoal_Theta())
+    {
+        ROS_INFO_STREAM("Angular Stop");
         speed_state = STOP;
         *speed = 0.0;
         twistPublish(0, 0, 0);
@@ -309,7 +318,7 @@ void My_navigation::decelerate(double *speed, double deceleration)
     else{
         if(move_state == TURN)
         {
-            ROS_INFO_STREAM("Decelerate ! " << now_theta << " " << goal_theta);
+            ROS_INFO_STREAM("Turning Decelerate " << now_theta << " " << goal_theta);
         }
         *speed -= deceleration / p_speed_frequency_;
     }
