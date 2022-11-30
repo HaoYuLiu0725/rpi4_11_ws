@@ -242,7 +242,7 @@ void My_navigation::stopTurn()
 void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
 {
     if(have_new_goal){
-        if ((hasReachedGoal_XY() && hasReachedGoal_Theta()) || move_state == ALL_STOP){
+        if (hasReachedGoal_XY() && hasReachedGoal_Theta()){
             reached_status_.data = true;
             reached_pub_.publish(reached_status_);
             have_new_goal = false;
@@ -320,6 +320,7 @@ void My_navigation::decelerate(double *speed, double deceleration)
             ROS_INFO_STREAM("Turning Decelerate " << now_theta << " " << goal_theta);
         }
         *speed -= deceleration / p_speed_frequency_;
+        if (*speed <= 0) *speed = 0;
     }
 }
 void My_navigation::stop(double *speed)
