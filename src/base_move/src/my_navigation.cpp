@@ -232,7 +232,7 @@ void My_navigation::stopTurn()
     if (hasStopped()){
         ROS_INFO_STREAM("[Reached goal_Theta !]");
         print_once = true;
-        move_state = LINEAR;
+        move_state = ALL_STOP;
     }
     else{
         twistPublish(0, 0, 0);
@@ -242,8 +242,7 @@ void My_navigation::stopTurn()
 void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
 {
     if(have_new_goal){
-        if (hasReachedGoal_XY() && hasReachedGoal_Theta()){
-            move_state = ALL_STOP;
+        if ((hasReachedGoal_XY() && hasReachedGoal_Theta()) || move_state == ALL_STOP){
             reached_status_.data = true;
             reached_pub_.publish(reached_status_);
             have_new_goal = false;
