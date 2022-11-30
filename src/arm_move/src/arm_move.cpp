@@ -132,6 +132,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     get_L = true;
     have_storage1 = false;
     have_storage2 = false;
+    have_square2 = false;
     have_on_hand = false;
     block_stacked = 0;
 
@@ -164,7 +165,7 @@ void ArmMove::missionTargetCallback(const arm_move::mission::ConstPtr& ptr)
         mission_state = mission_2;
         point_num = 1;
         ROS_INFO_STREAM("[Arm Move]: Mission 2 received");
-        if(have_on_hand) {goto_state = Goto_square_2; ROS_INFO_STREAM("[Arm Move]: Mission 2 started -> square_2");}
+        if(have_square2) {goto_state = Goto_square_2; ROS_INFO_STREAM("[Arm Move]: Mission 2 started -> square_2");}
         else if(have_storage2) {goto_state = Goto_storage_2; ROS_INFO_STREAM("[Arm Move]: Mission 2 started -> storage_2");}
         else if(have_storage1) {goto_state = Goto_storage_1; ROS_INFO_STREAM("[Arm Move]: Mission 2 started -> storage_1");}
         else goto_state = Backto_init_arm;
@@ -418,7 +419,7 @@ void ArmMove::goTo_Square_2()
             case 3:
                 ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> wait_mission_2");
                 ROS_INFO_STREAM("[Arm Move]: Mission 1 finished");
-                have_on_hand = true;
+                have_square2 = true;
                 check_TEL_Point();
                 finalCase();
                 break; 
@@ -447,6 +448,7 @@ void ArmMove::check_Storage() /* change state */
         output_point.z = 80;
         arm_goal_pub_.publish(output_point);
         ROS_INFO_STREAM("[Arm Move]: Go to safty Z");
+        ros::Duration(1).sleep();
         check_TEL_Point();
     }
 }
@@ -474,7 +476,7 @@ void ArmMove::stack_Square_2()
                 ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> Z + put");
                 publishSuck(false); // suction OFF(release)
                 ros::Duration(1).sleep();
-                have_on_hand = false; // block on hand stack complete
+                have_square2 = false; // block on hand(square2) stack complete
                 block_stacked += 1;
                 check_Stack();
                 break;
@@ -640,7 +642,7 @@ void ArmMove::backToInitArm()
 
 void ArmMove::check_Stack() /* change state */ 
 {
-    if(have_on_hand) {goto_state = Goto_square_2; point_num = 1;}
+    if(have_square2) {goto_state = Goto_square_2; point_num = 1;}
     else if(have_storage2) {goto_state = Goto_storage_2; point_num = 1;}
     else if(have_storage1) {goto_state = Goto_storage_1; point_num = 1;}
     else {goto_state = Backto_init_arm; point_num = 1;}

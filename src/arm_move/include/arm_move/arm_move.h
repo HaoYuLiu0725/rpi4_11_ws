@@ -105,6 +105,7 @@ private:
     bool get_L;
     bool have_storage1;
     bool have_storage2;
+    bool have_square2;
     bool have_on_hand;
     int block_stacked;
 
