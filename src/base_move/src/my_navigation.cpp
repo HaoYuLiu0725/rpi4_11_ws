@@ -307,7 +307,7 @@ void My_navigation::decelerate(double *speed, double deceleration)
         *speed = 0.0;
         twistPublish(0, 0, 0);
     }
-    else if (move_state == TURN && hasReachedGoal_Theta())
+    else if (move_state == TURN && hasReachedGoal_Theta() || *speed == 0)
     {
         ROS_INFO_STREAM("Angular Stop");
         speed_state = STOP;
