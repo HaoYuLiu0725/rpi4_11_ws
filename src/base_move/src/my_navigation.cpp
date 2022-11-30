@@ -174,7 +174,7 @@ bool My_navigation::hasStopped()
 bool My_navigation::timeToDecelerate(double *speed, double deceleration)
 {
     decelerate_distance = pow(*speed, 2) / (2 * deceleration);
-    ROS_INFO("decelerate_distance: %f", decelerate_distance);
+    // ROS_INFO("decelerate_distance: %f", decelerate_distance);
     if (move_state == LINEAR){
         remain_distance = sqrt(pow(goal_x - now_x, 2) + pow(goal_y - now_y, 2));
     }
@@ -184,7 +184,7 @@ bool My_navigation::timeToDecelerate(double *speed, double deceleration)
         remain_distance = remain_distance > 2*M_PI-remain_distance ? 2*M_PI - remain_distance : remain_distance;
     }
     else return true;
-    ROS_INFO("remain_distance: %f", remain_distance);
+    // ROS_INFO("remain_distance: %f", remain_distance);
     return (remain_distance <= decelerate_distance);
 }
 
@@ -251,7 +251,7 @@ void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
         }
 
         if (move_state == LINEAR){
-            ROS_INFO_STREAM("Moving......");
+            // ROS_INFO_STREAM("Moving......");
             if (print_once) {speed_state = ACCELERATE; print_once = false;}
             linear();
         }
@@ -259,7 +259,7 @@ void My_navigation::moveTimerCallback(const ros::TimerEvent& e)
             stopLinear();
         }
         else if (move_state == TURN){
-            ROS_INFO_STREAM("Turning......");
+            // ROS_INFO_STREAM("Turning......");
             if (print_once) {speed_state = ACCELERATE; print_once = false;}
             turn();
         }
@@ -307,7 +307,7 @@ void My_navigation::decelerate(double *speed, double deceleration)
         twistPublish(0, 0, 0);
     }
     else{
-        // ROS_INFO_STREAM("Decelerate ! " << *speed);
+        ROS_INFO_STREAM("Decelerate ! " << now_theta << " " << goal_theta);
         *speed -= deceleration / p_speed_frequency_;
     }
 }
@@ -350,7 +350,7 @@ void My_navigation::speedTimerCallback(const ros::TimerEvent& e)
             else if (speed_state == STOP){
                 stop(&t_linear_speed);
             }
-            ROS_INFO("t_linear_speed: %f", t_linear_speed);
+            // ROS_INFO("t_linear_speed: %f", t_linear_speed);
         }
         else if (move_state == TURN){
             if (speed_state == ACCELERATE){
@@ -365,7 +365,7 @@ void My_navigation::speedTimerCallback(const ros::TimerEvent& e)
             else if (speed_state == STOP){
                 stop(&t_angular_speed);
             }
-            ROS_INFO("t_angular_speed: %f", t_angular_speed);
+            // ROS_INFO("t_angular_speed: %f", t_angular_speed);
         }
         else twistPublish(0, 0, 0);
     }
