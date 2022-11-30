@@ -162,7 +162,7 @@ bool My_navigation::hasReachedGoal_XY()
 bool My_navigation::hasReachedGoal_Theta()
 {
     double error = fabsf(now_theta - goal_theta);
-    error = error > M_PI-error ? M_PI - error : error;
+    error = error > 2*M_PI-error ? 2*M_PI - error : error;
     return (error <= p_angular_margin_);
 }
 
@@ -181,7 +181,7 @@ bool My_navigation::timeToDecelerate(double *speed, double deceleration)
     else if (move_state == TURN){
         // ROS_INFO_STREAM(goal_theta << " - " << now_theta);
         remain_distance = fabsf(goal_theta - now_theta);
-        remain_distance = remain_distance > M_PI-remain_distance ? M_PI - remain_distance : remain_distance;
+        remain_distance = remain_distance > 2*M_PI-remain_distance ? 2*M_PI - remain_distance : remain_distance;
     }
     else return true;
     ROS_INFO("remain_distance: %f", remain_distance);
