@@ -161,7 +161,9 @@ bool My_navigation::hasReachedGoal_XY()
 
 bool My_navigation::hasReachedGoal_Theta()
 {
-  return fabsf(now_theta - goal_theta) <= p_angular_margin_;
+    double error = fabsf(now_theta - goal_theta);
+    error = error > M_PI-error ? M_PI - error : error;
+    return (error <= p_angular_margin_);
 }
 
 bool My_navigation::hasStopped()
