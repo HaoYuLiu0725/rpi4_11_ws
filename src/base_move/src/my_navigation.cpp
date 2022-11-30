@@ -93,6 +93,7 @@ bool My_navigation::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty:
     speed_state = ACCELERATE;
     print_once = true;
     turn_direction = true;
+    check_turn_direction = true;
 
     output_twist_.linear.x = 0;
     output_twist_.linear.y = 0;
@@ -209,6 +210,7 @@ void My_navigation::stopLinear()
         ROS_INFO_STREAM("[Reached goal_XY !]");
         print_once = true;
         move_state = TURN;
+        check_turn_direction = true;
     }
     else{
         twistPublish(0, 0, 0);
@@ -222,6 +224,13 @@ void My_navigation::turn()
         twistPublish(0, 0, 0);
     }
     else{
+        if (check_turn_direction){
+            check_turn_direction = false;
+            turn_direction = true;
+            double error = goal_theta - now_theta;
+            if (error < 0) turn_direction = false;
+            if (abs(error) > M_PI) turn_direction = !turn_direction;
+        }
         if (turn_direction) twistPublish(0, 0, t_angular_speed);
         else twistPublish(0, 0, -t_angular_speed);
     }

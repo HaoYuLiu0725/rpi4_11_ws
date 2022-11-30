@@ -106,6 +106,7 @@ private:
     double t_angular_speed; // rad/s, target angular speed
     bool print_once;
     bool turn_direction;
+    bool check_turn_direction;
 
     /* state */
     enum Move_State
