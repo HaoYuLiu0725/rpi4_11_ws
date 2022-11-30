@@ -172,17 +172,17 @@ bool My_navigation::hasStopped()
 bool My_navigation::timeToDecelerate(double *speed, double deceleration)
 {
     decelerate_distance = pow(*speed, 2) / (2 * deceleration);
-    // ROS_INFO("decelerate_distance: %f", decelerate_distance);
+    ROS_INFO("decelerate_distance: %f", decelerate_distance);
     if (move_state == LINEAR){
         remain_distance = sqrt(pow(goal_x - now_x, 2) + pow(goal_y - now_y, 2));
     }
     else if (move_state == TURN){
-        ROS_INFO_STREAM(goal_theta << " - " << now_theta);
+        // ROS_INFO_STREAM(goal_theta << " - " << now_theta);
         remain_distance = fabsf(goal_theta - now_theta);
-        remain_distance = remain_distance > M_PI-remain_distance ? M_PI-remain_distance:remain_distance;
+        remain_distance = remain_distance > M_PI-remain_distance ? M_PI - remain_distance : remain_distance;
     }
     else return true;
-    // ROS_INFO("remain_distance: %f", remain_distance);
+    ROS_INFO("remain_distance: %f", remain_distance);
     return (remain_distance <= decelerate_distance);
 }
 
