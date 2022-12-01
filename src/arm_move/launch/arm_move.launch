@@ -45,7 +45,7 @@
         <param name="drop_offset" value="35.0"/>    <!-- [mm] -->
         <param name="suck_offset" value="0.0"/>
         <param name="put_offset" value="3.0"/>        
-        <param name="stack_offset" value="63.5"/>
+        <param name="stack_offset" value="64.0"/>
 
         <param name="vibrate_time" value="3"/>      <!-- [s] -->
 
