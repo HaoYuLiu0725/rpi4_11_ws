@@ -474,11 +474,19 @@ void ArmMove::stack_Square_2()
     if(!running && point_num != 0){
         switch(point_num){
             case 1:
+                output_point.x = square_2.x;
+                output_point.y = square_2.y;
+                arm_goal_pub_.publish(output_point);
+                ROS_INFO_STREAM("[Arm Move]: Go to square_2");
+                nextCase();
+                break;
+            case 2:
+                ROS_INFO_STREAM("[Arm Move]: Reached square_2");
                 publishArmGoal(square_2.x, square_2.y, square_2.z + p_put_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to square_2 -> Z + put");
                 nextCase();
                 break;
-            case 2:
+            case 3:
                 ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> Z + put");
                 publishSuck(false); // suction OFF(release)
                 ros::Duration(1).sleep();
