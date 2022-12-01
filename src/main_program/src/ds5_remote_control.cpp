@@ -5,6 +5,7 @@
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Point.h>
 #include <std_msgs/Bool.h>
+#include <std_msgs/Float64.h>
 
 using namespace std;
 #define SATURATION(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
@@ -32,7 +33,8 @@ private:
     ros::Publisher suck_pub_;
     ros::Publisher vibrate_pub_;
     ros::Publisher light_pub_;
-    ros::Subscriber arm_status_sub_;        // from SCARA
+    ros::Subscriber arm_status_sub_;    // from SCARA
+    ros::Subscriber arm_angle_sub_;     // from SCARA
 
     sensor_msgs::Joy input_joy_;
     geometry_msgs::Twist output_twist_;
@@ -41,6 +43,7 @@ private:
     std_msgs::Bool output_vibrate_;
     std_msgs::Bool output_light_;
     std_msgs::Bool arm_status;  // true: SCARA moving mission done ; false: SCARA can't reach current point
+    std_msgs::Float64 arm_angle; // [deg]
 
     ros::Time last_time_;
     ros::Duration timeout_;
@@ -55,6 +58,7 @@ private:
     int8_t point_num; // for switch case in each mission
     double safe_z_point; // safe z point that won't collide while moving, equal to p_storage1_z and p_storage2_z
     int triangle_last_state;
+    double frame_angle; //
 
     /* ros param */
     bool p_active_;
@@ -90,6 +94,7 @@ private:
     std::string p_vibrate_topic_;
     std::string p_light_topic_;
     std::string p_arm_status_topic_;
+    std::string p_arm_angle_topic_;
 
     enum Mission_State
     {
@@ -149,6 +154,7 @@ private:
         get_param_ok = nh_local_.param<string>("vibrate_topic", p_vibrate_topic_, "/vibrate");
         get_param_ok = nh_local_.param<string>("light_topic", p_light_topic_, "/light");
         get_param_ok = nh_local_.param<string>("arm_status_topic", p_arm_status_topic_, "/arm_status");
+        get_param_ok = nh_local_.param<string>("arm_angle_topic", p_arm_angle_topic_, "/arm_angle");
 
         /* check param */
         if (get_param_ok){
@@ -172,6 +178,7 @@ private:
                 vibrate_pub_ = nh_.advertise<std_msgs::Bool>(p_vibrate_topic_, 10);
                 light_pub_ = nh_.advertise<std_msgs::Bool>(p_light_topic_, 10);
                 arm_status_sub_ = nh_.subscribe(p_arm_status_topic_, 10, &RemoteControl::armStatusCallback, this);
+                arm_angle_sub_ = nh_.subscribe(p_arm_angle_topic_, 10, &RemoteControl::armAngleCallback, this);
                 timer_.start();
             }
             else
@@ -183,6 +190,7 @@ private:
                 vibrate_pub_.shutdown();
                 light_pub_.shutdown();
                 arm_status_sub_.shutdown();
+                arm_angle_sub_.shutdown();
                 timer_.stop();
             }
         }
@@ -240,7 +248,13 @@ private:
         arm_status = *ptr;
         if(arm_status.data) running = false;
         else running = true;
-    }  
+    }
+
+    void armAngleCallback(const std_msgs::Float64::ConstPtr& ptr)
+    {
+        arm_angle = *ptr;
+        frame_angle = arm_angle.data;
+    }
 
     void timerCallback(const ros::TimerEvent& e)
     {
@@ -294,8 +308,8 @@ private:
         // (button up - button down)
         double dz = (input_joy_.buttons[13] - input_joy_.buttons[14]) * p_arm_MAX_Zspeed_ * dt;
 
-        output_point_.x += dx;
-        output_point_.y += dy;
+        output_point_.x += (dx * cos(frame_angle) - dy * sin(frame_angle));
+        output_point_.y += (dx * sin(frame_angle) + dy * cos(frame_angle));
         output_point_.z += dz;
 
         output_point_.x = SATURATION(output_point_.x, p_X_min_, p_X_max_);
