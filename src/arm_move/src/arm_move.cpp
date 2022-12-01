@@ -544,7 +544,7 @@ void ArmMove::stack_Storage_2()
                 break;
             case 6:
                 ROS_INFO_STREAM("[Arm Move]: Reached square_2");
-                publishArmGoal(square_2.x, square_2.y, square_2.z + block_stacked * p_stack_offset_ + p_put_offset_);
+                publishArmGoal(square_2.x, square_2.y, square_2.z + (block_stacked * p_stack_offset_) + p_put_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to square_2 -> Z + stack: " << block_stacked);
                 nextCase();
                 break;
@@ -594,7 +594,8 @@ void ArmMove::stack_Storage_1()
                     redo_count = 0;
                 }
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_1 -> Z + suck"); //got block
-                publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_drop_offset_);
+                // publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_drop_offset_);
+                publishArmGoal(storage_1.x, storage_1.y, square_2.z + (block_stacked * p_stack_offset_) + p_put_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to storage_1 -> Z + drop"); // lift up to leave container
                 nextCase();
                 break;
