@@ -1,8 +1,19 @@
 <launch>
-  <!-- rosserial for base -->
-  <node name = "base_serial_node" pkg = "rosserial_python" type = "serial_node.py" output="screen">
+  <!-- rosserial for base (python) -->
+  <!-- <node name = "base_serial_node" pkg = "rosserial_python" type = "serial_node.py" output="screen">
     <param name="port" value="/dev/USB3"/>
     <param name="baud" value="115200"/>
+  </node> -->
+
+  <!-- rosserial for base (c++) -->
+  <node name="serial_server" pkg="rosserial_server" type="serial_node" output="screen" respawn="true" respawn_delay="3">
+      <param name="port" value="/dev/USB3"/>
+      <param name="baud" value="115200"/>
+      <rosparam>
+        require:
+          publishers: [ base_speed ]
+          subscribers: [ cmd_vel ]
+    </rosparam>
   </node>
 
   <!-- odometry -->
