@@ -601,7 +601,8 @@ void ArmMove::stack_Storage_1()
                 break;
             case 5:
                 ROS_INFO_STREAM("[Arm Move]: Reached storage_1 -> Z + drop");
-                publishArmGoal(square_2.x, square_2.y, storage_1.z + p_drop_offset_);
+                // publishArmGoal(square_2.x, square_2.y, storage_1.z + p_drop_offset_);
+                publishArmGoal(square_2.x, square_2.y, square_2.z + (block_stacked * p_stack_offset_) + p_put_offset_);
                 ROS_INFO_STREAM("[Arm Move]: Go to square_2");
                 nextCase();
                 break;
