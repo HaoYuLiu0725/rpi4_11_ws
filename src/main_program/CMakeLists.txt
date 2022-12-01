@@ -194,10 +194,6 @@ endif()
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-catkin_install_python(PROGRAMS
-    src/DS5_Bluetooth_Connection/ds5_inputs.py
-    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
 # catkin_install_python(PROGRAMS
 #   scripts/my_python_script
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
