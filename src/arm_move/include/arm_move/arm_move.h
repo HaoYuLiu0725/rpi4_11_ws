@@ -92,6 +92,7 @@ private:
     geometry_msgs::Point L_point;
     geometry_msgs::Point storage_1;
     geometry_msgs::Point storage_2;
+    geometry_msgs::Point wait_2;
     geometry_msgs::Point square_2;
     geometry_msgs::Point touch_board;
 
@@ -122,6 +123,9 @@ private:
     double p_storage2_x;
     double p_storage2_y;
     double p_storage2_z;
+    double p_wait2_x;
+    double p_wait2_y;
+    double p_wait2_z;
     double p_square2_x;
     double p_square2_y;
     double p_square2_z;

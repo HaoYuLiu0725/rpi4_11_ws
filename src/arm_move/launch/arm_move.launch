@@ -26,9 +26,14 @@
         <param name="storage2_y" value="-199.0"/>
         <param name="storage2_z" value="74.0"/>
 
+        <!-- wait misson 2 -->
+        <param name="wait2_x" value="0.0"/>         <!-- [mm] -->
+        <param name="wait2_y" value="150.0"/>
+        <param name="wait2_z" value="-15.0"/>
+
         <!-- square2 -->
-        <param name="square2_x" value="0.0"/>       <!-- [mm] -->
-        <param name="square2_y" value="150.0"/>
+        <param name="square2_x" value="150.0"/>     <!-- [mm] -->
+        <param name="square2_y" value="300.0"/>
         <param name="square2_z" value="-15.0"/>
 
         <!-- touch_board -->

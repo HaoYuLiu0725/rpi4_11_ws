@@ -27,8 +27,11 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     get_param_ok = nh_local_.param<double>("storage2_x", p_storage2_x, 82.0);       // [mm]
     get_param_ok = nh_local_.param<double>("storage2_y", p_storage2_y, -199.0);     // [mm]
     get_param_ok = nh_local_.param<double>("storage2_z", p_storage2_z, 74.0);       // [mm]
+    get_param_ok = nh_local_.param<double>("wait2_x", p_wait2_x, 0.0);              // [mm]
+    get_param_ok = nh_local_.param<double>("wait2_y", p_wait2_y, 150.0);            // [mm]
+    get_param_ok = nh_local_.param<double>("wait2_z", p_wait2_z, -15.0);            // [mm]
     get_param_ok = nh_local_.param<double>("square2_x", p_square2_x, 0.0);          // [mm]
-    get_param_ok = nh_local_.param<double>("square2_y", p_square2_y, 200.0);        // [mm]
+    get_param_ok = nh_local_.param<double>("square2_y", p_square2_y, 150.0);        // [mm]
     get_param_ok = nh_local_.param<double>("square2_z", p_square2_z, -15.0);        // [mm]
     get_param_ok = nh_local_.param<double>("touch_board_x", p_touch_board_x, 500.0);// [mm]
     get_param_ok = nh_local_.param<double>("touch_board_y", p_touch_board_y, 0.0);  // [mm]
@@ -114,6 +117,9 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     storage_2.x = p_storage2_x;
     storage_2.y = p_storage2_y;
     storage_2.z = p_storage2_z;
+    wait_2.x = p_wait2_x;
+    wait_2.y = p_wait2_y;
+    wait_2.z = p_wait2_z;
     square_2.x = p_square2_x;
     square_2.y = p_square2_y;
     square_2.z = p_square2_z;
@@ -410,14 +416,14 @@ void ArmMove::goTo_Square_2()
                 nextCase();
                 break;
             case 2:
-                output_point.x = square_2.x;
-                output_point.y = square_2.y;
+                output_point.x = wait_2.x;
+                output_point.y = wait_2.y;
                 arm_goal_pub_.publish(output_point);
-                ROS_INFO_STREAM("[Arm Move]: Go to square_2 -> wait_mission_2");
+                ROS_INFO_STREAM("[Arm Move]: Go to wait_mission_2");
                 nextCase();
                 break;
             case 3:
-                ROS_INFO_STREAM("[Arm Move]: Reached square_2 -> wait_mission_2");
+                ROS_INFO_STREAM("[Arm Move]: Reached wait_mission_2");
                 ROS_INFO_STREAM("[Arm Move]: Mission 1 finished");
                 have_square2 = true;
                 check_TEL_Point();
