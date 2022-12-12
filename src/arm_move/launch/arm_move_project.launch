@@ -1,0 +1,65 @@
+<launch>
+    <!-- rosserial for SCARA -->
+    <node name = "arm_serial_node" pkg = "rosserial_python" type = "serial_node.py" output="screen">
+        <param name="port" value="/dev/USB1"/>
+        <param name="baud" value="115200"/>
+    </node>
+
+    <!-- arm_move -->
+    <node pkg="arm_move" type="arm_move_project_node" name="arm_move_project" output="screen">
+        <param name="active" value="true"/>
+        
+        <param name="frequency" value="10"/>
+
+        <!-- init_arm -->
+        <param name="init_arm_x" value="128.0"/>    <!-- [mm] -->
+        <param name="init_arm_y" value="20.0"/>
+        <param name="init_arm_z" value="10.0"/>
+
+        <!-- storage1 -->
+        <param name="storage1_x" value="84.0"/>     <!-- [mm] -->
+        <param name="storage1_y" value="-99.0"/>
+        <param name="storage1_z" value="74.0"/>
+
+        <!-- storage2 -->
+        <param name="storage2_x" value="84.0"/>     <!-- [mm] -->
+        <param name="storage2_y" value="-199.0"/>
+        <param name="storage2_z" value="74.0"/>
+
+        <!-- wait misson 2 -->
+        <param name="wait2_x" value="0.0"/>         <!-- [mm] -->
+        <param name="wait2_y" value="150.0"/>
+        <param name="wait2_z" value="-15.5"/>
+
+        <!-- square2 -->
+        <param name="square2_x" value="0.0"/>       <!-- [mm] -->
+        <param name="square2_y" value="150.0"/>
+        <param name="square2_z" value="-15.5"/>
+
+        <!-- touch_board -->
+        <param name="touch_board_x" value="200.0"/> <!-- [mm] -->
+        <param name="touch_board_y" value="1.0"/>
+        <param name="touch_board_z" value="10.0"/>
+
+        <!-- Offset -->
+        <param name="drop_offset" value="35.0"/>    <!-- [mm] -->
+        <param name="suck_offset" value="0.0"/>
+        <param name="put_offset" value="3.0"/>        
+        <param name="stack_offset" value="64.0"/>
+
+        <param name="vibrate_time" value="3"/>      <!-- [s] -->
+
+        <!-- with: main program -->
+        <param name="mission_goal_topic" value="/mission_target"/>      <!-- Sub [arm_move::mission] -->
+        <param name="mission_status_topic" value="/mission_status"/>    <!-- Pub [std_msgs::Bool] -->
+
+        <!-- with: rosserial for SCARA -->
+        <param name="arm_goal_topic" value="/arm_goal"/>        <!-- Pub [geometry_msgs::Point] -->
+        <param name="suck_topic" value="/suck"/>                <!-- Pub [std_msgs::Bool] -->
+        <param name="vibrate_topic" value="/vibrate"/>          <!-- Pub [std_msgs::Bool] -->
+        <param name="arm_status_topic" value="/arm_status"/>    <!-- Sub [std_msgs::Bool] -->
+        <param name="suck_status_topic" value="/suck_status"/>  <!-- Sub [std_msgs::Bool] -->
+
+    </node>
+
+</launch>
