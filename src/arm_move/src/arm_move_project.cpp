@@ -1,15 +1,15 @@
-#include <arm_move/arm_move.h>
+#include <arm_move/arm_move_project.h>
 
 using namespace std;
-using namespace arm_move;
+using namespace arm_move_project;
 
-ArmMove::ArmMove(ros::NodeHandle& nh, ros::NodeHandle& nh_local) : nh_(nh), nh_local_(nh_local)
+ArmMoveProject::ArmMoveProject(ros::NodeHandle& nh, ros::NodeHandle& nh_local) : nh_(nh), nh_local_(nh_local)
 {
-    timer_ = nh_.createTimer(ros::Duration(1.0), &ArmMove::timerCallback, this, false, false);
+    timer_ = nh_.createTimer(ros::Duration(1.0), &ArmMoveProject::timerCallback, this, false, false);
     initialize();
 }
 
-bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
+bool ArmMoveProject::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
     bool get_param_ok = true;
     bool prev_active = p_active_;
@@ -71,13 +71,13 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     {
         if (p_active_)
         {
-            mission_target_sub_ = nh_.subscribe(p_mission_target_topic_, 10, &ArmMove::missionTargetCallback, this);
+            mission_target_sub_ = nh_.subscribe(p_mission_target_topic_, 10, &ArmMoveProject::missionTargetCallback, this);
             mission_status_pub_ = nh_.advertise<std_msgs::Bool>(p_mission_status_topic_, 10);
             arm_goal_pub_ = nh_.advertise<geometry_msgs::Point>(p_arm_goal_topic_, 10);
             suck_pub_ = nh_.advertise<std_msgs::Bool>(p_suck_topic_, 10);
             vibrate_pub_ = nh_.advertise<std_msgs::Bool>(p_vibrate_topic_, 10);
-            arm_status_sub_ = nh_.subscribe(p_arm_status_topic_, 10, &ArmMove::armStatusCallback, this);
-            suck_status_sub_ = nh_.subscribe(p_suck_status_topic_, 10, &ArmMove::suckStatusCallback, this);
+            arm_status_sub_ = nh_.subscribe(p_arm_status_topic_, 10, &ArmMoveProject::armStatusCallback, this);
+            suck_status_sub_ = nh_.subscribe(p_suck_status_topic_, 10, &ArmMoveProject::suckStatusCallback, this);
             timer_.start();
         }
         else
@@ -145,7 +145,7 @@ bool ArmMove::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
     return true;
 }
 
-void ArmMove::missionTargetCallback(const arm_move::mission::ConstPtr& ptr)
+void ArmMoveProject::missionTargetCallback(const arm_move::mission::ConstPtr& ptr)
 {
     input_mission = *ptr;
     if(input_mission.type == 1){
@@ -188,20 +188,20 @@ void ArmMove::missionTargetCallback(const arm_move::mission::ConstPtr& ptr)
     pub_once = true;
 }
 
-void ArmMove::armStatusCallback(const std_msgs::Bool::ConstPtr& ptr)  
+void ArmMoveProject::armStatusCallback(const std_msgs::Bool::ConstPtr& ptr)  
 {
     arm_status = *ptr;
     if(arm_status.data) running = false;
     else running = true;
 }  
 
-void ArmMove::suckStatusCallback(const std_msgs::Bool::ConstPtr& ptr)  
+void ArmMoveProject::suckStatusCallback(const std_msgs::Bool::ConstPtr& ptr)  
 {
     suck_status = *ptr;
     ROS_INFO_STREAM("[Arm Move]: suck status : " << suck_status);
 }
 
-void ArmMove::timerCallback(const ros::TimerEvent& e)
+void ArmMoveProject::timerCallback(const ros::TimerEvent& e)
 {
     if (mission_state == no_mission && pub_once){
         publishMissionStatus(true); // mission done or no mission
@@ -214,7 +214,7 @@ void ArmMove::timerCallback(const ros::TimerEvent& e)
 }
 
 /*----- Mission 1-----------------------------------------------------------------------------------*/
-void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  */
+void ArmMoveProject::mission1() /* In level 1, pick up T, E, L block in first square  */
 {
     if(goto_state == Goto_T_point) goTo_T_Point();
     else if(goto_state == Goto_E_point) goTo_E_Point();
@@ -225,7 +225,7 @@ void ArmMove::mission1() /* In level 1, pick up T, E, L block in first square  *
     else mission_state = no_mission;
 }
 
-void ArmMove::goTo_T_Point()
+void ArmMoveProject::goTo_T_Point()
 {
     if(!running && point_num != 0){
         switch(point_num){
@@ -267,7 +267,7 @@ void ArmMove::goTo_T_Point()
     }
 }
 
-void ArmMove::goTo_E_Point()
+void ArmMoveProject::goTo_E_Point()
 {
     if(!running && point_num != 0){
         switch(point_num){
@@ -309,7 +309,7 @@ void ArmMove::goTo_E_Point()
     }
 }
 
-void ArmMove::goTo_L_Point()
+void ArmMoveProject::goTo_L_Point()
 {
     if(!running && point_num != 0){
         switch(point_num){
@@ -351,7 +351,7 @@ void ArmMove::goTo_L_Point()
     }
 }
 
-void ArmMove::goTo_Storage_1()
+void ArmMoveProject::goTo_Storage_1()
 {
     if(!running && point_num != 0){
         switch(point_num){
@@ -378,7 +378,7 @@ void ArmMove::goTo_Storage_1()
     }
 }
 
-void ArmMove::goTo_Storage_2()
+void ArmMoveProject::goTo_Storage_2()
 {
     if(!running && point_num != 0){
         switch(point_num){
@@ -405,7 +405,7 @@ void ArmMove::goTo_Storage_2()
     }
 }
 
-void ArmMove::goTo_Square_2()
+void ArmMoveProject::goTo_Square_2()
 {
     if(!running && point_num != 0){
         switch(point_num){
@@ -433,7 +433,7 @@ void ArmMove::goTo_Square_2()
     }
 }
 
-void ArmMove::check_TEL_Point() /* change state */
+void ArmMoveProject::check_TEL_Point() /* change state */
 {
     if(get_T) {goto_state = Goto_T_point; point_num = 1;}
     else if(get_E) {goto_state = Goto_E_point; point_num = 1;}
@@ -442,7 +442,7 @@ void ArmMove::check_TEL_Point() /* change state */
     else{mission_state = no_mission; publishVibrate(false);} // vibration OFF
 }
 
-void ArmMove::check_Storage() /* change state */ 
+void ArmMoveProject::check_Storage() /* change state */ 
 {
     if(have_on_hand){
         if(!have_storage1) {goto_state = Goto_storage_1; point_num = 1;}
@@ -460,7 +460,7 @@ void ArmMove::check_Storage() /* change state */
 }
 
 /*----- Mission 2-----------------------------------------------------------------------------------*/
-void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
+void ArmMoveProject::mission2() /* In level 2, put T, E, L block in second square  */
 {
     if(goto_state == Goto_square_2) stack_Square_2();
     else if(goto_state == Goto_storage_2) stack_Storage_2();
@@ -469,7 +469,7 @@ void ArmMove::mission2() /* In level 2, put T, E, L block in second square  */
     else mission_state = no_mission;
 }
 
-void ArmMove::stack_Square_2()
+void ArmMoveProject::stack_Square_2()
 {
     if(!running && point_num != 0){
         switch(point_num){
@@ -498,7 +498,7 @@ void ArmMove::stack_Square_2()
     }
 }
 
-void ArmMove::stack_Storage_2()
+void ArmMoveProject::stack_Storage_2()
 {
     if(!running && point_num != 0){
         switch(point_num){
@@ -560,7 +560,7 @@ void ArmMove::stack_Storage_2()
     }   
 }
 
-void ArmMove::stack_Storage_1()
+void ArmMoveProject::stack_Storage_1()
 {
     if(!running && point_num != 0){
         switch(point_num){
@@ -622,7 +622,7 @@ void ArmMove::stack_Storage_1()
         }
     } 
 }
-void ArmMove::backToInitArm()
+void ArmMoveProject::backToInitArm()
 {
     if(!running && point_num != 0){
         switch(point_num){
@@ -656,7 +656,7 @@ void ArmMove::backToInitArm()
     }
 }
 
-void ArmMove::check_Stack() /* change state */ 
+void ArmMoveProject::check_Stack() /* change state */ 
 {
     if(have_square2) {goto_state = Goto_square_2; point_num = 1;}
     else if(have_storage2) {goto_state = Goto_storage_2; point_num = 1;}
@@ -665,13 +665,13 @@ void ArmMove::check_Stack() /* change state */
 }
 
 /*----- Mission 3-----------------------------------------------------------------------------------*/
-void ArmMove::mission3()
+void ArmMoveProject::mission3()
 {
     arm_goal_pub_.publish(touch_board);
     mission_state = no_mission;
 }
 /*--------------------------------------------------------------------------------------------------*/
-void ArmMove::publishArmGoal(double x, double y, double z)
+void ArmMoveProject::publishArmGoal(double x, double y, double z)
 {
     output_point.x = x;
     output_point.y = y;
@@ -679,25 +679,25 @@ void ArmMove::publishArmGoal(double x, double y, double z)
     arm_goal_pub_.publish(output_point);
 }
 
-void ArmMove::publishSuck(bool state)
+void ArmMoveProject::publishSuck(bool state)
 {
     suck.data = state;
     suck_pub_.publish(suck);
 }
 
-void ArmMove::publishVibrate(bool state)
+void ArmMoveProject::publishVibrate(bool state)
 {
     vibrate.data = state;
     vibrate_pub_.publish(vibrate);
 }
 
-void ArmMove::publishMissionStatus(bool state)
+void ArmMoveProject::publishMissionStatus(bool state)
 {
     mission_status.data = state;
     mission_status_pub_.publish(mission_status);
 }
 
-void ArmMove::lastCase(double offset) 
+void ArmMoveProject::lastCase(double offset) 
 {
     ROS_INFO_STREAM("[Arm Move]: Suction Failed !");
     point_num -= 1;
@@ -707,14 +707,14 @@ void ArmMove::lastCase(double offset)
     ros::Duration(0.5).sleep();
 }
 
-void ArmMove::nextCase()
+void ArmMoveProject::nextCase()
 {
     point_num += 1;
     running = true;
     ros::Duration(0.5).sleep();
 }
 
-void ArmMove::finalCase()
+void ArmMoveProject::finalCase()
 {
     point_num = 0;
     running = false;
