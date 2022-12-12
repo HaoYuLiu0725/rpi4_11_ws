@@ -162,12 +162,16 @@ void ArmMoveProject::missionTargetCallback(const arm_move::mission::ConstPtr& pt
     }
     else if(input_mission.type == 2){
         mission_state = mission_2;
+        nead_stack_storage1 = (input_mission.T.x == 1)? true : false;
+        nead_stack_storage2 = (input_mission.E.x == 1)? true : false;
+        nead_stack_wait = (input_mission.L.x == 1)? true : false;
         point_num = 1;
         ROS_INFO_STREAM("[Arm Move Project]: Mission 2 received");
-        if(have_wait) {goto_state = Goto_put_point; ROS_INFO_STREAM("[Arm Move Project]: Mission 2 started -> put_point");}
-        else if(have_storage2) {goto_state = Goto_storage_2; ROS_INFO_STREAM("[Arm Move Project]: Mission 2 started -> storage_2");}
-        else if(have_storage1) {goto_state = Goto_storage_1; ROS_INFO_STREAM("[Arm Move Project]: Mission 2 started -> storage_1");}
+        if(have_wait && nead_stack_wait) {goto_state = Goto_put_point; ROS_INFO_STREAM("[Arm Move Project]: Mission 2 started -> put_point");}
+        else if(have_storage2 && nead_stack_storage2) {goto_state = Goto_storage_2; ROS_INFO_STREAM("[Arm Move Project]: Mission 2 started -> storage_2");}
+        else if(have_storage1 && nead_stack_storage1) {goto_state = Goto_storage_1; ROS_INFO_STREAM("[Arm Move Project]: Mission 2 started -> storage_1");}
         else goto_state = Backto_init_arm;
+        block_stacked = 0;
     }
     else{
         mission_state = no_mission;
@@ -201,7 +205,7 @@ void ArmMoveProject::timerCallback(const ros::TimerEvent& e)
 }
 
 /*----- Mission 1-----------------------------------------------------------------------------------*/
-void ArmMoveProject::mission1() /* In level 1, pick up T, E, L block in first square  */
+void ArmMoveProject::mission1() /* pick up P, M, E block */
 {
     if(goto_state == Goto_block_1) goTo_Block_1();
     else if(goto_state == Goto_block_2) goTo_Block_2();
@@ -429,7 +433,7 @@ void ArmMoveProject::check_Storage() /* change state */
 }
 
 /*----- Mission 2-----------------------------------------------------------------------------------*/
-void ArmMoveProject::mission2() /* In level 2, put T, E, L block in second square  */
+void ArmMoveProject::mission2() /* put P, M, E block in each P & M & E & stack squares  */
 {
     if(goto_state == Goto_put_point) stack_Put();
     else if(goto_state == Goto_storage_2) stack_Storage_2();
@@ -608,9 +612,9 @@ void ArmMoveProject::backToInitArm()
 
 void ArmMoveProject::check_Stack() /* change state */ 
 {
-    if(have_wait) {goto_state = Goto_put_point; point_num = 1;}
-    else if(have_storage2) {goto_state = Goto_storage_2; point_num = 1;}
-    else if(have_storage1) {goto_state = Goto_storage_1; point_num = 1;}
+    if(have_wait && nead_stack_wait) {goto_state = Goto_put_point; point_num = 1;}
+    else if(have_storage2 && nead_stack_storage2) {goto_state = Goto_storage_2; point_num = 1;}
+    else if(have_storage1 && nead_stack_storage1) {goto_state = Goto_storage_1; point_num = 1;}
     else {goto_state = Backto_init_arm; point_num = 1;}
 }
 

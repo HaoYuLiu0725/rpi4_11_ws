@@ -102,6 +102,9 @@ private:
     bool have_storage2;
     bool have_wait;
     bool have_on_hand;
+    bool nead_stack_storage1;
+    bool nead_stack_storage2;
+    bool nead_stack_wait;
     int block_stacked;
 
     /* ros param */
