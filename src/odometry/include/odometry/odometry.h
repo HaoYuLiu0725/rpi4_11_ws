@@ -49,6 +49,7 @@ private:
   ros::Publisher pose_pub_;
   ros::Publisher odom_pub_;
   tf2_ros::TransformBroadcaster tf2_broadcaster_;
+  ros::ServiceServer param_srv_;
 
   geometry_msgs::Twist input_twist_;
   geometry_msgs::Twist twist_;
