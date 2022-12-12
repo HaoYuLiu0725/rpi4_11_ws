@@ -15,7 +15,7 @@
     <!-- <include file="$(find fake_odom)/launch/fake_odom.launch"/> -->
 
     <!-- my_navigation -->
-    <include file="$(find base_move)/launch/my_navigation.launch"/>
+    <include file="$(find base_move)/launch/my_navigation_project.launch"/>
 
     <!-- tf2_transformListener -->
     <node name="base_link_to_map_transformListener" pkg="base_move" type="tf2_transformListener" output="screen"/>
