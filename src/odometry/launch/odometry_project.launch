@@ -1,0 +1,44 @@
+<launch>
+  <!-- rosserial for base (python) -->
+  <!-- <node name = "base_serial_node" pkg = "rosserial_python" type = "serial_node.py" output="screen">
+    <param name="port" value="/dev/USB3"/>
+    <param name="baud" value="115200"/>
+  </node> -->
+
+  <!-- rosserial for base (c++) -->
+  <node name="serial_server" pkg="rosserial_server" type="serial_node" output="screen" respawn="true" respawn_delay="3">
+    <param name="port" value="/dev/USB3"/>
+    <param name="baud" value="115200"/>
+    <rosparam>
+      require:
+        publishers: [ base_speed ]
+        subscribers: [ cmd_vel ]
+    </rosparam>
+  </node>
+
+  <!-- odometry -->
+  <node name="odometry" pkg="odometry" type="odometry_node" output="screen">
+    <param name="active" value="true"/>
+    <param name="publish_pose" value="false"/>
+    <param name="publish_odom" value="true"/>
+    <param name="publish_tf" value="true"/>
+
+    <param name="frequency" value="100"/>
+    <param name="init_pose_x" value="0"/>
+    <param name="init_pose_y" value="0"/>
+    <param name="init_pose_yaw" value="$(eval 0 * 3.1415 / 180.0)"/>
+    <param name="cov_vx" value="0.00005"/>
+    <param name="cov_vy" value="0.00005"/>
+    <param name="cov_vyaw" value="0.00005"/>
+  
+    <param name="twist_topic" value="/base_speed"/>    <!-- Sub [geometry_msgs::Twist] -->
+    <param name="odom_topic" value="/odom"/>           <!-- Pub [nav_msgs::Odometry] -->
+    <param name="pose_topic" value="/odom_pose"/>      <!-- Pub [geometry_msgs::PoseWithCovarianceStamped] -->
+    <param name="fixed_frame_id" value="odom"/>
+    <param name="target_frame_id" value="base_link"/>
+  </node>
+
+  <!-- TF:map to odom -->
+  <node name="map_to_odom" pkg="tf2_ros" type="static_transform_publisher" args="2.275 0.165 0 0 0 0.707 0.707 map odom" output="screen"/>
+
+</launch>
