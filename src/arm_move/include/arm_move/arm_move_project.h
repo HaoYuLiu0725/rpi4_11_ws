@@ -12,12 +12,12 @@
 #include <std_msgs/Bool.h>
 #include <arm_move/mission.h>
 
-namespace arm_move
+namespace arm_move_project
 {
-class ArmMove
+class ArmMoveProject
 {
 public:
-    ArmMove(ros::NodeHandle& nh, ros::NodeHandle& nh_local);
+    ArmMoveProject(ros::NodeHandle& nh, ros::NodeHandle& nh_local);
 
 private:
     void initialize()
