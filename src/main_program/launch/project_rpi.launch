@@ -6,7 +6,7 @@
     <node name="start_caller" pkg="main_program" type="start_caller" output="screen"/>
     
     <!-- arm_move -->
-    <include file="$(find arm_move)/launch/arm_move.launch"/>
+    <include file="$(find arm_move)/launch/arm_move_project.launch"/>
 
     <!-- odometry -->
     <include file="$(find odometry)/launch/odometry_project.launch"/>
