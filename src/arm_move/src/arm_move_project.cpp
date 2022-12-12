@@ -6,6 +6,7 @@ using namespace arm_move_project;
 ArmMoveProject::ArmMoveProject(ros::NodeHandle& nh, ros::NodeHandle& nh_local) : nh_(nh), nh_local_(nh_local)
 {
     timer_ = nh_.createTimer(ros::Duration(1.0), &ArmMoveProject::timerCallback, this, false, false);
+    params_srv_ = nh_.advertiseService("arm_move_reset", &ArmMoveProject::updateParams, this);
     initialize();
 }
 
