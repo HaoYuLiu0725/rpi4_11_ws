@@ -30,6 +30,7 @@ using namespace fake_odom;
 FakeOdom::FakeOdom(ros::NodeHandle& nh, ros::NodeHandle& nh_local) : nh_(nh), nh_local_(nh_local)
 {
   timer_ = nh_.createTimer(ros::Duration(1.0), &FakeOdom::timerCallback, this, false, false);
+  params_srv_ = nh_.advertiseService("fake_odom_reset", &FakeOdom::updateParams, this);
   initialize();
 }
 
