@@ -33,29 +33,26 @@ private:
     void timerCallback(const ros::TimerEvent& e);
 
     void mission1();
-    void goTo_T_Point();
-    void goTo_E_Point();
-    void goTo_L_Point();
+    void goTo_Block_1();
+    void goTo_Block_2();
+    void goTo_Block_3();
     void goTo_Storage_1();
     void goTo_Storage_2();
-    void goTo_Square_2();
-    void check_TEL_Point();
+    void goTo_Wait();
+    void check_Block();
     void check_Storage();
 
     void mission2();
-    void stack_Square_2();
+    void stack_Put();
     void stack_Storage_2();
     void stack_Storage_1();
     void check_Stack();
     void backToInitArm();
-
-    void mission3();
     
     void publishArmGoal(double x, double y, double z);
     void publishSuck(bool state);
     void publishVibrate(bool state);
     void publishMissionStatus(bool state);
-    void lastCase(double offset);
     void nextCase();
     void finalCase();
 
@@ -87,26 +84,23 @@ private:
     ros::Duration timeout_;
 
     geometry_msgs::Point init_arm;
-    geometry_msgs::Point T_point;
-    geometry_msgs::Point E_point;
-    geometry_msgs::Point L_point;
+    geometry_msgs::Point block_1;
+    geometry_msgs::Point block_2;
+    geometry_msgs::Point block_3;
     geometry_msgs::Point storage_1;
     geometry_msgs::Point storage_2;
-    geometry_msgs::Point wait_2;
-    geometry_msgs::Point square_2;
-    geometry_msgs::Point touch_board;
+    geometry_msgs::Point wait_point;
+    geometry_msgs::Point put_point;
 
     bool running; // true: arm is moving
     bool pub_once; // for mission_status_pub_ to pub only once
     int  point_num; // for switch case in each mission
-    double more_suck_offset; // for suction failed on getting block, add more offset
-    int  redo_count;
-    bool get_T;
-    bool get_E;
-    bool get_L;
+    bool get_block_1;
+    bool get_block_2;
+    bool get_block_3;
     bool have_storage1;
     bool have_storage2;
-    bool have_square2;
+    bool have_wait;
     bool have_on_hand;
     int block_stacked;
 
@@ -123,15 +117,12 @@ private:
     double p_storage2_x;
     double p_storage2_y;
     double p_storage2_z;
-    double p_wait2_x;
-    double p_wait2_y;
-    double p_wait2_z;
-    double p_square2_x;
-    double p_square2_y;
-    double p_square2_z;
-    double p_touch_board_x;
-    double p_touch_board_y;
-    double p_touch_board_z;
+    double p_wait_x;
+    double p_wait_y;
+    double p_wait_z;
+    double p_put_x;
+    double p_put_y;
+    double p_put_z;
     double p_drop_offset_;
     double p_suck_offset_;
     double p_put_offset_;
@@ -146,24 +137,23 @@ private:
     std::string p_arm_status_topic_;
     std::string p_suck_status_topic_;
 
-
     /* state */
     enum Mission_State
     {
         no_mission,
         mission_1,
-        mission_2,
-        mission_3
+        mission_2
     }mission_state;
 
     enum Goto_State
     {
-        Goto_T_point,
-        Goto_E_point,
-        Goto_L_point,
+        Goto_block_1,
+        Goto_block_2,
+        Goto_block_3,
         Goto_storage_1,
         Goto_storage_2,
-        Goto_square_2,
+        Goto_wait_point,
+        Goto_put_point,
         Backto_init_arm
     }goto_state;
 };
