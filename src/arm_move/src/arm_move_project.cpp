@@ -162,9 +162,9 @@ void ArmMoveProject::missionTargetCallback(const arm_move::mission::ConstPtr& pt
     }
     else if(input_mission.type == 2){
         mission_state = mission_2;
-        nead_stack_storage1 = (input_mission.T.x == 1)? true : false;
-        nead_stack_storage2 = (input_mission.E.x == 1)? true : false;
-        nead_stack_wait = (input_mission.L.x == 1)? true : false;
+        nead_stack_storage1 = (input_mission.T.x == 0)? false : true;
+        nead_stack_storage2 = (input_mission.E.x == 0)? false : true;
+        nead_stack_wait = (input_mission.L.x == 0)? false : true;
         point_num = 1;
         ROS_INFO_STREAM("[Arm Move Project]: Mission 2 received");
         if(have_wait && nead_stack_wait) {goto_state = Goto_put_point; ROS_INFO_STREAM("[Arm Move Project]: Mission 2 started -> put_point");}
