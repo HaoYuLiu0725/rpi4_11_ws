@@ -132,6 +132,9 @@ bool ArmMoveProject::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty
     have_storage1 = false;
     have_storage2 = false;
     have_wait = false;
+    nead_stack_storage1 = false;
+    nead_stack_storage2 = false;
+    nead_stack_wait = false;
     have_on_hand = false;
     block_stacked = 0;
 
