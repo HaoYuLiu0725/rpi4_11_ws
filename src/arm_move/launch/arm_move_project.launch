@@ -26,20 +26,15 @@
         <param name="storage2_y" value="-199.0"/>
         <param name="storage2_z" value="74.0"/>
 
-        <!-- wait misson 2 -->
-        <param name="wait2_x" value="0.0"/>         <!-- [mm] -->
-        <param name="wait2_y" value="150.0"/>
-        <param name="wait2_z" value="-15.5"/>
+        <!-- wait -->
+        <param name="wait_x" value="0.0"/>          <!-- [mm] -->
+        <param name="wait_y" value="150.0"/>
+        <param name="wait_z" value="55.0"/>
 
-        <!-- square2 -->
-        <param name="square2_x" value="0.0"/>       <!-- [mm] -->
-        <param name="square2_y" value="150.0"/>
-        <param name="square2_z" value="-15.5"/>
-
-        <!-- touch_board -->
-        <param name="touch_board_x" value="200.0"/> <!-- [mm] -->
-        <param name="touch_board_y" value="1.0"/>
-        <param name="touch_board_z" value="10.0"/>
+        <!-- put -->
+        <param name="put_x" value="0.0"/>           <!-- [mm] -->
+        <param name="put_y" value="150.0"/>
+        <param name="put_z" value="-15.5"/>
 
         <!-- Offset -->
         <param name="drop_offset" value="35.0"/>    <!-- [mm] -->
