@@ -28,9 +28,9 @@ def main():
 		# 	rospy.logwarn("Service call failed: %s" %e)
 		# rate.sleep()
 	while True:
-		script = port.read_until().decode()
+		script = int(port.read_until().decode())
 		print(script)
-		print(type(script))
+		# print(type(script))
 
 if __name__ == "__main__":
 	try:
