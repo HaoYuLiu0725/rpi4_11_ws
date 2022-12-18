@@ -16,6 +16,7 @@ def CallBackFunction(msg):
 	global running
 	if(msg.data):
 		running = False
+		port.write(bytes(str(69),'utf-8'))
 
 def main():
 	port.reset_input_buffer()
