@@ -6,14 +6,21 @@ import serial
 import copy
 from urllib import response
 from main_program.srv import *
+from std_msgs.msg import Bool
+
 
 port = serial.Serial("/dev/rfcomm0", baudrate=9600)
+running = False
+
+def CallBackFunction(msg):
+	rospy.loginfo(f"script_finish: {msg.data}")
+	if(msg.data):
+		running = False
 
 def main():
 	port.reset_input_buffer()
 	print(f"Port: '{port._port}' open complete")
 	rospy.init_node("py_bt_start_controll")
-	running = False
 	inVar = 0
 	last_inVar = 0
 	script = 0
@@ -21,6 +28,7 @@ def main():
 	req.startTrigger = False
 	req.startStatus = script
 
+	rospy.Subscriber("/script_finish", Bool, CallBackFunction)
 	print("Waiting for service...")
 	rospy.wait_for_service("/startRunning")
 	print("service is good!")
