@@ -10,7 +10,7 @@ from main_program.srv import *
 port = serial.Serial("/dev/rfcomm0", baudrate=9600)
 
 def main():
-	port.reset_inVar_buffer()
+	port.reset_input_buffer()
 	rospy.init_node("py_bt_start_controll")
 	running = False
 	inVar = 0
