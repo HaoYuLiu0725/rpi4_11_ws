@@ -104,7 +104,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
  INCLUDE_DIRS include
- LIBRARIES arm_move
+ LIBRARIES arm_move arm_move_project
  CATKIN_DEPENDS geometry_msgs roscpp std_msgs message_runtime
 #  DEPENDS system_lib
 )
@@ -154,6 +154,11 @@ add_library(arm_move src/arm_move.cpp)
 add_executable(arm_move_node  src/nodes/arm_move_node.cpp)
 target_link_libraries(arm_move    ${catkin_LIBRARIES})
 target_link_libraries(arm_move_node arm_move)
+
+add_library(arm_move_project src/arm_move_project.cpp)
+add_executable(arm_move_project_node  src/nodes/arm_move_project_node.cpp)
+target_link_libraries(arm_move_project    ${catkin_LIBRARIES})
+target_link_libraries(arm_move_project_node arm_move_project)
 
 #############
 ## Install ##
