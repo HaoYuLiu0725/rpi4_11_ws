@@ -17,7 +17,9 @@ def main():
 	inVar = 0
 	last_inVar = 0
 	script = 0
-	req = starting(script, False)
+	req = starting
+	req._request_class.startTrigger = False
+	req._request_class.startStatus = script
 
 	print("Waiting for service...")
 	rospy.wait_for_service("/startRunning")
