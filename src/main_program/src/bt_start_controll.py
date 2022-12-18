@@ -40,7 +40,6 @@ def main():
 				
 				try:
 					client = rospy.ServiceProxy("/startRunning", starting)
-					response = client(req)
 					# rospy.loginfo("Message from server: %s" %response.feedback)
 				except rospy.ServiceException as e:
 					rospy.logwarn("Service call failed: %s" %e)
