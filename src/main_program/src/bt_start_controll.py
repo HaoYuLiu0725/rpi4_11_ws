@@ -11,6 +11,7 @@ port = serial.Serial("/dev/rfcomm0", baudrate=9600)
 
 def main():
 	port.reset_input_buffer()
+	print(f"Port: '{port._port}' open complete")
 	rospy.init_node("py_bt_start_controll")
 	running = False
 	inVar = 0
@@ -20,7 +21,9 @@ def main():
 	req._request_class.startStatus = script
 	req._request_class.startTrigger = False
 
+	print("Waiting for service...")
 	rospy.wait_for_service("/startRunning")
+	print("service is good!")
 
 	rate = rospy.Rate(10)
 	while not rospy.is_shutdown():
