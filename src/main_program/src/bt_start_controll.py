@@ -8,12 +8,12 @@ from urllib import response
 from main_program.srv import *
 from std_msgs.msg import Bool
 
-
 port = serial.Serial("/dev/rfcomm0", baudrate=9600)
 running = False
 
 def CallBackFunction(msg):
 	rospy.loginfo(f"script_finish: {msg.data}")
+	global running
 	if(msg.data):
 		running = False
 
@@ -24,6 +24,7 @@ def main():
 	inVar = 0
 	last_inVar = 0
 	script = 0
+	global running
 	req = startingRequest()
 	req.startTrigger = False
 	req.startStatus = script
@@ -67,5 +68,3 @@ if __name__ == "__main__":
 	except rospy.ROSInterruptException:
 		pass
 		port.close()
-
-
