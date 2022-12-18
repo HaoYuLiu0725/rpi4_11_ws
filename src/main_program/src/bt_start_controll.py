@@ -28,7 +28,7 @@ def main():
 	rate = rospy.Rate(10)
 	while not rospy.is_shutdown():
 		if(not running):
-			print(f"Waiting... || script = {script} || Trigger = {req._request_class.startTrigger}")
+			print(f"Waiting... || Status = {req.startStatus} || Trigger = {req.startTrigger}")
 			last_inVar = inVar
 			inVar = int(port.read_until().decode())
 			print(inVar)
@@ -39,7 +39,7 @@ def main():
 					script = inVar
 					req.startStatus = script
 
-				print(f"Changed ! || script = {script} || Trigger = {req._request_class.startTrigger}")
+				print(f"Changed ! || Status = {req.startStatus} || Trigger = {req.startTrigger}")
 				
 				try:
 					client = rospy.ServiceProxy("/startRunning", starting)
