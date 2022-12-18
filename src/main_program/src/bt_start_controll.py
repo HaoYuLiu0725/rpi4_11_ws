@@ -16,10 +16,8 @@ def main():
 	running = False
 	inVar = 0
 	last_inVar = 0
-	req = starting
 	script = 0
-	req._request_class.startStatus = script
-	req._request_class.startTrigger = False
+	req = starting(script, False)
 
 	print("Waiting for service...")
 	rospy.wait_for_service("/startRunning")
@@ -43,7 +41,7 @@ def main():
 				
 				try:
 					client = rospy.ServiceProxy("/startRunning", starting)
-					client(req)
+					resp = client(req)
 					# rospy.loginfo("Message from server: %s" %response.feedback)
 				except rospy.ServiceException as e:
 					rospy.logwarn("Service call failed: %s" %e)
