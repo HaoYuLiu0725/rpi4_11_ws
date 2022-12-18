@@ -17,9 +17,9 @@ def main():
 	inVar = 0
 	last_inVar = 0
 	script = 0
-	req = starting
-	req._request_class.startTrigger = False
-	req._request_class.startStatus = script
+	req = startingRequest()
+	req.startTrigger = False
+	req.startStatus = script
 
 	print("Waiting for service...")
 	rospy.wait_for_service("/startRunning")
@@ -34,10 +34,10 @@ def main():
 			print(inVar)
 			if(inVar != last_inVar):
 				if(inVar == 99):
-					req._request_class.startTrigger = True
+					req.startTrigger = True
 				else:
 					script = inVar
-					req._request_class.startStatus = script
+					req.startStatus = script
 
 				print(f"Changed ! || script = {script} || Trigger = {req._request_class.startTrigger}")
 				
