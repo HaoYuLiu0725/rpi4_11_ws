@@ -20,4 +20,7 @@
     <!-- tf2_transformListener -->
     <node name="base_link_to_map_transformListener" pkg="base_move" type="tf2_transformListener" output="screen"/>
 
+    <!-- rviz_display -->
+    <include file="$(find rviz_display)/launch/project_rviz.launch"/>
+
 </launch>
