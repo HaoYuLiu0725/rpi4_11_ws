@@ -56,15 +56,15 @@ Visualization Manager:
       Enabled: true
       Frame Timeout: 15
       Frames:
-        All Enabled: true
+        All Enabled: false
         map:
           Value: true
         quad:
-          Value: true
+          Value: false
       Marker Alpha: 1
       Marker Scale: 1
       Name: TF
-      Show Arrows: true
+      Show Arrows: false
       Show Axes: true
       Show Names: true
       Tree:
@@ -215,10 +215,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 356.739990234375
+      Scale: 355.4871826171875
       Target Frame: <Fixed Frame>
-      X: 1.0111583471298218
-      Y: 0.9937770366668701
+      X: 1.0075433254241943
+      Y: 0.9942225217819214
     Saved: ~
 Window Geometry:
   Displays:
