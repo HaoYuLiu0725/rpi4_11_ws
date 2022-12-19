@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     sensor_msgs::Image ros_image;
     cv_image.toImageMsg(ros_image);
 
-    ros::Publisher pub = nh.advertise<sensor_msgs::Image>("Map_Image", 10);
+    ros::Publisher pub = nh.advertise<sensor_msgs::Image>("map_image", 10);
     ros::Rate loop_rate(5);
 
     while (nh.ok())
