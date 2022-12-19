@@ -4,6 +4,6 @@
 
     <node name="publish_image" pkg="rviz_display" type="publish_image" output="screen"/>
 
-    <node pkg="tf" type="static_transform_publisher" name="quad_broadcaster" args="1 1 0 0 0 3.1415 map quad 30"/>
+    <node pkg="tf" type="static_transform_publisher" name="quad_broadcaster" args="1 1 -0.05 0 0 3.1415 map quad 30"/>
 
 </launch>
