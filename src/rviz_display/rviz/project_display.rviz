@@ -20,8 +20,9 @@ Panels:
   - Class: rviz/Views
     Expanded:
       - /Current View1
+      - /ProjectView1
     Name: Views
-    Splitter Ratio: 0.5
+    Splitter Ratio: 0.5613383054733276
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
@@ -214,11 +215,25 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 355.4871826171875
+      Scale: 340
       Target Frame: <Fixed Frame>
-      X: 1.0075433254241943
-      Y: 0.9942225217819214
-    Saved: ~
+      X: 1
+      Y: 0.949999988079071
+    Saved:
+      - Angle: 0
+        Class: rviz/TopDownOrtho
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.05999999865889549
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Invert Z Axis: false
+        Name: ProjectView
+        Near Clip Distance: 0.009999999776482582
+        Scale: 340
+        Target Frame: <Fixed Frame>
+        X: 1
+        Y: 0.949999988079071
 Window Geometry:
   Displays:
     collapsed: false
