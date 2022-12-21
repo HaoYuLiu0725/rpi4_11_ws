@@ -178,7 +178,7 @@ void ArmMoveProject::missionTargetCallback(const arm_move::mission::ConstPtr& pt
     }
     else{
         mission_state = no_mission;
-        ROS_INFO_STREAM("[Arm Move Project]: ERROR Mission type !");
+        ROS_INFO_STREAM("[Arm Move Project]: " << input_mission.type << " is ERROR Mission type !");
     }
     pub_once = true;
 }
