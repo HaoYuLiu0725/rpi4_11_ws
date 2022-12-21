@@ -240,7 +240,15 @@ void ArmMoveProject::goTo_Block_1()
                 nextCase();
                 break;
             case 3:
+                /* call same point to get feedback and check get block */
                 ROS_INFO_STREAM("[Arm Move Project]: Reached block_1 -> Z + suck");
+                publishSuck(true); // suction ON
+                publishArmGoal(block_1.x, block_1.y, block_1.z + p_suck_offset_);
+                ROS_INFO_STREAM("[Arm Move Project]: check get block_1");
+                nextCase();
+                break;
+            case 4:
+                ROS_INFO_STREAM("[Arm Move Project]: Reached block_1 -> check get block_1");
                 if (!suck_status.data){ // get block FAILED
                     ROS_INFO_STREAM("[Arm Move Project]: Get Block 1 Failed !");
                     have_on_hand = false;   
@@ -276,7 +284,15 @@ void ArmMoveProject::goTo_Block_2()
                 nextCase();
                 break;
             case 3:
+                /* call same point to get feedback and check get block */
                 ROS_INFO_STREAM("[Arm Move Project]: Reached block_2 -> Z + suck");
+                publishSuck(true); // suction ON
+                publishArmGoal(block_2.x, block_2.y, block_2.z + p_suck_offset_);
+                ROS_INFO_STREAM("[Arm Move Project]: check get block_2");
+                nextCase();
+                break;
+            case 4:
+                ROS_INFO_STREAM("[Arm Move Project]: Reached block_2 -> check get block_2");
                 if (!suck_status.data){ // get block FAILED
                     ROS_INFO_STREAM("[Arm Move Project]: Get Block 2 Failed !");
                     have_on_hand = false;   
@@ -312,7 +328,15 @@ void ArmMoveProject::goTo_Block_3()
                 nextCase();
                 break;
             case 3:
+                /* call same point to get feedback and check get block */
                 ROS_INFO_STREAM("[Arm Move Project]: Reached block_3 -> Z + suck");
+                publishSuck(true); // suction ON
+                publishArmGoal(block_3.x, block_3.y, block_3.z + p_suck_offset_);
+                ROS_INFO_STREAM("[Arm Move Project]: check get block_3");
+                nextCase();
+                break;
+            case 4:
+                ROS_INFO_STREAM("[Arm Move Project]: Reached block_3 -> check get block_3");
                 if (!suck_status.data){ // get block FAILED
                     ROS_INFO_STREAM("[Arm Move Project]: Get Block 3 Failed !");
                     have_on_hand = false;   
