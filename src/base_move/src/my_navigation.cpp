@@ -7,6 +7,7 @@ My_navigation::My_navigation(ros::NodeHandle& nh, ros::NodeHandle& nh_local) : n
 {
     move_timer_ = nh_.createTimer(ros::Duration(1.0), &My_navigation::moveTimerCallback, this, false, false);
     speed_timer_ = nh_.createTimer(ros::Duration(1.0), &My_navigation::speedTimerCallback, this, false, false);
+    params_srv_ = nh_.advertiseService("nav_reset", &My_navigation::updateParams, this);
     initialize();
 }
 
