@@ -216,7 +216,8 @@ void ArmMoveProject::mission1() /* pick up P, M, E block */
     else if(goto_state == Goto_storage_1) goTo_Storage_1();        
     else if(goto_state == Goto_storage_2) goTo_Storage_2();
     else if(goto_state == Goto_wait_point) goTo_Wait();
-    else mission_state = no_mission;
+    else if(goto_state == Backto_init_arm) backToInitArm();
+    else mission_state = no_mission; ROS_INFO("Wrong goto_state in mission 1 !");
 }
 
 void ArmMoveProject::goTo_Block_1()
@@ -400,10 +401,8 @@ void ArmMoveProject::goTo_Wait()
                 break;
             case 3:
                 ROS_INFO_STREAM("[Arm Move Project]: Reached wait_point");
-                ROS_INFO_STREAM("[Arm Move Project]: Mission 1 finished");
                 have_wait = true;
                 check_Block();
-                finalCase();
                 break; 
         }
     }
@@ -414,8 +413,13 @@ void ArmMoveProject::check_Block() /* change state */
     if(get_block_1) {goto_state = Goto_block_1; point_num = 1;}
     else if(get_block_2) {goto_state = Goto_block_2; point_num = 1;}
     else if(get_block_3) {goto_state = Goto_block_3; point_num = 1;}
+    else if(have_wait == false) {goto_state = Backto_init_arm; point_num = 1;}
     /* mission finish*/
-    else{mission_state = no_mission; publishVibrate(false);} // vibration OFF
+    else{
+        mission_state = no_mission; 
+        publishVibrate(false);      // vibration OFF
+        ROS_INFO_STREAM("[Arm Move Project]: Mission 1 finished");
+    }
 }
 
 void ArmMoveProject::check_Storage() /* change state */ 
@@ -430,7 +434,7 @@ void ArmMoveProject::check_Storage() /* change state */
         arm_goal_pub_.publish(output_point);
         ROS_INFO_STREAM("[Arm Move Project]: Go to safty Z");
         ros::Duration(1).sleep();
-        publishSuck(false); // suction OFF
+        // publishSuck(false); // suction OFF
         check_Block();
     }
 }
@@ -442,7 +446,7 @@ void ArmMoveProject::mission2() /* put P, M, E block in each P & M & E & stack s
     else if(goto_state == Goto_storage_2) stack_Storage_2();
     else if(goto_state == Goto_storage_1) stack_Storage_1();
     else if(goto_state == Backto_init_arm) backToInitArm();
-    else mission_state = no_mission;
+    else mission_state = no_mission; ROS_INFO("Wrong goto_state in mission 2 !");
 }
 
 void ArmMoveProject::stack_Put()
@@ -606,7 +610,6 @@ void ArmMoveProject::backToInitArm()
                 break;
             case 4:
                 ROS_INFO_STREAM("[Arm Move Project]: Reached init_arm -> Z");
-                ROS_INFO_STREAM("[Arm Move Project]: Mission 2 finished");
                 finalCase();
                 break;
         }
@@ -661,4 +664,6 @@ void ArmMoveProject::finalCase()
     running = false;
     mission_state = no_mission;
     pub_once = true;
+    if (mission_state == mission_1) ROS_INFO_STREAM("[Arm Move Project]: Mission 1 finished");
+    else if (mission_state == mission_2) ROS_INFO_STREAM("[Arm Move Project]: Mission 2 finished");
 }
