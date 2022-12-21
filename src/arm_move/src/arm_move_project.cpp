@@ -217,7 +217,7 @@ void ArmMoveProject::mission1() /* pick up P, M, E block */
     else if(goto_state == Goto_storage_2) goTo_Storage_2();
     else if(goto_state == Goto_wait_point) goTo_Wait();
     else if(goto_state == Backto_init_arm) backToInitArm();
-    else mission_state = no_mission; ROS_INFO("Wrong goto_state in mission 1 !");
+    else {mission_state = no_mission; ROS_INFO("Wrong goto_state in mission 1 !");}
 }
 
 void ArmMoveProject::goTo_Block_1()
@@ -470,7 +470,7 @@ void ArmMoveProject::mission2() /* put P, M, E block in each P & M & E & stack s
     else if(goto_state == Goto_storage_2) stack_Storage_2();
     else if(goto_state == Goto_storage_1) stack_Storage_1();
     else if(goto_state == Backto_init_arm) backToInitArm();
-    else mission_state = no_mission; ROS_INFO("Wrong goto_state in mission 2 !");
+    else {mission_state = no_mission; ROS_INFO("Wrong goto_state in mission 2 !");}
 }
 
 void ArmMoveProject::stack_Put()
