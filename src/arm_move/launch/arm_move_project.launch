@@ -28,12 +28,12 @@
 
         <!-- wait -->
         <param name="wait_x" value="0.0"/>          <!-- [mm] -->
-        <param name="wait_y" value="150.0"/>
+        <param name="wait_y" value="120.0"/>
         <param name="wait_z" value="55.0"/>
 
         <!-- put -->
         <param name="put_x" value="0.0"/>           <!-- [mm] -->
-        <param name="put_y" value="250.0"/>
+        <param name="put_y" value="200.0"/>
         <param name="put_z" value="-15.5"/>
 
         <!-- Offset -->
