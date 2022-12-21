@@ -586,7 +586,7 @@ void ArmMoveProject::stack_Storage_1()
                 break;
             case 5:
                 ROS_INFO_STREAM("[Arm Move Project]: Reached storage_1 -> Z + drop");
-                publishArmGoal(put_point.x, put_point.y, storage_1.z + p_drop_offset_);
+                publishArmGoal(put_point.x, put_point.y, 118);
                 ROS_INFO_STREAM("[Arm Move Project]: Go to put_point");
                 nextCase();
                 break;
