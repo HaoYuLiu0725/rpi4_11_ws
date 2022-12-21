@@ -33,12 +33,12 @@
 
         <!-- put -->
         <param name="put_x" value="0.0"/>           <!-- [mm] -->
-        <param name="put_y" value="150.0"/>
+        <param name="put_y" value="250.0"/>
         <param name="put_z" value="-15.5"/>
 
         <!-- Offset -->
         <param name="drop_offset" value="35.0"/>    <!-- [mm] -->
-        <param name="suck_offset" value="-1.0"/>
+        <param name="suck_offset" value="0.0"/>
         <param name="put_offset" value="3.0"/>        
         <param name="stack_offset" value="64.0"/>
 
