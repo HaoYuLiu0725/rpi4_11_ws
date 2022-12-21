@@ -9,6 +9,7 @@ from main_program.srv import *
 from std_msgs.msg import Bool
 
 port = serial.Serial("/dev/rfcomm0", baudrate=9600)
+req = startingRequest()
 running = False
 
 def CallBackFunction(msg):
@@ -16,6 +17,7 @@ def CallBackFunction(msg):
 	global running
 	if(msg.data):
 		running = False
+		req.startTrigger = False
 		port.write(bytes(str(69),'utf-8'))
 
 def main():
@@ -26,7 +28,6 @@ def main():
 	last_inVar = 0
 	script = 0
 	global running
-	req = startingRequest()
 	req.startTrigger = False
 	req.startStatus = script
 
