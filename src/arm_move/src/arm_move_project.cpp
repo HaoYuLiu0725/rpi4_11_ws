@@ -612,6 +612,7 @@ void ArmMoveProject::backToInitArm()
     if(!running && point_num != 0){
         switch(point_num){
             case 1:
+                publishVibrate(false);      // vibration OFF
                 output_point.z = 118;
                 arm_goal_pub_.publish(output_point);
                 ROS_INFO_STREAM("[Arm Move Project]: Go to MAX_Z");
