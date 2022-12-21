@@ -39,6 +39,6 @@
   </node>
 
   <!-- TF:map to odom -->
-  <node name="map_to_odom" pkg="tf2_ros" type="static_transform_publisher" args="2.275 0.165 0 0 0 0.707 0.707 map odom" output="screen"/>
+  <node name="map_to_odom" pkg="tf2_ros" type="static_transform_publisher" args="1.835 0.165 0 0 0 0.707 0.707 map odom" output="screen"/>
 
 </launch>
