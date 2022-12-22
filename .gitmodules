@@ -1,3 +1,9 @@
 [submodule "src/ds5_uwb_remote_control"]
 	path = src/ds5_uwb_remote_control
 	url = git@github.com:HaoYuLiu0725/ds5_uwb_remote_control.git
+[submodule "src/rviz_camera_stream"]
+	path = src/rviz_camera_stream
+	url = https://github.com/lucasw/rviz_camera_stream.git
+[submodule "src/rviz_textured_quads"]
+	path = src/rviz_textured_quads
+	url = https://github.com/lucasw/rviz_textured_quads.git
