@@ -198,6 +198,7 @@ void ArmMoveProject::suckStatusCallback(const std_msgs::Int16::ConstPtr& ptr)
 {
     suck_value = *ptr;
     got_block = (suck_value.data < p_preasure_threshold_)? true : false;
+    ROS_INFO_STREAM("[Arm Move Project]: suck_value : " << suck_value.data);
     ROS_INFO_STREAM("[Arm Move Project]: got_block : " << got_block);
 }
 
