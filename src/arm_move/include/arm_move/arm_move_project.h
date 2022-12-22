@@ -29,7 +29,7 @@ private:
     bool updateParams(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
     void missionTargetCallback(const arm_move::mission::ConstPtr& ptr); // from main program
     void armStatusCallback(const std_msgs::Bool::ConstPtr& ptr);        // from SCARA
-    void suckStatusCallback(const std_msgs::Bool::ConstPtr& ptr);       // from SCARA
+    void suckStatusCallback(const std_msgs::Int16::ConstPtr& ptr);       // from SCARA
     void timerCallback(const ros::TimerEvent& e);
 
     void mission1();
@@ -78,7 +78,7 @@ private:
     std_msgs::Bool suck;
     std_msgs::Bool vibrate;
     std_msgs::Bool arm_status;  // true: SCARA moving mission done ; false: SCARA can't reach current point
-    std_msgs::Bool suck_status; // true: block suction successfully ; false: block release successfully
+    std_msgs::Int16 suck_value; // preasure gauge value from SCARA
 
     ros::Time last_time_;
     ros::Duration timeout_;
@@ -106,6 +106,7 @@ private:
     bool nead_stack_storage2;
     bool nead_stack_wait;
     int block_stacked;
+    bool got_block;
 
     /* ros param */
     bool p_active_;
@@ -131,6 +132,7 @@ private:
     double p_put_offset_;
     double p_stack_offset_;
     double p_vibrate_time_;
+    double p_preasure_threshold_;
 
     std::string p_mission_target_topic_;
     std::string p_mission_status_topic_;

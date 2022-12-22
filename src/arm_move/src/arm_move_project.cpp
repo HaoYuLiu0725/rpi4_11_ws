@@ -39,6 +39,7 @@ bool ArmMoveProject::updateParams(std_srvs::Empty::Request& req, std_srvs::Empty
     get_param_ok = nh_local_.param<double>("put_offset", p_put_offset_, 3.0);       // [mm]
     get_param_ok = nh_local_.param<double>("stack_offset", p_stack_offset_, 62.0);  // [mm]
     get_param_ok = nh_local_.param<double>("vibrate_time", p_vibrate_time_, 3.0);   // [s]
+    get_param_ok = nh_local_.param<double>("preasure_threshold", p_preasure_threshold_, 200);
 
     double timeout;
     get_param_ok = nh_local_.param<double>("timeout", timeout, 0.2);
@@ -193,10 +194,11 @@ void ArmMoveProject::armStatusCallback(const std_msgs::Bool::ConstPtr& ptr)
     else running = true;
 }  
 
-void ArmMoveProject::suckStatusCallback(const std_msgs::Bool::ConstPtr& ptr)  
+void ArmMoveProject::suckStatusCallback(const std_msgs::Int16::ConstPtr& ptr)  
 {
-    suck_status = *ptr;
-    ROS_INFO_STREAM("[Arm Move Project]: suck status : " << suck_status);
+    suck_value = *ptr;
+    got_block = (suck_value.data < p_preasure_threshold_)? true : false;
+    ROS_INFO_STREAM("[Arm Move Project]: got_block : " << got_block);
 }
 
 void ArmMoveProject::timerCallback(const ros::TimerEvent& e)
@@ -252,7 +254,7 @@ void ArmMoveProject::goTo_Block_1()
                 break;
             case 4:
                 ROS_INFO_STREAM("[Arm Move Project]: Reached block_1 -> check get block_1");
-                if (!suck_status.data){ // get block FAILED
+                if (!got_block){ // get block FAILED
                     ROS_INFO_STREAM("[Arm Move Project]: Get Block 1 Failed !");
                     have_on_hand = false;   
                 }
@@ -296,7 +298,7 @@ void ArmMoveProject::goTo_Block_2()
                 break;
             case 4:
                 ROS_INFO_STREAM("[Arm Move Project]: Reached block_2 -> check get block_2");
-                if (!suck_status.data){ // get block FAILED
+                if (!got_block){ // get block FAILED
                     ROS_INFO_STREAM("[Arm Move Project]: Get Block 2 Failed !");
                     have_on_hand = false;   
                 }
@@ -340,7 +342,7 @@ void ArmMoveProject::goTo_Block_3()
                 break;
             case 4:
                 ROS_INFO_STREAM("[Arm Move Project]: Reached block_3 -> check get block_3");
-                if (!suck_status.data){ // get block FAILED
+                if (!got_block){ // get block FAILED
                     ROS_INFO_STREAM("[Arm Move Project]: Get Block 3 Failed !");
                     have_on_hand = false;   
                 }

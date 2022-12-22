@@ -43,6 +43,7 @@
         <param name="stack_offset" value="64.0"/>
 
         <param name="vibrate_time" value="3"/>      <!-- [s] -->
+        <param name="preasure_threshold" value="200"/>
 
         <!-- with: main program -->
         <param name="mission_goal_topic" value="/mission_target"/>      <!-- Sub [arm_move::mission] -->
