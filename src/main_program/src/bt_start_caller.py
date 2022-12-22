@@ -43,25 +43,24 @@ def main():
 			last_inVar = inVar
 			inVar = int(port.read_until().decode())
 			print(inVar)
-			if(inVar != last_inVar):
-				if(inVar == 99):
-					req.startTrigger = True
-					running = True
-				else:
-					script = inVar
-					req.startStatus = script
+			if(inVar == 99):
+				req.startTrigger = True
+				running = True
+			else:
+				script = inVar
+				req.startStatus = script
 
-				print(f"Changed ! || Status = {req.startStatus} || Trigger = {req.startTrigger}")
-				if(running):
-					print(f"Running !")
-				
-				try:
-					client = rospy.ServiceProxy("/startRunning", starting)
-					resp = client(req)
-					# rospy.loginfo("Message from server: %s" %response.feedback)
-				except rospy.ServiceException as e:
-					rospy.logwarn("Service call failed: %s" %e)
-		
+			print(f"Changed ! || Status = {req.startStatus} || Trigger = {req.startTrigger}")
+			if(running):
+				print(f"Running !")
+			
+			try:
+				client = rospy.ServiceProxy("/startRunning", starting)
+				resp = client(req)
+				# rospy.loginfo("Message from server: %s" %response.feedback)
+			except rospy.ServiceException as e:
+				rospy.logwarn("Service call failed: %s" %e)
+	
 		rate.sleep()		
 
 if __name__ == "__main__":
