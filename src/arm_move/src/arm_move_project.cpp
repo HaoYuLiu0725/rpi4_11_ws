@@ -3,6 +3,8 @@
 using namespace std;
 using namespace arm_move_project;
 
+#define MAX_Z 118
+
 ArmMoveProject::ArmMoveProject(ros::NodeHandle& nh, ros::NodeHandle& nh_local) : nh_(nh), nh_local_(nh_local)
 {
     timer_ = nh_.createTimer(ros::Duration(1.0), &ArmMoveProject::timerCallback, this, false, false);
@@ -419,7 +421,7 @@ void ArmMoveProject::goTo_Wait()
             case 1:
                 output_point.z = 55;
                 arm_goal_pub_.publish(output_point);
-                ROS_INFO_STREAM("[Arm Move Project]: Go to safty Z");
+                ROS_INFO_STREAM("[Arm Move Project]: Go to wait_point Z");
                 nextCase();
                 break;
             case 2:
@@ -533,13 +535,13 @@ void ArmMoveProject::stack_Storage_2()
                 break;
             case 4:
                 ROS_INFO_STREAM("[Arm Move Project]: Reached storage_2 -> Z + suck"); //got block
-                publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_drop_offset_);
-                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_2 -> Z + drop"); // lift up to leave container
+                publishArmGoal(storage_2.x, storage_2.y, MAX_Z);
+                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_2 -> MAX_Z"); // lift up to leave container
                 nextCase();
                 break;
             case 5:
-                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_2 -> Z + drop");
-                publishArmGoal(put_point.x, put_point.y, storage_2.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_2 -> MAX_Z");
+                publishArmGoal(put_point.x, put_point.y, MAX_Z);
                 ROS_INFO_STREAM("[Arm Move Project]: Go to put_point");
                 nextCase();
                 break;
@@ -586,13 +588,13 @@ void ArmMoveProject::stack_Storage_1()
                 break;
             case 4:
                 ROS_INFO_STREAM("[Arm Move Project]: Reached storage_1 -> Z + suck"); //got block
-                publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_drop_offset_);
-                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_1 -> Z + drop"); // lift up to leave container
+                publishArmGoal(storage_1.x, storage_1.y, MAX_Z);
+                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_1 -> MAX_Z"); // lift up to leave container
                 nextCase();
                 break;
             case 5:
-                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_1 -> Z + drop");
-                publishArmGoal(put_point.x, put_point.y, 118);
+                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_1 -> MAX_Z");
+                publishArmGoal(put_point.x, put_point.y, MAX_Z);
                 ROS_INFO_STREAM("[Arm Move Project]: Go to put_point");
                 nextCase();
                 break;
@@ -619,7 +621,7 @@ void ArmMoveProject::backToInitArm()
         switch(point_num){
             case 1:
                 publishVibrate(false);      // vibration OFF
-                output_point.z = 118;
+                output_point.z = MAX_Z;
                 arm_goal_pub_.publish(output_point);
                 ROS_INFO_STREAM("[Arm Move Project]: Go to MAX_Z");
                 nextCase();
