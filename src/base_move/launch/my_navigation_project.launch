@@ -12,8 +12,8 @@
         <param name="MAX_angular_speed" value="1.0"/>       <!-- [rad/s] -->
         <param name="linear_acceleration" value="0.35"/>    <!-- [m/s^2] -->
         <param name="linear_deceleration" value="0.35"/>    <!-- [m/s^2] -->
-        <param name="angular_acceleration" value="1.00"/>   <!-- [rad/s^2] -->
-        <param name="angular_deceleration" value="1.00"/>   <!-- [rad/s^2] -->
+        <param name="angular_acceleration" value="0.5"/>    <!-- [rad/s^2] -->
+        <param name="angular_deceleration" value="0.5"/>    <!-- [rad/s^2] -->
         <param name="linear_margin" value="0.005"/>         <!-- [m] -->
         <param name="angular_margin" value="0.005"/>        <!-- [rad] -->
         <param name="stop_margin" value="0.0001"/>          <!-- [m/s & rad/s] -->
