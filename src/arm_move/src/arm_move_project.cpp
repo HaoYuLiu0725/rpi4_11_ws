@@ -268,6 +268,26 @@ void ArmMoveProject::goTo_Block_1()
                 get_block_1 = false; //finished block_1
                 check_Storage();
                 break;
+            /* goTo_Storage_1() */
+            case 5:
+                output_point.z = storage_1.z + p_drop_offset_;
+                arm_goal_pub_.publish(output_point);
+                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_1 -> Z + drop");
+                nextCase();
+                break;
+            case 6:
+                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_1 -> Z + drop");
+                publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_1");
+                nextCase();
+                break;
+            case 7:
+                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_1");
+                publishSuck(false); // suction OFF(release)
+                ros::Duration(1).sleep();
+                have_storage1 = true; //storage1 have block
+                check_Block();
+                break;
         }
     }
 }
@@ -311,6 +331,26 @@ void ArmMoveProject::goTo_Block_2()
                 }
                 get_block_2 = false; //finished block_2
                 check_Storage();
+                break;
+            /* goTo_Storage_2() */
+            case 5:
+                output_point.z = storage_2.z + p_drop_offset_;
+                arm_goal_pub_.publish(output_point);
+                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_2 -> Z + drop");
+                nextCase();
+                break;
+            case 6:
+                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_2 -> Z + drop");
+                publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_drop_offset_);
+                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_2");
+                nextCase();
+                break;
+            case 7:
+                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_2");
+                publishSuck(false); // suction OFF(release)
+                ros::Duration(1).sleep();
+                have_storage2 = true; //storage2 have block
+                check_Block();
                 break;
         }
     }
@@ -356,88 +396,107 @@ void ArmMoveProject::goTo_Block_3()
                 get_block_3 = false; //finished block_3
                 check_Storage();
                 break;
-        }
-    }
-}
-
-void ArmMoveProject::goTo_Storage_1()
-{
-    if(!running && point_num != 0){
-        switch(point_num){
-            case 1:
-                output_point.z = storage_1.z + p_drop_offset_;
-                arm_goal_pub_.publish(output_point);
-                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_1 -> Z + drop");
-                nextCase();
-                break;
-            case 2:
-                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_1 -> Z + drop");
-                publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_drop_offset_);
-                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_1");
-                nextCase();
-                break;
-            case 3:
-                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_1");
-                publishSuck(false); // suction OFF(release)
-                ros::Duration(1).sleep();
-                have_storage1 = true; //storage1 have block
-                check_Block();
-                break;
-        }
-    }
-}
-
-void ArmMoveProject::goTo_Storage_2()
-{
-    if(!running && point_num != 0){
-        switch(point_num){
-            case 1:
-                output_point.z = storage_2.z + p_drop_offset_;
-                arm_goal_pub_.publish(output_point);
-                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_2 -> Z + drop");
-                nextCase();
-                break;
-            case 2:
-                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_2 -> Z + drop");
-                publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_drop_offset_);
-                ROS_INFO_STREAM("[Arm Move Project]: Go to storage_2");
-                nextCase();
-                break;
-            case 3:
-                ROS_INFO_STREAM("[Arm Move Project]: Reached storage_2");
-                publishSuck(false); // suction OFF(release)
-                ros::Duration(1).sleep();
-                have_storage2 = true; //storage2 have block
-                check_Block();
-                break;
-        }
-    }
-}
-
-void ArmMoveProject::goTo_Wait()
-{
-    if(!running && point_num != 0){
-        switch(point_num){
-            case 1:
+            /* goTo_Wait() */
+            case 5:
                 output_point.z = 55;
                 arm_goal_pub_.publish(output_point);
                 ROS_INFO_STREAM("[Arm Move Project]: Go to wait_point Z");
                 nextCase();
                 break;
-            case 2:
+            case 6:
                 output_point.x = wait_point.x;
                 output_point.y = wait_point.y;
                 arm_goal_pub_.publish(output_point);
                 ROS_INFO_STREAM("[Arm Move Project]: Go to wait_point");
                 nextCase();
                 break;
-            case 3:
+            case 7:
                 ROS_INFO_STREAM("[Arm Move Project]: Reached wait_point");
                 have_wait = true;
                 check_Block();
                 break; 
         }
     }
+}
+
+void ArmMoveProject::goTo_Storage_1()
+{
+    // if(!running && point_num != 0){
+    //     switch(point_num){
+    //         case 1:
+    //             output_point.z = storage_1.z + p_drop_offset_;
+    //             arm_goal_pub_.publish(output_point);
+    //             ROS_INFO_STREAM("[Arm Move Project]: Go to storage_1 -> Z + drop");
+    //             nextCase();
+    //             break;
+    //         case 2:
+    //             ROS_INFO_STREAM("[Arm Move Project]: Reached storage_1 -> Z + drop");
+    //             publishArmGoal(storage_1.x, storage_1.y, storage_1.z + p_drop_offset_);
+    //             ROS_INFO_STREAM("[Arm Move Project]: Go to storage_1");
+    //             nextCase();
+    //             break;
+    //         case 3:
+    //             ROS_INFO_STREAM("[Arm Move Project]: Reached storage_1");
+    //             publishSuck(false); // suction OFF(release)
+    //             ros::Duration(1).sleep();
+    //             have_storage1 = true; //storage1 have block
+    //             check_Block();
+    //             break;
+    //     }
+    // }
+}
+
+void ArmMoveProject::goTo_Storage_2()
+{
+    // if(!running && point_num != 0){
+    //     switch(point_num){
+    //         case 1:
+    //             output_point.z = storage_2.z + p_drop_offset_;
+    //             arm_goal_pub_.publish(output_point);
+    //             ROS_INFO_STREAM("[Arm Move Project]: Go to storage_2 -> Z + drop");
+    //             nextCase();
+    //             break;
+    //         case 2:
+    //             ROS_INFO_STREAM("[Arm Move Project]: Reached storage_2 -> Z + drop");
+    //             publishArmGoal(storage_2.x, storage_2.y, storage_2.z + p_drop_offset_);
+    //             ROS_INFO_STREAM("[Arm Move Project]: Go to storage_2");
+    //             nextCase();
+    //             break;
+    //         case 3:
+    //             ROS_INFO_STREAM("[Arm Move Project]: Reached storage_2");
+    //             publishSuck(false); // suction OFF(release)
+    //             ros::Duration(1).sleep();
+    //             have_storage2 = true; //storage2 have block
+    //             check_Block();
+    //             break;
+    //     }
+    // }
+}
+
+void ArmMoveProject::goTo_Wait()
+{
+    // if(!running && point_num != 0){
+    //     switch(point_num){
+    //         case 1:
+    //             output_point.z = 55;
+    //             arm_goal_pub_.publish(output_point);
+    //             ROS_INFO_STREAM("[Arm Move Project]: Go to wait_point Z");
+    //             nextCase();
+    //             break;
+    //         case 2:
+    //             output_point.x = wait_point.x;
+    //             output_point.y = wait_point.y;
+    //             arm_goal_pub_.publish(output_point);
+    //             ROS_INFO_STREAM("[Arm Move Project]: Go to wait_point");
+    //             nextCase();
+    //             break;
+    //         case 3:
+    //             ROS_INFO_STREAM("[Arm Move Project]: Reached wait_point");
+    //             have_wait = true;
+    //             check_Block();
+    //             break; 
+    //     }
+    // }
 }
 
 void ArmMoveProject::check_Block() /* change state */
@@ -457,9 +516,9 @@ void ArmMoveProject::check_Block() /* change state */
 void ArmMoveProject::check_Storage() /* change state */ 
 {
     if(have_on_hand){
-        if(!have_storage1) {goto_state = Goto_storage_1; point_num = 1;}
-        else if(!have_storage2) {goto_state = Goto_storage_2; point_num = 1;}
-        else {goto_state = Goto_wait_point; point_num = 1;}
+        // if(!have_storage1) {goto_state = Goto_storage_1; point_num = 1;}
+        // else if(!have_storage2) {goto_state = Goto_storage_2; point_num = 1;}
+        // else {goto_state = Goto_wait_point; point_num = 1;}
     }
     else{
         output_point.z = 80;
