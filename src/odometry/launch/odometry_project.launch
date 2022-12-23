@@ -11,8 +11,8 @@
     <param name="baud" value="115200"/>
     <rosparam>
       require:
-        publishers: [ base_speed ]
-        subscribers: [ cmd_vel ]
+        publishers: [ /base_speed ]
+        subscribers: [ /cmd_vel ]
     </rosparam>
   </node>
 
