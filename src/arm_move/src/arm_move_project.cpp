@@ -519,6 +519,7 @@ void ArmMoveProject::check_Storage() /* change state */
         // if(!have_storage1) {goto_state = Goto_storage_1; point_num = 1;}
         // else if(!have_storage2) {goto_state = Goto_storage_2; point_num = 1;}
         // else {goto_state = Goto_wait_point; point_num = 1;}
+        nextCase();
     }
     else{
         output_point.z = 80;
