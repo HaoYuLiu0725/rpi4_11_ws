@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /TF1/Frames1
+        - /Pose2
       Splitter Ratio: 0.5
     Tree Height: 341
   - Class: rviz/Selection
@@ -165,7 +166,7 @@ Visualization Manager:
       Head Radius: 0.10000000149011612
       Name: Pose
       Queue Size: 10
-      Shaft Length: 1
+      Shaft Length: 0.5
       Shaft Radius: 0.05000000074505806
       Shape: Arrow
       Topic: /map_pose
