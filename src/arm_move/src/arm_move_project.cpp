@@ -466,7 +466,7 @@ void ArmMoveProject::check_Storage() /* change state */
         arm_goal_pub_.publish(output_point);
         ROS_INFO_STREAM("[Arm Move Project]: Go to safty Z");
         ros::Duration(1).sleep();
-        // publishSuck(false); // suction OFF
+        publishSuck(false); // suction OFF
         check_Block();
     }
 }
