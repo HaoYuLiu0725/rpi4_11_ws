@@ -221,9 +221,9 @@ void ArmMoveProject::mission1() /* pick up P, M, E block */
     if(goto_state == Goto_block_1) goTo_Block_1();
     else if(goto_state == Goto_block_2) goTo_Block_2();
     else if(goto_state == Goto_block_3) goTo_Block_3();
-    else if(goto_state == Goto_storage_1) goTo_Storage_1();        
-    else if(goto_state == Goto_storage_2) goTo_Storage_2();
-    else if(goto_state == Goto_wait_point) goTo_Wait();
+    // else if(goto_state == Goto_storage_1) goTo_Storage_1();        
+    // else if(goto_state == Goto_storage_2) goTo_Storage_2();
+    // else if(goto_state == Goto_wait_point) goTo_Wait();
     else if(goto_state == Backto_init_arm) backToInitArm();
     else {mission_state = no_mission; ROS_INFO("Wrong goto_state in mission 1 !");}
 }
@@ -519,6 +519,8 @@ void ArmMoveProject::check_Storage() /* change state */
         // if(!have_storage1) {goto_state = Goto_storage_1; point_num = 1;}
         // else if(!have_storage2) {goto_state = Goto_storage_2; point_num = 1;}
         // else {goto_state = Goto_wait_point; point_num = 1;}
+        ROS_INFO_STREAM("[Arm Move Project]: have on hand ! -> next case");
+        arm_goal_pub_.publish(output_point);
         nextCase();
     }
     else{
